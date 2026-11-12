@@ -1,5 +1,5 @@
 /*
- * Zürichdeutsch Decoder: content
+ * Züri-Tüütsch Decoder: content
  * ------------------------------
  * Everything the app shows lives in this one file, so you can add words,
  * rules or quiz items without touching the app code.

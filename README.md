@@ -1,34 +1,43 @@
-# Zürichdeutsch Decoder
+# Züri-Tüütsch Decoder
 
-**Understand Zürich German faster, if you already speak German.**
+**My first GitHub project had to be about Züritüütsch.**
 
-Zürichdeutsch isn't a new language. It's Standard German run through about a dozen predictable sound shifts, plus a few hundred everyday words that don't follow any rule. This small web app teaches both, and trains the one skill that matters when you're listening: **reversing what you hear back into Standard German.**
+Turkish is my mother tongue, German my second home, and Swiss German the language my new neighbours speak. My German is native-level, yet in Zürich it suddenly needed subtitles. So, as a trained translator, I mapped how Hochdeutsch turns into Zürich German and built this little web app with Claude to practise hearing it in reverse.
 
 👉 **Try it live: https://cemreozertas.github.io/zueri-tuetsch/**
 
-![The Zürichdeutsch Decoder start page](docs/screenshot-hero.png)
+![The decoder flipping Ziitig into Zeitung on a departure board](docs/screenshot-hero.png)
+
+## The idea
+
+Zürichdeutsch isn't a new language. It's Standard German run through about a dozen predictable sound shifts, plus a few hundred everyday words that don't follow any rule. Learn the shifts, memorise the words, and train the one skill that matters when you're listening: **reversing what you hear back into Standard German.**
 
 ## What's inside
 
-| Section | What it does |
+| Tab | What it does |
 |---|---|
-| **Decode a word** | Type a word you heard. You get the meaning if it's in the word list. If it isn't, the app runs the sound rules backwards and shows its best guess, step by step. |
-| **The sound shifts** | 13 rules (ei → ii, au → uu, k → ch, -ung → -ig, …), each with examples, a "reverse it" tip and the exceptions. Plus four grammar shortcuts. |
-| **Flashcards** | 70+ words the rules can't explain (*luege, poschte, Rüebli, Ziischtig*), with false friends like *springe* = rennen. You can flip the direction, filter by topic, and your progress is saved in your browser. |
-| **Reverse-it quiz** | Read the dialect, type the Standard German, and see which rule did the work. Two levels: words and sentences. |
+| **Decode** | Type a word you heard and watch it flip into Standard German on a departure board. The letters that change light up, and each change links to the rule behind it. Words that aren't in the list get a best guess, made by running the rules backwards. |
+| **Rules** | 13 numbered sound shifts (ei → ii, au → uu, k → ch, -ung → -ig …), each with examples, a "reverse it" tip and its exceptions. Plus four grammar shortcuts. |
+| **Flashcards** | 70+ words the rules can't explain (*luege, poschte, Rüebli, Ziischtig*), including false friends like *springe* = rennen. You can flip the direction, filter by topic, and your progress is saved in your browser. |
+| **Quiz** | Read the dialect, type the Standard German, and see the answer flap into place with the rules that did the work. Two levels: words and sentences. |
 | **Listening plan** | A step-by-step plan from SRF Meteo to Swiss TV series, plus one daily habit. |
 
-![The reverse-it quiz showing which rules apply](docs/screenshot-quiz.png)
+![The reverse-it quiz on a phone](docs/screenshot-quiz.png)
+
+## Design
+
+The look borrows from the split-flap departure board and uses Zürich's city colours: **Blau** with white as the main pair, **Dunkelblau** for the flaps, **Türkis** for right answers, **Magenta** for misses and **Bordeaux** for exceptions and false friends. The fonts are Hanken Grotesk and JetBrains Mono, both served from this repo.
 
 ## How it's built
 
 It's plain HTML, CSS and JavaScript, with no framework, no build step and no tracking. All the content lives in **one file**, [`data.js`](data.js), separate from the app logic:
 
 ```
-index.html     page structure
+index.html     page structure and the five tabs
 styles.css     look and feel
-app.js         decoder, flashcards, quiz
+app.js         split-flap board, decoder, flashcards, quiz
 data.js        all rules, words, quiz items and the listening plan
+fonts/         self-hosted fonts (SIL Open Font License)
 docs/          screenshots for this README
 ```
 
@@ -36,7 +45,7 @@ The site is hosted for free with **GitHub Pages**, straight from the `main` bran
 
 ## Run it on your own computer
 
-Download or clone the repo and open `index.html` in your browser. That's all you need.
+Download or clone the repo and open `index.html` in your browser.
 
 ## Add a word or a rule
 
@@ -54,6 +63,6 @@ Swiss German has no official spelling. This app follows common Zürich usage, wi
 
 ## Credits
 
-Made in Zürich by Cemre, built together with [Claude](https://claude.ai). The content started as a chat about improving my Swiss German listening and grew into this app.
+Made with love in Zürich by Cemre, built together with [Claude](https://claude.ai). Fonts: [Hanken Grotesk](https://github.com/marcologous/hanken-grotesk) and [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono), both under the SIL Open Font License.
 
 Licensed under the [MIT licence](LICENSE): free to use, copy and adapt.

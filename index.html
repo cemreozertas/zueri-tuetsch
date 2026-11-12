@@ -3,87 +3,112 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Zürichdeutsch Decoder</title>
+  <title>Züri-Tüütsch Decoder</title>
   <meta name="description" content="Understand Zürich German faster: the sound-shift rules, flashcards for the words you just have to learn, and a quiz that reverses dialect into Standard German.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23C8372D'/><text x='16' y='23' font-family='Arial,sans-serif' font-size='20' font-weight='700' fill='white' text-anchor='middle'>ü</text></svg>">
+  <meta name="theme-color" content="#0070B4">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230070B4'/><rect x='6' y='6' width='20' height='20' rx='3' fill='%2300407C'/><rect x='6' y='15.5' width='20' height='1' fill='%230070B4'/><text x='16' y='22.5' font-family='monospace' font-size='15' font-weight='700' fill='white' text-anchor='middle'>Ü</text></svg>">
+  <link rel="preload" href="fonts/jetbrains-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
 
-  <header class="site-header">
-    <div class="wrap header-row">
-      <a class="brand" href="#top" aria-label="Zürichdeutsch Decoder, back to top">
-        <span class="brand-mark" aria-hidden="true">ii→ei</span>
-        <span>Zürichdeutsch Decoder</span>
+  <header class="topbar">
+    <div class="wrap topbar-row">
+      <a class="brand" href="#decode" aria-label="Züri-Tüütsch Decoder, start">
+        <span class="brand-flap" aria-hidden="true"><span>Ü</span></span>
+        <span class="brand-name">Züri-Tüütsch <span>Decoder</span></span>
       </a>
-      <nav aria-label="Sections">
-        <a href="#decode">Decode</a>
-        <a href="#rules">Rules</a>
-        <a href="#cards">Flashcards</a>
-        <a href="#quiz">Quiz</a>
-        <a href="#plan">Listening plan</a>
+      <nav class="tabs" aria-label="Sections">
+        <a href="#decode" data-view="decode">Decode</a>
+        <a href="#rules" data-view="rules">Rules</a>
+        <a href="#cards" data-view="cards">Flashcards</a>
+        <a href="#quiz" data-view="quiz">Quiz</a>
+        <a href="#plan" data-view="plan">Listening plan</a>
       </nav>
     </div>
   </header>
 
   <main id="main">
-    <section class="hero" id="top">
-      <div class="wrap">
-        <p class="eyebrow">For German speakers in Zürich</p>
-        <h1>You already speak most of it.<br><span class="accent">You just can't hear it yet.</span></h1>
-        <p class="lede">Zürichdeutsch isn't a new language. It's Standard German run through a dozen predictable sound shifts, plus a few hundred everyday words. Learn the shifts, memorise the words, and practise reversing what you hear.</p>
-        <div class="hero-demo" aria-hidden="true">
-          <span class="demo-zd">Ich ha hüt kei Ziit.</span>
-          <span class="demo-arrow">→</span>
-          <span class="demo-hd">Ich habe heute keine Zeit.</span>
+
+    <!-- DECODE -->
+    <section class="view" id="view-decode" data-view="decode" aria-labelledby="decode-title">
+      <div class="band">
+        <div class="wrap">
+          <p class="kicker">For native-level German speakers in Zürich</p>
+          <h1 id="decode-title">You already speak most of it. <span>You just can't hear it yet.</span></h1>
+
+          <form class="decoder" id="decoder-form" autocomplete="off">
+            <label for="decoder-input">Type a word you heard</label>
+            <div class="field-row">
+              <input id="decoder-input" type="text" placeholder="e.g. Ziitig, Chuchi, Hüüser" spellcheck="false" autocapitalize="off">
+              <button type="submit" class="btn btn-light">Decode</button>
+            </div>
+          </form>
+
+          <div class="board" id="board" aria-live="polite">
+            <div class="board-head">
+              <span class="board-label" id="board-from">Züri</span>
+              <span class="board-arrow" aria-hidden="true">→</span>
+              <span class="board-label" id="board-to">Hochdeutsch</span>
+              <span class="board-status" id="board-status">Example</span>
+            </div>
+            <div class="flaps" id="board-flaps"></div>
+            <div class="board-foot" id="board-foot"></div>
+          </div>
+
+          <div class="chips chips-on-blue" id="decoder-examples" aria-label="Try an example"></div>
+        </div>
+      </div>
+
+      <div class="wrap intro-grid">
+        <div class="intro-card">
+          <span class="num">13</span>
+          <h2>Sound shifts</h2>
+          <p>Zürichdeutsch is Standard German run through a set of predictable shifts. Learn them once and most words decode themselves.</p>
+          <a class="link-arrow" href="#rules">See the rules</a>
+        </div>
+        <div class="intro-card">
+          <span class="num" id="vocab-count">74</span>
+          <h2>Words to learn by heart</h2>
+          <p>Some everyday words follow no rule at all: luege, poschte, Rüebli. Those go on flashcards.</p>
+          <a class="link-arrow" href="#cards">Practise flashcards</a>
+        </div>
+        <div class="intro-card">
+          <span class="num">45</span>
+          <h2>Reverse-it quiz</h2>
+          <p>Read the dialect, type the Standard German, and see which rule did the work.</p>
+          <a class="link-arrow" href="#quiz">Start the quiz</a>
         </div>
       </div>
     </section>
 
-    <section class="section" id="decode" aria-labelledby="decode-title">
-      <div class="wrap">
-        <div class="section-head">
-          <span class="num">01</span>
-          <h2 id="decode-title">Decode a word</h2>
-          <p>Type a word you heard. If it's in the word list you get the meaning. Otherwise the decoder runs the sound rules backwards and makes a guess.</p>
-        </div>
-        <form class="decoder" id="decoder-form" autocomplete="off">
-          <label for="decoder-input" class="visually-hidden">Zürich German word</label>
-          <input id="decoder-input" type="text" placeholder="e.g. Ziitig, Chuchi, Hüüser" spellcheck="false" autocapitalize="off">
-          <button type="submit" class="btn btn-primary">Decode</button>
-        </form>
-        <div class="chips" id="decoder-examples" aria-label="Try an example"></div>
-        <div id="decoder-result" class="decoder-result" aria-live="polite"></div>
-      </div>
-    </section>
-
-    <section class="section" id="rules" aria-labelledby="rules-title">
-      <div class="wrap">
-        <div class="section-head">
-          <span class="num">02</span>
+    <!-- RULES -->
+    <section class="view" id="view-rules" data-view="rules" aria-labelledby="rules-title" hidden>
+      <div class="wrap page">
+        <div class="page-head">
           <h2 id="rules-title">The sound shifts</h2>
-          <p>These patterns unlock most words. Each card shows the shift forwards and the trick for hearing it backwards.</p>
+          <p>Each rule shows the shift forwards, with examples, and the trick for hearing it backwards. The number stays the same everywhere in the app.</p>
         </div>
-        <div class="rules-grid" id="rules-grid"></div>
+        <ol class="rules" id="rules-list"></ol>
         <h3 class="sub">Grammar shortcuts</h3>
         <div class="grammar-grid" id="grammar-grid"></div>
       </div>
     </section>
 
-    <section class="section" id="cards" aria-labelledby="cards-title">
-      <div class="wrap">
-        <div class="section-head">
-          <span class="num">03</span>
+    <!-- FLASHCARDS -->
+    <section class="view" id="view-cards" data-view="cards" aria-labelledby="cards-title" hidden>
+      <div class="wrap page">
+        <div class="page-head">
           <h2 id="cards-title">Flashcards</h2>
           <p>The rules can't explain these words, so they're worth learning by heart. Click the card or press space to flip it.</p>
         </div>
         <div class="toolbar">
           <div class="chips" id="card-filters" role="group" aria-label="Filter by category"></div>
-          <button class="btn btn-ghost" id="card-direction" type="button">Show: Zürich → Standard</button>
+          <button class="btn btn-ghost btn-sm" id="card-direction" type="button">Show: Züri → Hochdeutsch</button>
         </div>
         <div class="card-stage">
-          <button class="flashcard" id="flashcard" type="button" aria-live="polite">
+          <button class="flashcard" id="flashcard" type="button">
             <span class="card-face card-front" id="card-front"></span>
             <span class="card-face card-back" id="card-back"></span>
           </button>
@@ -93,27 +118,28 @@
           <span class="card-progress" id="card-progress"></span>
           <button class="btn btn-primary" id="card-known" type="button">Knew it <kbd>→</kbd></button>
         </div>
-        <p class="small-print">Your progress is saved in this browser only. <button class="link-btn" id="card-reset" type="button">Reset progress</button></p>
+        <p class="small-print">Progress is saved in this browser only. <button class="link-btn" id="card-reset" type="button">Reset progress</button></p>
       </div>
     </section>
 
-    <section class="section" id="quiz" aria-labelledby="quiz-title">
-      <div class="wrap">
-        <div class="section-head">
-          <span class="num">04</span>
+    <!-- QUIZ -->
+    <section class="view" id="view-quiz" data-view="quiz" aria-labelledby="quiz-title" hidden>
+      <div class="wrap page">
+        <div class="page-head">
           <h2 id="quiz-title">Reverse it into Standard German</h2>
           <p>Read the dialect, then type the Standard German. Afterwards you'll see which rule did the work.</p>
         </div>
         <div class="toolbar">
-          <div class="chips" role="group" aria-label="Quiz level">
-            <button class="chip is-active" data-level="words" type="button">Words</button>
-            <button class="chip" data-level="sentences" type="button">Sentences</button>
+          <div class="segmented" role="group" aria-label="Quiz level">
+            <button class="is-active" data-level="words" type="button" aria-pressed="true">Words</button>
+            <button data-level="sentences" type="button" aria-pressed="false">Sentences</button>
           </div>
           <span class="score" id="quiz-score"></span>
         </div>
         <div class="quiz-card">
+          <div class="quiz-meta"><span id="quiz-count"></span></div>
           <p class="quiz-prompt" id="quiz-prompt"></p>
-          <form id="quiz-form" class="quiz-form" autocomplete="off">
+          <form id="quiz-form" class="field-row" autocomplete="off">
             <label for="quiz-input" class="visually-hidden">Your Standard German answer</label>
             <input id="quiz-input" type="text" placeholder="Standard German…" spellcheck="false" autocapitalize="off">
             <button type="submit" class="btn btn-primary" id="quiz-submit">Check</button>
@@ -123,10 +149,10 @@
       </div>
     </section>
 
-    <section class="section" id="plan" aria-labelledby="plan-title">
-      <div class="wrap">
-        <div class="section-head">
-          <span class="num">05</span>
+    <!-- PLAN -->
+    <section class="view" id="view-plan" data-view="plan" aria-labelledby="plan-title" hidden>
+      <div class="wrap page">
+        <div class="page-head">
           <h2 id="plan-title">A listening plan</h2>
           <p>Start short and predictable, then move to people talking freely.</p>
         </div>
@@ -139,10 +165,10 @@
     </section>
   </main>
 
-  <footer class="site-footer">
+  <footer class="footer">
     <div class="wrap footer-row">
-      <p>Made in Zürich by Cemre, built with Claude. Spellings follow common Zürich usage. Swiss German has no official spelling, so you'll see variants.</p>
-      <p><a href="https://github.com/" id="repo-link">Source on GitHub</a> · Free to use under the MIT licence</p>
+      <p>My first GitHub project, made with love in Zürich and built with Claude. Swiss German has no official spelling, so you'll meet variants in the wild.</p>
+      <p><a href="https://github.com/" id="repo-link">Source on GitHub</a> · MIT licence</p>
     </div>
   </footer>
 
