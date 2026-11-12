@@ -217,8 +217,9 @@
   };
 
   const LEXICON = new Map();
+  const clean = (t) => t.toLowerCase().replace(/[.,!?;:"']/g, "").replace(/\s+/g, " ").trim();
   function addToLexicon(zd, hd, source) {
-    zd.split("/").map((s) => s.trim().toLowerCase()).filter(Boolean)
+    zd.split("/").map(clean).filter(Boolean)
       .forEach((key) => { if (!LEXICON.has(key)) LEXICON.set(key, { hd, source }); });
   }
   VOCAB.forEach((v) => addToLexicon(v.zd, v.hd, "vocab"));
@@ -250,7 +251,7 @@
 
   function decode(input) {
     const raw = input.trim();
-    const key = raw.toLowerCase();
+    const key = clean(raw);
     if (!key) return null;
     if (LEXICON.has(key)) {
       const hit = LEXICON.get(key);
@@ -285,14 +286,25 @@
 
     if (result.type === "known") {
       const target = flapText(result.hd);
-      const fits = target.length <= MAX_FLAPS && result.input.length <= MAX_FLAPS;
-      flapTo(flaps, result.input, fits ? target : result.input, opts);
+      if (result.input.length > MAX_FLAPS || target.length > MAX_FLAPS) {
+        // Whole phrases are too long for the board: show them as a line of text instead.
+        flaps._run = (flaps._run || 0) + 1;
+        flaps.style.removeProperty("--n");
+        flaps.removeAttribute("role");
+        flaps.removeAttribute("aria-label");
+        flaps.innerHTML = "";
+        flaps.append(el("p", { class: "board-text", text: result.hd }));
+      } else {
+        flapTo(flaps, result.input, target, opts);
+      }
       status.textContent = "Word list";
       status.classList.add("is-known");
       if (result.source.startsWith("rules:")) {
         result.source.slice(6).split(",").filter(Boolean).forEach((id) => foot.append(ruleChip(id)));
+      } else if (result.source === "vocab") {
+        foot.append(el("p", { text: "No rule explains this one, so it's on the flashcards." }));
       } else {
-        foot.append(el("p", { text: result.input + " = " + result.hd + (result.source === "vocab" ? ". No rule explains this one, so it's a flashcard word." : "") }));
+        foot.append(el("p", { text: result.input + " = " + result.hd }));
       }
     } else if (result.type === "guess") {
       const fits = result.guess.length <= MAX_FLAPS && result.input.length <= MAX_FLAPS;
@@ -588,10 +600,7 @@
     $("#quiz-form").addEventListener("submit", check);
     $$("[data-level]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        $$("[data-level]").forEach((b) => {
-          b.classList.toggle("is-active", b === btn);
-          b.setAttribute("aria-pressed", b === btn ? "true" : "false");
-        });
+        $$("[data-level]").forEach((b) => b.setAttribute("aria-pressed", b === btn ? "true" : "false"));
         startQuiz(btn.dataset.level);
       });
     });

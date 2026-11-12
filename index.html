@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Züri-Tüütsch Decoder</title>
-  <meta name="description" content="Understand Zürich German faster: the sound-shift rules, flashcards for the words you just have to learn, and a quiz that reverses dialect into Standard German.">
+  <meta name="description" content="Understand Zurich German faster: the sound-shift rules, flashcards for the words you just have to learn, and a quiz that reverses dialect into Standard German.">
   <meta name="theme-color" content="#0070B4">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230070B4'/><rect x='6' y='6' width='20' height='20' rx='3' fill='%2300407C'/><rect x='6' y='15.5' width='20' height='1' fill='%230070B4'/><text x='16' y='22.5' font-family='monospace' font-size='15' font-weight='700' fill='white' text-anchor='middle'>Ü</text></svg>">
   <link rel="preload" href="fonts/jetbrains-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -35,7 +35,7 @@
     <section class="view" id="view-decode" data-view="decode" aria-labelledby="decode-title">
       <div class="band">
         <div class="wrap">
-          <p class="kicker">For native-level German speakers in Zürich</p>
+          <p class="kicker">For native-level German speakers in Zurich</p>
           <h1 id="decode-title">You already speak most of it. <span>You just can't hear it yet.</span></h1>
 
           <form class="decoder" id="decoder-form" autocomplete="off">
@@ -65,19 +65,19 @@
         <div class="intro-card">
           <span class="num">13</span>
           <h2>Sound shifts</h2>
-          <p>Zürichdeutsch is Standard German run through a set of predictable shifts. Learn them once and most words decode themselves.</p>
+          <p>Züritüütsch is Hochdeutsch run through a set of predictable shifts. Learn them once and most words decode themselves.</p>
           <a class="link-arrow" href="#rules">See the rules</a>
         </div>
         <div class="intro-card">
           <span class="num" id="vocab-count">74</span>
-          <h2>Words to learn by heart</h2>
+          <h2>Words and phrases to learn</h2>
           <p>Some everyday words follow no rule at all: luege, poschte, Rüebli. Those go on flashcards.</p>
           <a class="link-arrow" href="#cards">Practise flashcards</a>
         </div>
         <div class="intro-card">
           <span class="num">45</span>
           <h2>Reverse-it quiz</h2>
-          <p>Read the dialect, type the Standard German, and see which rule did the work.</p>
+          <p>Read the Züritüütsch, type the Hochdeutsch, and see which rule did the work.</p>
           <a class="link-arrow" href="#quiz">Start the quiz</a>
         </div>
       </div>
@@ -126,13 +126,13 @@
     <section class="view" id="view-quiz" data-view="quiz" aria-labelledby="quiz-title" hidden>
       <div class="wrap page">
         <div class="page-head">
-          <h2 id="quiz-title">Reverse it into Standard German</h2>
-          <p>Read the dialect, then type the Standard German. Afterwards you'll see which rule did the work.</p>
+          <h2 id="quiz-title">Reverse it into Hochdeutsch</h2>
+          <p>Read the Züritüütsch, then type the Hochdeutsch. Afterwards you'll see which rule did the work.</p>
         </div>
         <div class="toolbar">
-          <div class="segmented" role="group" aria-label="Quiz level">
-            <button class="is-active" data-level="words" type="button" aria-pressed="true">Words</button>
-            <button data-level="sentences" type="button" aria-pressed="false">Sentences</button>
+          <div class="chips" role="group" aria-label="Quiz level">
+            <button class="chip" data-level="words" type="button" aria-pressed="true">Words</button>
+            <button class="chip" data-level="sentences" type="button" aria-pressed="false">Sentences</button>
           </div>
           <span class="score" id="quiz-score"></span>
         </div>
@@ -140,8 +140,8 @@
           <div class="quiz-meta"><span id="quiz-count"></span></div>
           <p class="quiz-prompt" id="quiz-prompt"></p>
           <form id="quiz-form" class="field-row" autocomplete="off">
-            <label for="quiz-input" class="visually-hidden">Your Standard German answer</label>
-            <input id="quiz-input" type="text" placeholder="Standard German…" spellcheck="false" autocapitalize="off">
+            <label for="quiz-input" class="visually-hidden">Your answer in Hochdeutsch</label>
+            <input id="quiz-input" type="text" placeholder="Hochdeutsch…" spellcheck="false" autocapitalize="off">
             <button type="submit" class="btn btn-primary" id="quiz-submit">Check</button>
           </form>
           <div id="quiz-feedback" class="quiz-feedback" aria-live="polite"></div>
@@ -167,8 +167,8 @@
 
   <footer class="footer">
     <div class="wrap footer-row">
-      <p>My first GitHub project, made with love in Zürich and built with Claude. Swiss German has no official spelling, so you'll meet variants in the wild.</p>
-      <p><a href="https://github.com/" id="repo-link">Source on GitHub</a> · MIT licence</p>
+      <p>Decoded with love in Zurich by <a href="https://github.com/cemreozertas">Cemre Özer Taş</a>. Swiss German has no official spelling, so you'll meet variants in the wild.</p>
+      <p><a href="https://github.com/cemreozertas">@cemreozertas</a> · <a href="https://github.com/" id="repo-link">Source on GitHub</a> · MIT licence</p>
     </div>
   </footer>
 
