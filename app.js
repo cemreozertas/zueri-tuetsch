@@ -147,7 +147,7 @@
       }
       else a.removeAttribute("aria-current");
     });
-    const label = { start: "Start", story: "Story", decode: "Decode", rules: "Rules", cards: "Flashcards", quiz: "Quiz", plan: "Listening plan" }[view];
+    const label = { start: "Start", story: "Story", decode: "Decode", rules: "Rules", cards: "Vocabulary", quiz: "Quiz", plan: "Listening plan" }[view];
     document.title = view === "start" ? "Züritüütsch · A guide to Zurich German" : label + " · Züritüütsch";
 
     if (target) target.scrollIntoView({ block: "start", behavior: reduceMotion ? "auto" : "smooth" });
@@ -223,7 +223,8 @@
     "de": "der", "d": "die", "s": "das", "en": "ein", "e": "eine", "es": "ein (neutral) / es",
     "gseh": "gesehen", "chunnsch": "kommst du", "lueg": "schau!", "los": "hör zu!",
     "mueter": "Mutter", "vatter": "Vater", "spiil": "Spiel", "iichaufe": "einkaufen",
-    "wii": "Wein", "miin": "mein", "ziit": "Zeit", "gschänk": "Geschenk", "aabig": "Abend", "strass": "Strasse", "meitli": "Mädchen"
+    "wii": "Wein", "miin": "mein", "ziit": "Zeit", "gschänk": "Geschenk", "aabig": "Abend", "strass": "Strasse", "meitli": "Mädchen",
+    "höi": "Heu", "föif": "fünf", "nöii": "neue"
   };
 
   const LEXICON = new Map();
@@ -233,7 +234,7 @@
       .forEach((key) => { if (!LEXICON.has(key)) LEXICON.set(key, { hd, source }); });
   }
   VOCAB.forEach((v) => addToLexicon(v.zd, v.hd, "vocab"));
-  QUIZ.words.forEach((q) => addToLexicon(q.zd, q.hd[0], "rules:" + q.rules.join(",")));
+  QUIZ.filter((q) => !q.zd.includes(" ")).forEach((q) => addToLexicon(q.zd, q.hd[0], "rules:" + q.rules.join(",")));
   Object.entries(EXTRA_WORDS).forEach(([zd, hd]) => addToLexicon(zd, hd, "small"));
   RULES.forEach((r) => r.examples.forEach(([hd, zd]) => addToLexicon(zd, hd, "rules:" + r.id)));
 
@@ -245,7 +246,7 @@
       .forEach((key) => { if (!LEXICON_HD.has(key)) LEXICON_HD.set(key, { zd: firstVariant(zd), source }); });
   }
   RULES.forEach((r) => r.examples.forEach(([hd, zd]) => addToLexiconHd(hd, zd, "rules:" + r.id)));
-  QUIZ.words.forEach((q) => q.hd.forEach((hd) => addToLexiconHd(hd, q.zd, "rules:" + q.rules.join(","))));
+  QUIZ.filter((q) => !q.zd.includes(" ")).forEach((q) => q.hd.forEach((hd) => addToLexiconHd(hd, q.zd, "rules:" + q.rules.join(","))));
   VOCAB.forEach((v) => addToLexiconHd(v.hd, v.zd, "vocab"));
   Object.entries(EXTRA_WORDS).forEach(([zd, hd]) => addToLexiconHd(hd, zd, "small"));
 
@@ -525,10 +526,43 @@
     $("#vocab-count").textContent = VOCAB.length;
   }
 
-  /* ---------------------------------------------------------- Flashcards */
+  /* ---------------------------------------------------------- Levels */
+
+  const SWAP_SVG = '<svg class="swap" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 5h10.5M10 2l3 3-3 3M14 11H3.5M6 8l-3 3 3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  // Three little bars, filled 1, 2 or 3 times: the level at a glance.
+  function pips(lvl) {
+    return el("span", { class: "pips", "aria-hidden": "true" }, [el("i"), el("i"), el("i")]);
+  }
+  function levelBadge(lvl) {
+    return el("span", { class: "lvl-badge lvl-" + lvl, title: "Level: " + LEVELS[lvl].name }, [pips(lvl), el("span", { text: LEVELS[lvl].name })]);
+  }
+
+  // A row of level buttons. counts(level) gives the number shown on each button.
+  function levelBar(container, opts) {
+    container.innerHTML = "";
+    const keys = (opts.all ? ["all"] : []).concat(["1", "2", "3"]);
+    keys.forEach((k) => {
+      const lvl = k === "all" ? null : Number(k);
+      const btn = el("button", { type: "button", class: "level-btn" + (lvl ? " lvl-" + lvl : " lvl-all"), "data-lvl": k, "aria-pressed": String(k) === String(opts.current) ? "true" : "false" }, [
+        el("span", { class: "level-top" }, [lvl ? pips(lvl) : el("span", { class: "pips pips-all", "aria-hidden": "true" }, [el("i"), el("i"), el("i")]), el("span", { class: "level-name", text: lvl ? LEVELS[lvl].name : "All levels" })]),
+        el("span", { class: "level-count", text: opts.counts(lvl) + " " + opts.unit })
+      ]);
+      btn.addEventListener("click", () => {
+        $$(".level-btn", container).forEach((b) => b.setAttribute("aria-pressed", b === btn ? "true" : "false"));
+        opts.onChange(k);
+      });
+      container.append(btn);
+    });
+  }
+  const levelText = (k) => k === "all" ? "Everything, from easy to impossible." : LEVELS[k].text;
+
+  /* ---------------------------------------------------------- Words (flashcards and list) */
 
   const cards = {
+    level: store.get("zd-level", "all"),
     filter: "all",
+    mode: store.get("zd-mode", "cards"),
     direction: "zd2hd",
     queue: [],
     current: null,
@@ -536,7 +570,61 @@
     flipped: false
   };
 
-  const deck = () => VOCAB.filter((v) => cards.filter === "all" || v.cat === cards.filter);
+  const inLevel = (v) => cards.level === "all" || v.lvl === Number(cards.level);
+  const deck = () => VOCAB.filter((v) => inLevel(v) && (cards.filter === "all" || v.cat === cards.filter));
+
+  function renderTopics() {
+    const filters = $("#card-filters");
+    filters.innerHTML = "";
+    const pool = VOCAB.filter(inLevel);
+    if (cards.filter !== "all" && !pool.some((v) => v.cat === cards.filter)) cards.filter = "all";
+    [["all", "All topics"]].concat(Object.entries(CATEGORIES)).forEach(([id, label]) => {
+      const n = id === "all" ? pool.length : pool.filter((v) => v.cat === id).length;
+      if (!n) return;
+      filters.append(el("button", {
+        class: "chip" + (id === "false-friends" ? " chip-false" : ""), type: "button", "aria-pressed": id === cards.filter ? "true" : "false",
+        onclick: (e) => {
+          cards.filter = id;
+          $$(".chip", filters).forEach((b) => b.setAttribute("aria-pressed", b === e.currentTarget ? "true" : "false"));
+          refreshWords();
+        }
+      }, [document.createTextNode(label + " "), el("span", { class: "chip-count", text: String(n) })]));
+    });
+  }
+
+  function refreshWords() {
+    $("#word-level-desc").textContent = levelText(cards.level);
+    $("#cards-mode").hidden = cards.mode !== "cards";
+    $("#list-mode").hidden = cards.mode !== "list";
+    $("#card-direction").hidden = cards.mode !== "cards";
+    $$(".seg [data-mode]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.mode === cards.mode ? "true" : "false"));
+    if (cards.mode === "cards") buildQueue(); else renderList();
+  }
+
+  function renderList() {
+    const wrap = $("#word-list");
+    wrap.innerHTML = "";
+    const words = deck();
+    Object.entries(CATEGORIES).forEach(([id, label]) => {
+      const group = words.filter((v) => v.cat === id);
+      if (!group.length) return;
+      const ul = el("ul", { class: "word-rows" });
+      group.forEach((v) => {
+        const li = el("li", { class: cards.known.has(v.zd) ? "is-known" : "" }, [
+          el("span", { class: "w-zd", text: v.zd }),
+          el("span", { class: "w-hd", text: v.hd }),
+          levelBadge(v.lvl)
+        ]);
+        const extra = [v.note, v.ex].filter(Boolean).join(" · ");
+        if (extra) li.append(el("span", { class: "w-extra", text: extra }));
+        ul.append(li);
+      });
+      wrap.append(el("section", { class: "word-group" + (id === "false-friends" ? " is-false" : "") }, [
+        el("h3", null, [document.createTextNode(label + " "), el("span", { class: "chip-count", text: String(group.length) })]),
+        ul
+      ]));
+    });
+  }
 
   function buildQueue() {
     cards.queue = shuffle(deck().filter((v) => !cards.known.has(v.zd)));
@@ -579,6 +667,7 @@
     const backText = zdFirst ? c.hd : c.zd;
     const catClass = "card-cat" + (c.cat === "false-friends" ? " is-false-friend" : "");
     front.append(
+      el("span", { class: "card-corner" }, [levelBadge(c.lvl)]),
       el("span", { class: catClass, text: CATEGORIES[c.cat] }),
       el("span", { class: "card-word", text: frontText }),
       el("span", { class: "card-hint", text: zdFirst ? "What does it mean?" : "How do you say it in Züritüütsch?" })
@@ -616,23 +705,35 @@
     nextCard();
   }
 
-  function initCards() {
-    const filters = $("#card-filters");
-    [["all", "All"]].concat(Object.entries(CATEGORIES)).forEach(([id, label]) => {
-      filters.append(el("button", {
-        class: "chip", type: "button", text: label, "aria-pressed": id === "all" ? "true" : "false",
-        onclick: (e) => {
-          cards.filter = id;
-          $$(".chip", filters).forEach((b) => b.setAttribute("aria-pressed", b === e.currentTarget ? "true" : "false"));
-          buildQueue();
-        }
-      }));
-    });
+  function setCardDirection() {
+    const zdFirst = cards.direction === "zd2hd";
+    const btn = $("#card-direction");
+    btn.innerHTML = "";
+    btn.append(
+      el("span", { text: zdFirst ? "Züri" : "Hochdeutsch" }),
+      tram(),
+      el("span", { text: zdFirst ? "Hochdeutsch" : "Züri" })
+    );
+    const t = document.createElement("template"); t.innerHTML = SWAP_SVG; btn.append(t.content.firstChild);
+    btn.setAttribute("aria-label", "Card direction: " + (zdFirst ? "Züri to Hochdeutsch" : "Hochdeutsch to Züri") + ". Click to switch.");
+    btn.title = "Switch direction";
+  }
 
-    const dirBtn = $("#card-direction");
-    dirBtn.addEventListener("click", () => {
+  function initCards() {
+    if (!["all", "1", "2", "3"].includes(String(cards.level))) cards.level = "all";
+    if (!["cards", "list"].includes(cards.mode)) cards.mode = "cards";
+    levelBar($("#word-levels"), {
+      all: true, current: cards.level, unit: "words",
+      counts: (lvl) => VOCAB.filter((v) => !lvl || v.lvl === lvl).length,
+      onChange: (k) => { cards.level = k; store.set("zd-level", k); renderTopics(); refreshWords(); }
+    });
+    $$(".seg [data-mode]").forEach((b) => b.addEventListener("click", () => {
+      cards.mode = b.dataset.mode; store.set("zd-mode", cards.mode); refreshWords();
+    }));
+    setCardDirection();
+    $("#card-direction").addEventListener("click", () => {
       cards.direction = cards.direction === "zd2hd" ? "hd2zd" : "zd2hd";
-      dirBtn.textContent = cards.direction === "zd2hd" ? "Show: Züri → Hochdeutsch" : "Show: Hochdeutsch → Züri";
+      setCardDirection();
       cards.flipped = false;
       renderCard();
     });
@@ -647,18 +748,19 @@
     });
 
     document.addEventListener("keydown", (e) => {
-      if (currentView !== "cards" || e.target.closest("input, textarea, select")) return;
+      if (currentView !== "cards" || cards.mode !== "cards" || e.target.closest("input, textarea, select")) return;
       if (e.key === " " && !e.target.closest("button")) { e.preventDefault(); flip(); }
       else if (e.key === "ArrowRight") { e.preventDefault(); markKnown(); }
       else if (e.key === "ArrowLeft") { e.preventDefault(); markAgain(); }
     });
 
-    buildQueue();
+    renderTopics();
+    refreshWords();
   }
 
   /* ---------------------------------------------------------------- Quiz */
 
-  const quiz = { level: "words", items: [], index: 0, right: 0, answered: 0, done: false };
+  const quiz = { level: "1", items: [], index: 0, right: 0, answered: 0, done: false };
 
   function normalize(s) {
     return s.toLowerCase()
@@ -670,7 +772,8 @@
 
   function startQuiz(level) {
     quiz.level = level;
-    quiz.items = shuffle(QUIZ[level]);
+    quiz.items = shuffle(QUIZ.filter((q) => q.lvl === Number(level)));
+    $("#quiz-level-desc").textContent = { 1: "Single words, one sound rule each.", 2: "Words with two rules, and short sentences.", 3: "Full sentences at real-life speed, with slang and traps." }[level];
     quiz.index = 0;
     quiz.right = 0;
     quiz.answered = 0;
@@ -738,7 +841,7 @@
     const box = el("div", { class: "fb " + (ok ? "fb-ok" : "fb-miss") }, [
       el("p", { class: "fb-title", text: ok ? "Genau! That's right." : (answer.trim() ? "Not quite." : "Here's the answer.") })
     ]);
-    if (quiz.level === "words" && item.hd[0].length <= MAX_FLAPS) {
+    if (!item.zd.includes(" ") && item.hd[0].length <= MAX_FLAPS) {
       const flaps = el("div", { class: "flaps" });
       box.append(el("div", { class: "fb-board" }, [flaps]));
       flapTo(flaps, item.zd, item.hd[0]);
@@ -761,13 +864,12 @@
 
   function initQuiz() {
     $("#quiz-form").addEventListener("submit", check);
-    $$("[data-level]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        $$("[data-level]").forEach((b) => b.setAttribute("aria-pressed", b === btn ? "true" : "false"));
-        startQuiz(btn.dataset.level);
-      });
+    levelBar($("#quiz-levels"), {
+      all: false, current: "1", unit: "questions",
+      counts: (lvl) => QUIZ.filter((q) => q.lvl === lvl).length,
+      onChange: (k) => startQuiz(k)
     });
-    startQuiz("words");
+    startQuiz("1");
   }
 
   /* ---------------------------------------------------------------- Plan */

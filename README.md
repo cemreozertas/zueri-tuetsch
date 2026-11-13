@@ -23,8 +23,8 @@ Zurich German isn't a variant of Standard German but its close relative: both gr
 | **Start** | A short introduction: what the site is, how it works and where to begin. |
 | **Decode** | Type a word you heard and watch it flip into Standard German on a departure board. The letters that change light up, and each change links to the rule behind it. Words that aren't in the list get a best guess from the rules. A switch flips the direction, so you can also go from Hochdeutsch to Züritüütsch. |
 | **Rules** | 13 numbered sound shifts (ei → ii, au → uu, k → ch, -ung → -ig …), each with examples, a "reverse it" tip and its exceptions. Plus four grammar shortcuts. |
-| **Flashcards** | 150+ words and phrases the rules can't explain (*luege, poschte, Rüebli, Ziischtig*), including false friends like *springe* = rennen. You can flip the direction, filter by topic, and your progress is saved in your browser. |
-| **Quiz** | Read the dialect, type the Standard German, and see the answer flap into place with the rules that did the work. Two levels: words and sentences. |
+| **Vocabulary** | 168 words and phrases the rules can't explain (*luege, poschte, Rüebli, Ziischtig*), sorted into ten topics and three levels: easy, hard and impossible. Practise them as flashcards (in either direction, with progress saved in your browser) or browse them as a list. False friends like *springe* = rennen get their own topic. |
+| **Quiz** | Read the dialect, type the Standard German, and see the answer flap into place with the rules that did the work. Three levels: easy (single words), hard (trickier words and short sentences) and impossible (full sentences with slang). |
 | **Listening plan** | A step-by-step plan from SRF Meteo to Swiss TV series, plus one daily habit. |
 | **Story** | Where Zurich German comes from, in twelve short headlines you can open for details: the Alemanni, the old vowels, why the Swiss write Hochdeutsch, the missing ß, no official spelling and more. Every fact links to its source. |
 
@@ -32,7 +32,7 @@ Zurich German isn't a variant of Standard German but its close relative: both gr
 
 ## Design
 
-The look borrows from the split-flap departure board and uses Zurich's city colours, over a street map of Zurich from Oerlikon to Enge that stays still while the page scrolls: **Blau** with white as the main pair, **Dunkelblau** for the flaps, **Türkis** for right answers, **Magenta** for misses and **Bordeaux** for exceptions and false friends. The fonts are Hanken Grotesk and JetBrains Mono, both served from this repo.
+The look borrows from the split-flap departure board and uses Zurich's city colours, over a street map of Zurich from Oerlikon to Enge that stays still while the page scrolls: **Blau** with white as the main pair, **Dunkelblau** for the flaps, and **Magenta** as the one accent colour, for answers, levels, exceptions and false friends. The fonts are Hanken Grotesk and JetBrains Mono, both served from this repo.
 
 ## How it's built
 

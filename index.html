@@ -35,7 +35,7 @@
         <a href="#start" data-view="start">Start</a>
         <a href="#decode" data-view="decode">Decode</a>
         <a href="#rules" data-view="rules">Rules</a>
-        <a href="#cards" data-view="cards">Flashcards</a>
+        <a href="#cards" data-view="cards">Vocabulary</a>
         <a href="#quiz" data-view="quiz">Quiz</a>
         <a href="#plan" data-view="plan">Listening plan</a>
         <a href="#story" data-view="story">Story</a>
@@ -82,7 +82,7 @@
             <span class="num" id="vocab-count">74</span>
             <h2>Words and phrases to learn</h2>
             <p>Some everyday words follow no rule at all: luege, poschte, Rüebli. Those go on flashcards.</p>
-            <a class="link-arrow" href="#cards">Practise flashcards</a>
+            <a class="link-arrow" href="#cards">Practise the vocabulary</a>
           </div>
           <div class="intro-card">
             <span class="num">45</span>
@@ -154,25 +154,40 @@
     <section class="view" id="view-cards" data-view="cards" aria-labelledby="cards-title" hidden>
       <div class="wrap page">
         <div class="page-head">
-          <h2 id="cards-title">Flashcards</h2>
-          <p>The rules can't explain these words, so they're worth learning by heart. Click the card or press space to flip it.</p>
+          <h2 id="cards-title">Vocabulary</h2>
+          <p>The words the sound rules can't explain, sorted by topic and by how hard they are. Practise them as flashcards, or browse the whole list.</p>
         </div>
-        <div class="toolbar">
-          <div class="chips" id="card-filters" role="group" aria-label="Filter by category"></div>
-          <button class="btn btn-ghost btn-sm" id="card-direction" type="button">Show: Züri → Hochdeutsch</button>
+
+        <div class="level-bar" id="word-levels" role="group" aria-label="Level"></div>
+        <p class="level-desc" id="word-level-desc"></p>
+        <div class="chips topic-chips" id="card-filters" role="group" aria-label="Topic"></div>
+
+        <div class="toolbar mode-bar">
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" data-mode="cards" aria-pressed="true">Flashcards</button>
+            <button type="button" data-mode="list" aria-pressed="false">List</button>
+          </div>
+          <button class="dir-toggle on-light" id="card-direction" type="button"></button>
         </div>
-        <div class="card-stage">
-          <button class="flashcard" id="flashcard" type="button">
-            <span class="card-face card-front" id="card-front"></span>
-            <span class="card-face card-back" id="card-back"></span>
-          </button>
+
+        <div id="cards-mode">
+          <div class="card-stage">
+            <button class="flashcard" id="flashcard" type="button">
+              <span class="card-face card-front" id="card-front"></span>
+              <span class="card-face card-back" id="card-back"></span>
+            </button>
+          </div>
+          <div class="card-controls">
+            <button class="btn btn-ghost" id="card-again" type="button">Again <kbd>←</kbd></button>
+            <span class="card-progress" id="card-progress"></span>
+            <button class="btn btn-primary" id="card-known" type="button">Knew it <kbd>→</kbd></button>
+          </div>
+          <p class="small-print">Click the card or press space to flip it. Progress is saved in this browser only. <button class="link-btn" id="card-reset" type="button">Reset progress</button></p>
         </div>
-        <div class="card-controls">
-          <button class="btn btn-ghost" id="card-again" type="button">Again <kbd>←</kbd></button>
-          <span class="card-progress" id="card-progress"></span>
-          <button class="btn btn-primary" id="card-known" type="button">Knew it <kbd>→</kbd></button>
+
+        <div id="list-mode" hidden>
+          <div class="word-list" id="word-list"></div>
         </div>
-        <p class="small-print">Progress is saved in this browser only. <button class="link-btn" id="card-reset" type="button">Reset progress</button></p>
       </div>
     </section>
 
@@ -183,11 +198,9 @@
           <h2 id="quiz-title">Reverse it into Hochdeutsch</h2>
           <p>Read the Züritüütsch, then type the Hochdeutsch. Afterwards you'll see which rule did the work.</p>
         </div>
+        <div class="level-bar level-bar-3" id="quiz-levels" role="group" aria-label="Quiz level"></div>
         <div class="toolbar">
-          <div class="chips" role="group" aria-label="Quiz level">
-            <button class="chip" data-level="words" type="button" aria-pressed="true">Words</button>
-            <button class="chip" data-level="sentences" type="button" aria-pressed="false">Sentences</button>
-          </div>
+          <p class="level-desc" id="quiz-level-desc"></p>
           <span class="score" id="quiz-score"></span>
         </div>
         <div class="quiz-card">
