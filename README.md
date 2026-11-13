@@ -12,6 +12,8 @@ Turkish is my mother tongue, German my second home, and Swiss German the languag
 
 Zurich German isn't a new language. It's Standard German run through about a dozen predictable sound shifts, plus a few hundred everyday words that don't follow any rule. Learn the shifts, memorise the words, and train the one skill that matters when you're listening: **reversing what you hear back into Standard German.**
 
+**Who it's for:** anyone in or around Zurich who speaks German. It works best if you're comfortable in Hochdeutsch (about B1 and up), because the trick is reversing dialect into words you already know.
+
 ## What's inside
 
 | Tab | What it does |
@@ -26,7 +28,7 @@ Zurich German isn't a new language. It's Standard German run through about a doz
 
 ## Design
 
-The look borrows from the split-flap departure board and uses Zurich's city colours: **Blau** with white as the main pair, **Dunkelblau** for the flaps, **Türkis** for right answers, **Magenta** for misses and **Bordeaux** for exceptions and false friends. The fonts are Hanken Grotesk and JetBrains Mono, both served from this repo.
+The look borrows from the split-flap departure board and uses Zurich's city colours, over a street map of Zurich from Oerlikon to Enge that stays still while the page scrolls: **Blau** with white as the main pair, **Dunkelblau** for the flaps, **Türkis** for right answers, **Magenta** for misses and **Bordeaux** for exceptions and false friends. The fonts are Hanken Grotesk and JetBrains Mono, both served from this repo.
 
 ## How it's built
 
@@ -37,6 +39,7 @@ index.html     page structure and the five tabs
 styles.css     look and feel
 app.js         split-flap board, decoder, flashcards, quiz
 data.js        all rules, words, quiz items and the listening plan
+map-on-*.svg   the Zurich street map, one colour per background
 fonts/         self-hosted fonts (SIL Open Font License)
 docs/          screenshots for this README
 ```
@@ -63,6 +66,6 @@ Swiss German has no official spelling. This app follows common Zurich usage, wit
 
 ## Credits
 
-Made with love in Zurich by Cemre, built together with [Claude](https://claude.ai). Fonts: [Hanken Grotesk](https://github.com/marcologous/hanken-grotesk) and [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono), both under the SIL Open Font License.
+Made with love in Zurich by Cemre, built together with [Claude](https://claude.ai). Map data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), via [EqualStreetNames Zürich](https://github.com/EqualStreetNames/equalstreetnames-zurich). Fonts: [Hanken Grotesk](https://github.com/marcologous/hanken-grotesk) and [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono), both under the SIL Open Font License.
 
 Licensed under the [MIT licence](LICENSE): free to use, copy and adapt.

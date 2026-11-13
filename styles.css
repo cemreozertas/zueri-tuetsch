@@ -326,3 +326,21 @@ input[type="text"]:disabled { background: var(--panel); color: var(--ink-2); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ---------- Zurich street map behind the page ---------- */
+/* One map, fixed to the screen: each coloured part shows it through its own window,
+   so streets run straight across the edges and only change colour as the page scrolls over them.
+   clip-path keeps each copy inside its own part (this also works on iPhones).
+   Map data © OpenStreetMap contributors. */
+.band, main, .footer { position: relative; isolation: isolate; clip-path: inset(0); }
+.band::before, main::before, .footer::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: url("map-on-blue.svg") 50% 50% / cover no-repeat;
+}
+main::before { background-image: url("map-on-white.svg"); }
+.footer::before { background-image: url("map-on-dark.svg"); }
+@media (max-aspect-ratio: 3/4) {
+  /* Portrait phones: the full north-south stretch, Oerlikon to the lake */
+  .band::before, main::before, .footer::before { background-size: auto 100%; background-position: 46% 50%; }
+}
+.quiz-card { background: #fff; }
