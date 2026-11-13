@@ -63,7 +63,8 @@ a:hover { color: var(--dunkelblau); }
 .topbar-row { display: flex; align-items: center; gap: 24px; min-height: 64px; }
 .brand { display: flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; font-weight: 800; font-size: 1.125rem; letter-spacing: -0.01em; }
 .brand:hover { color: #fff; }
-.brand-name span { font-weight: 600; opacity: 0.8; }
+.brand-name span { font-weight: 600; opacity: 0.8; font-size: 0.875rem; margin-left: 6px; }
+@media (max-width: 1100px) { .brand-name span { display: none; } }
 .brand-flap {
   width: 32px; height: 40px; border-radius: 5px; position: relative;
   background: linear-gradient(var(--flap-top) 50%, var(--hinge) 50%, var(--hinge) calc(50% + 2px), var(--flap) calc(50% + 2px));
@@ -96,7 +97,7 @@ a:hover { color: var(--dunkelblau); }
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   min-height: 48px; padding: 0 22px; border-radius: var(--r); cursor: pointer;
   border: 2px solid transparent; transition: background-color 150ms, border-color 150ms, color 150ms;
-  white-space: nowrap;
+  white-space: nowrap; text-decoration: none;
 }
 .btn-sm { min-height: 40px; padding: 0 16px; font-size: 0.9375rem; }
 .btn-primary { background: var(--blau); color: #fff; }
@@ -137,7 +138,8 @@ input[type="text"]:disabled { background: var(--panel); color: var(--ink-2); }
 .band { background: var(--blau); color: #fff; padding: 48px 0 40px; }
 .kicker { margin: 0 0 12px; font-family: var(--mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.85; }
 .band h1 { margin: 0 0 32px; font-size: 3rem; line-height: 1.05; letter-spacing: -0.03em; font-weight: 800; max-width: 820px; }
-.band h1 span { display: block; opacity: 0.72; }
+.band h1 { text-wrap: balance; }
+.band h1 span { display: block; opacity: 0.72; text-wrap: balance; }
 
 .decoder { max-width: 720px; margin-bottom: 20px; }
 .decoder label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 8px; opacity: 0.9; }
@@ -153,7 +155,7 @@ input[type="text"]:disabled { background: var(--panel); color: var(--ink-2); }
 .board-head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; font-family: var(--mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
 .board-label { opacity: 0.85; }
 .board-arrow { opacity: 0.6; }
-.board-status { margin-left: auto; letter-spacing: 0.06em; background: rgba(255, 255, 255, 0.12); padding: 4px 8px; border-radius: var(--r-xs); }
+.board-status { white-space: nowrap; margin-left: auto; letter-spacing: 0.06em; background: rgba(255, 255, 255, 0.12); padding: 4px 8px; border-radius: var(--r-xs); }
 .board-status.is-known { background: var(--tuerkis); }
 .board-status.is-guess { background: var(--bordeaux); }
 .board-text { grid-column: 1 / -1; margin: 0; font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; }
@@ -327,6 +329,89 @@ input[type="text"]:disabled { background: var(--panel); color: var(--ink-2); }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 
+/* ---------- Tram icon (used instead of arrows between the two languages) ---------- */
+.tram { width: 1.6em; height: 0.96em; vertical-align: -0.08em; display: inline-block; }
+.board-arrow { display: inline-flex; opacity: 0.75; }
+.board-arrow .tram { width: 22px; height: 13px; }
+.rule h3 .arrow { display: inline-flex; align-items: center; color: var(--blau); margin: 0 6px; }
+.rule h3 .arrow .tram { width: 1.3em; height: 0.8em; }
+
+/* Direction switch: the board's own "Züri → Hochdeutsch" label is the button */
+.dir-toggle {
+  display: inline-flex; align-items: center; gap: 10px; font: inherit; color: #fff; cursor: pointer;
+  background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: var(--r-sm); padding: 7px 10px; margin: -8px 0 -8px -10px; min-height: 40px;
+  text-transform: inherit; letter-spacing: inherit; transition: background-color 150ms, border-color 150ms;
+}
+.dir-toggle:hover { background: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.5); }
+.dir-toggle .swap { width: 16px; height: 16px; opacity: 0.85; }
+
+/* Small note under a page intro */
+.note { margin: 12px 0 0; padding: 12px 16px; background: var(--panel); border-radius: var(--r-sm); font-size: 0.9375rem; color: var(--ink-2); }
+
+/* ---------- Start page ---------- */
+.band-start { padding: 64px 0 56px; }
+.start-hero { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 48px; align-items: center; }
+.start-copy h1 { margin-bottom: 20px; text-wrap: balance; }
+.start-copy h1 span { text-wrap: balance; }
+.lede { margin: 0 0 28px; font-size: 1.1875rem; line-height: 1.5; max-width: 560px; opacity: 0.92; }
+.start-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn-on-blue { background: transparent; color: #fff; border-color: rgba(255, 255, 255, 0.55); }
+.btn-on-blue:hover { border-color: #fff; background: rgba(255, 255, 255, 0.1); color: #fff; }
+.board-mini { margin: 0; }
+.board-mini .board-head { margin-bottom: 14px; }
+.start-body { padding-top: 40px; padding-bottom: 56px; }
+.start-body .intro-grid { padding: 0; }
+.section-label { margin: 0 0 14px; font-family: var(--mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--blau); }
+.start-more { margin: 20px 0 0; color: var(--ink-2); max-width: 720px; }
+.about-note {
+  margin-top: 40px; background: #fff; border: 2px solid var(--line); border-left: 6px solid var(--blau);
+  border-radius: var(--r-lg); padding: 24px 28px; max-width: 760px;
+}
+.about-note h2 { margin: 0 0 8px; font-size: 1.25rem; letter-spacing: -0.01em; }
+.about-note p { margin: 0; color: var(--ink-2); }
+@media (max-width: 820px) {
+  .band-start { padding: 40px 0 40px; }
+  .start-hero { grid-template-columns: 1fr; gap: 32px; }
+  .lede { font-size: 1.0625rem; }
+}
+
+/* ---------- Story page (accordion) ---------- */
+.story-tools { display: flex; justify-content: flex-end; max-width: 820px; margin-bottom: 12px; }
+.story { list-style: none; margin: 0; padding: 0; max-width: 820px; display: grid; gap: 10px; }
+.story > li { scroll-margin-top: 140px; background: #fff; border: 2px solid var(--line); border-radius: var(--r-lg); transition: border-color 0.15s; }
+.story > li.is-open { border-color: var(--blau); }
+.story h3 { margin: 0; font-size: inherit; }
+.story-q {
+  width: 100%; display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center;
+  background: none; border: 0; padding: 16px 18px; text-align: left; cursor: pointer;
+  font: inherit; font-size: 1.0625rem; font-weight: 600; line-height: 1.4; color: var(--ink);
+  border-radius: var(--r-lg);
+}
+.story-q:hover .story-title { color: var(--blau); }
+.story-num {
+  font-family: var(--mono); font-weight: 700; font-size: 0.8125rem; color: #fff; background: var(--dunkelblau);
+  border-radius: var(--r-xs); padding: 4px 7px; line-height: 1.2; align-self: start; margin-top: 2px;
+}
+/* Open/close toggle: a ticket that gets stamped when the item opens */
+.story-ticket { display: inline-flex; width: 40px; height: 26px; flex: none; }
+.story-ticket svg { width: 100%; height: 100%; overflow: visible; }
+.story-ticket .t-body { fill: var(--panel); stroke: var(--blau); stroke-width: 1.5; transition: fill 0.2s; }
+.story-ticket .t-perf { stroke: var(--blau); stroke-width: 1; stroke-dasharray: 2 2; fill: none; }
+.story-ticket .t-stamp { fill: none; stroke: #fff; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transform-origin: 13px 11px; transform: scale(1.6) rotate(-20deg); transition: opacity 0.18s, transform 0.22s; }
+.story-q:hover .story-ticket .t-body { fill: #DCE9F4; }
+.story-q[aria-expanded="true"] .story-ticket .t-body { fill: var(--blau); }
+.story-q[aria-expanded="true"] .story-ticket .t-perf { stroke: #fff; }
+.story-q[aria-expanded="true"] .story-ticket .t-stamp { opacity: 1; transform: none; }
+.story-a { padding: 0 18px 18px 64px; }
+.story-a p { margin: 0 0 12px; color: var(--ink-2); max-width: 640px; }
+.story-src { font-size: 0.875rem; padding-top: 12px; border-top: 1px solid var(--line); }
+.story-src-label { font-family: var(--mono); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink); margin-right: 8px; }
+@media (max-width: 600px) {
+  .story-q { gap: 10px; padding: 14px; font-size: 1rem; }
+  .story-a { padding: 0 14px 16px; }
+}
+
 /* ---------- Zurich street map behind the page ---------- */
 /* One map, fixed to the screen: each coloured part shows it through its own window,
    so streets run straight across the edges and only change colour as the page scrolls over them.
@@ -335,12 +420,18 @@ input[type="text"]:disabled { background: var(--panel); color: var(--ink-2); }
 .band, main, .footer { position: relative; isolation: isolate; clip-path: inset(0); }
 .band::before, main::before, .footer::before {
   content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
-  background: url("map-on-blue.svg") 50% 50% / cover no-repeat;
+  background: url("map-on-blue.svg") 50% 62% / cover no-repeat; /* 62%: keeps the lake tip in view on wide screens */
 }
 main::before { background-image: url("map-on-white.svg"); }
 .footer::before { background-image: url("map-on-dark.svg"); }
 @media (max-aspect-ratio: 3/4) {
   /* Portrait phones: the full north-south stretch, Oerlikon to the lake */
-  .band::before, main::before, .footer::before { background-size: auto 100%; background-position: 46% 50%; }
+  .band::before, main::before, .footer::before { background-size: auto 100%; background-position: 54% 50%; }
 }
 .quiz-card { background: #fff; }
+
+/* Short pages (Decode): the blue band stretches so the footer sits at the bottom of the screen */
+body { min-height: 100vh; display: flex; flex-direction: column; }
+main { flex: 1 0 auto; display: flex; flex-direction: column; }
+#view-decode:not([hidden]) { flex: 1 0 auto; display: flex; flex-direction: column; }
+#view-decode .band { flex: 1 0 auto; }

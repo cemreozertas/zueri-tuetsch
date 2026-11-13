@@ -1,5 +1,5 @@
 /*
- * Züri-Tüütsch Decoder: content
+ * Züritüütsch, a guide to Zurich German: content
  * ------------------------------
  * Everything the app shows lives in this one file, so you can add words,
  * rules or quiz items without touching the app code.
@@ -20,7 +20,7 @@ const RULES = [
   {
     id: "ei",
     from: "ei", to: "ii",
-    title: "ei becomes ii",
+    title: "Where Hochdeutsch has ei, you often hear ii",
     explain: "Many words with ei keep the old long i that Standard German turned into ei.",
     examples: [["Zeit", "Ziit"], ["mein", "miin"], ["bleiben", "bliibe"], ["schreiben", "schriibe"], ["Eis", "Iis"]],
     reverse: "Hear ii? Try ei.",
@@ -29,7 +29,7 @@ const RULES = [
   {
     id: "au",
     from: "au", to: "uu",
-    title: "au becomes uu",
+    title: "Where Hochdeutsch has au, you often hear uu",
     explain: "Same story as ei: an old long u that Standard German turned into au.",
     examples: [["Haus", "Huus"], ["auf", "uf"], ["brauchen", "bruuche"], ["Maus", "Muus"], ["aus", "us"]],
     reverse: "Hear uu (or a short u in uf, us)? Try au.",
@@ -38,15 +38,15 @@ const RULES = [
   {
     id: "eu",
     from: "eu / äu", to: "üü",
-    title: "eu and äu become üü",
-    explain: "The plural or umlauted partner of the au → uu shift.",
+    title: "Where Hochdeutsch has eu or äu, you often hear üü",
+    explain: "The umlauted partner of au and uu.",
     examples: [["heute", "hüt"], ["Leute", "Lüüt"], ["Häuser", "Hüüser"], ["Feuer", "Füür"]],
     reverse: "Hear üü? Try eu or äu."
   },
   {
     id: "ue",
     from: "u (long)", to: "ue",
-    title: "long u becomes ue",
+    title: "Where Hochdeutsch has a long u, you often hear ue",
     explain: "A gliding u-e sound where Standard German has a plain long u.",
     examples: [["gut", "guet"], ["Bruder", "Brueder"], ["Fuss", "Fuess"], ["Kuh", "Chue"]],
     reverse: "Hear ue? Drop the e."
@@ -54,7 +54,7 @@ const RULES = [
   {
     id: "ueh",
     from: "ü (long)", to: "üe",
-    title: "long ü becomes üe",
+    title: "Where Hochdeutsch has a long ü, you often hear üe",
     explain: "The umlauted version of ue. It's also hiding inside Grüezi (grüssen).",
     examples: [["müde", "müed"], ["früh", "früe"], ["grüssen", "grüesse"], ["Füsse", "Füess"]],
     reverse: "Hear üe? Drop the e."
@@ -70,7 +70,7 @@ const RULES = [
   {
     id: "k",
     from: "k (at the start)", to: "ch",
-    title: "k becomes ch",
+    title: "Where Hochdeutsch has k, you hear ch",
     explain: "At the start of a word, k is a throaty ch, like in Bach.",
     examples: [["Kind", "Chind"], ["Küche", "Chuchi"], ["kommen", "cho"], ["Käse", "Chääs"], ["kaufen", "chaufe"]],
     reverse: "Hear ch at the start of a word? Try k.",
@@ -79,7 +79,7 @@ const RULES = [
   {
     id: "en",
     from: "-en", to: "-e",
-    title: "the final n disappears",
+    title: "Words end without the final n",
     explain: "Verbs (and many nouns) lose their final n. Some short verbs shrink even more.",
     examples: [["machen", "mache"], ["Garten", "Garte"], ["gehen", "gaa"], ["haben", "ha"]],
     reverse: "Word ends in e? It probably ends in -en."
@@ -87,7 +87,7 @@ const RULES = [
   {
     id: "ge",
     from: "ge- (participle)", to: "g- / nothing",
-    title: "ge- shrinks to g- or disappears",
+    title: "ge- is just g-, or nothing",
     explain: "Past participles keep only a g, or nothing at all.",
     examples: [["gemacht", "gmacht"], ["gewesen", "gsi"], ["gehabt", "gha"], ["gesehen", "gseh"], ["gekommen", "cho"]],
     reverse: "g + consonant at the start? Add an e: ge-."
@@ -95,7 +95,7 @@ const RULES = [
   {
     id: "st",
     from: "st", to: "scht",
-    title: "st becomes scht everywhere",
+    title: "st is said scht everywhere",
     explain: "Standard German says scht only at the start of a word. Zurich says it everywhere.",
     examples: [["ist", "isch"], ["Post", "Poscht"], ["fast", "fascht"], ["Fest", "Fescht"], ["Wurst", "Wurscht"]],
     reverse: "Hear scht in the middle or at the end? Try st."
@@ -103,7 +103,7 @@ const RULES = [
   {
     id: "ung",
     from: "-ung", to: "-ig",
-    title: "-ung becomes -ig",
+    title: "Where Hochdeutsch has -ung, you hear -ig",
     explain: "One of the easiest shifts to spot once you know it.",
     examples: [["Zeitung", "Ziitig"], ["Wohnung", "Wonig"], ["Rechnung", "Rächnig"], ["Meinung", "Meinig"]],
     reverse: "Noun ends in -ig? Try -ung."
@@ -119,7 +119,7 @@ const RULES = [
   {
     id: "ae",
     from: "e (short)", to: "ä",
-    title: "short e opens up to ä",
+    title: "Short e often sounds like ä",
     explain: "Many short e sounds are spoken more open, like the a in English cat.",
     examples: [["Geld", "Gäld"], ["essen", "ässe"], ["recht", "rächt"], ["sechs", "sächs"]],
     reverse: "Hear ä where it sounds odd? Try e."
@@ -435,3 +435,150 @@ const PLAN = [
 ];
 
 const HABIT = "When you catch a word you didn't recognise, say the Standard German equivalent aloud and see which sound rule bridges them. After a few weeks you start doing it automatically.";
+
+
+/*
+ * Story page: each item is one full sentence that opens to show the details.
+ * Read the titles in order and they tell the story on their own.
+ * In the text, *word* is shown in italics.
+ */
+const STORY = [
+  {
+    title: "Swiss German isn't one language but a family of Alemannic dialects.",
+    text: [
+      "Swiss German is the umbrella name for the Alemannic dialects spoken in German-speaking Switzerland, by roughly 5.5 million people.",
+      "Linguists split them into Low, High and Highest Alemannic, and each group divides again into local varieties, sometimes village by village. Speakers from different regions still understand each other almost effortlessly, even where the words differ."
+    ],
+    sources: [
+      ["Swiss German (Wikipedia)", "https://en.wikipedia.org/wiki/Swiss_German"],
+      ["Does Whisper understand Swiss German? (arXiv, 2024)", "https://arxiv.org/pdf/2404.19310"]
+    ]
+  },
+  {
+    title: "Those dialects go back to the Alemanni, who settled here in the early Middle Ages.",
+    text: [
+      "The Alemanni were a confederation of Germanic peoples, first named in Roman sources in 289 AD. Their name probably meant \"all men\", and it lives on in the French word for Germany: *Allemagne*.",
+      "They settled the region in stages: north of the Rhine from the 5th century, and south of it, into what is now German-speaking Switzerland, from the 6th century on. Historians see them as the group that did most to make the region German-speaking."
+    ],
+    sources: [
+      ["Deutsch (Historisches Lexikon der Schweiz)", "https://hls-dhs-dss.ch/de/articles/011194/"],
+      ["Germanen (Historisches Lexikon der Schweiz)", "https://hls-dhs-dss.ch/de/articles/008026/"],
+      ["Alemanni (Wikipedia)", "https://en.wikipedia.org/wiki/Alemanni"]
+    ]
+  },
+  {
+    title: "Zurich German is the High Alemannic dialect of the Canton of Zurich.",
+    text: [
+      "Its speakers call it *Züritüütsch*. High Alemannic covers most of the Swiss Plateau and splits into an eastern and a western group, with Zurich sitting in the middle between them.",
+      "So when you learn to hear Zurich German, you are also halfway to understanding the dialects of the whole Plateau."
+    ],
+    sources: [
+      ["Zurich German (Wikipedia)", "https://en.wikipedia.org/wiki/Zurich_German"],
+      ["Swiss German (Wikipedia)", "https://en.wikipedia.org/wiki/Swiss_German"]
+    ]
+  },
+  {
+    title: "It kept the long vowels of medieval German, which is why Zeit is still Ziit.",
+    text: [
+      "In Middle High German, words like *mîn* and *hûs* had long vowels. From the 12th century, a change that began in south-eastern Austria turned these vowels into diphthongs, giving modern *mein* and *Haus*. By the 16th century it had spread across most of the German-speaking area, but not all of it.",
+      "Swiss German never took part, so it still says *miin*, *Huus* and *Ziit*. It also kept the old gliding vowels that Hochdeutsch flattened: *lieb* is still said li-eb, and *gut* is still *guet*. That's rules 01 to 06 in this app."
+    ],
+    sources: [
+      ["Chapter 21: Middle to New High German (Monash University)", "https://users.monash.edu.au/~ewilkins/textbook/CHAP21.PDF"],
+      ["Swiss German features (The Linguist)", "https://thelinguist.uberflip.com/i/1463531/22"]
+    ]
+  },
+  {
+    title: "It also pushed one sound shift further than Hochdeutsch did, turning k into ch.",
+    text: [
+      "While the Alemanni were settling here, the High German consonant shift was spreading: from the 5th to the 8th century, *t* turned into *tz* or *s*, *p* into *pf* or *f*, and *k* into *ch*. Even the city's name went through it: Roman *Turicum* became *Zúriche*, today's Zürich.",
+      "Hochdeutsch only took the k-step in some positions, as in *machen*. High Alemannic took it all the way, so a child is a *Chind* and a kitchen is a *Chuchi*, and the famous test word *Chuchichäschtli* (kitchen cupboard) is full of it. That's rule 07 in this app."
+    ],
+    sources: [
+      ["Deutsch (Historisches Lexikon der Schweiz)", "https://hls-dhs-dss.ch/de/articles/011194/"],
+      ["Alemannic German (Wikipedia)", "https://en.wikipedia.org/wiki/Alemannic_German"]
+    ]
+  },
+  {
+    title: "Yet the Swiss write in Hochdeutsch, and speak it only when they have to.",
+    text: [
+      "Linguists call this split diglossia, and German-speaking Switzerland was one of the classic cases Charles Ferguson used when he defined the term in 1959. Speaking happens in dialect, across all classes and levels of education. Writing happens in Standard German.",
+      "Children learn Standard German at school from around age six. Spoken Standard German is kept for school, the news, parliament and conversations with people who don't understand the dialect, which is why Swiss interviews on German TV often get subtitles."
+    ],
+    sources: [
+      ["Does Whisper understand Swiss German? (arXiv, 2024)", "https://arxiv.org/pdf/2404.19310"],
+      ["Swiss German (Wikipedia)", "https://en.wikipedia.org/wiki/Swiss_German"],
+      ["Deutsch (Historisches Lexikon der Schweiz)", "https://hls-dhs-dss.ch/de/articles/011194/"]
+    ]
+  },
+  {
+    title: "Their written Hochdeutsch has a Swiss flavour of its own, starting with the missing ß.",
+    text: [
+      "Swiss Standard German always writes ss: *Strasse*, *gross*, *Fussball*. The Canton of Zurich was the first to stop teaching the ß in schools, in 1935, and the *Neue Zürcher Zeitung* was the last Swiss newspaper to give it up, in 1974.",
+      "It also has its own vocabulary, known as Helvetisms: *Spital* instead of Krankenhaus, *Velo* for bicycle, *Billett* for ticket, and many loanwords from French."
+    ],
+    sources: [
+      ["German Orthographic Conference of 1901 (Wikipedia)", "https://en.wikipedia.org/wiki/German_Orthographic_Conference_of_1901"],
+      ["Swiss Standard German (Wikipedia)", "https://en.wikipedia.org/wiki/Swiss_Standard_German"]
+    ]
+  },
+  {
+    title: "The spoken dialects, meanwhile, change from city to city, so Zurich, Bern and Basel are easy to tell apart.",
+    text: [
+      "Basel is the odd one out: its dialect is Low Alemannic, an island in High Alemannic country, so a child there is a *Kind*, not a *Chind*.",
+      "Bern is known for turning l into a u-sound, so *Milch* becomes *Miuch*. Linguists have tracked this habit spreading south and west from Bern, but hardly towards Zurich or Basel."
+    ],
+    sources: [
+      ["Basel German (Wikipedia)", "https://en.wikipedia.org/wiki/Basel_German"],
+      ["The diffusion of /l/-vocalization in Swiss German (Cambridge)", "https://www.cambridge.org/core/journals/language-variation-and-change/article/diffusion-of-lvocalization-in-swiss-german/4AA92B479B21056EC82FEA6034D28AAA"],
+      ["Urban dialects in the city of Bern (University of Bern)", "https://boris.unibe.ch/141547/1/UrbanDialects_Bern.pdf"]
+    ]
+  },
+  {
+    title: "Because the dialects were made for speaking, they have no official spelling.",
+    text: [
+      "For a long time Swiss German was almost only spoken, so there is no rulebook. The best-known guide is Eugen Dieth's *Schwyzertütschi Dialäktschrift* from 1938, which writes words as they sound: short vowels with one letter, long vowels with two, as in *Huus* and *Ziit*. This app follows that style.",
+      "Bern has its own system from 1972 that stays closer to Hochdeutsch. In everyday messages, most people simply spell the way it feels right."
+    ],
+    sources: [
+      ["Wie schreibe ich Mundart? (SRF)", "https://www.srf.ch/radio-srf-1/mundart/dialekt-schrift-wie-schreibe-ich-mundart"],
+      ["Eugen Dieth (Wikipedia)", "https://en.wikipedia.org/wiki/Eugen_Dieth"]
+    ]
+  },
+  {
+    title: "Linguists have been collecting their words in one dictionary since 1862, and it still isn't finished.",
+    text: [
+      "The *Schweizerisches Idiotikon* was founded in Zurich in 1862 by an association led by Friedrich Staub. Its first part appeared in 1881, and it built on earlier collections going back to 1806.",
+      "It records around 150,000 words from the late Middle Ages to today, across 16 printed volumes, with the 17th, covering Z, still being written. You can search all of it for free online."
+    ],
+    sources: [
+      ["Schweizerisches Idiotikon (Wikipedia)", "https://en.wikipedia.org/wiki/Schweizerisches_Idiotikon"],
+      ["«Tschegge» und «Tröpsli» online nachschauen (swissinfo)", "https://www.swissinfo.ch/ger/-tschegge--und--troepsli--online-nachschauen/28706952"],
+      ["idiotikon.ch", "https://www.idiotikon.ch/"]
+    ]
+  },
+  {
+    title: "In 2011, Zurich voters even made dialect the teaching language in kindergarten.",
+    text: [
+      "On 15 May 2011, voters in the Canton of Zurich accepted the popular initiative «JA zur Mundart im Kindergarten» with 53.9% of the vote.",
+      "Since then, the law says that dialect is, in principle, the teaching language in Zurich kindergartens. Aargau later became the second canton to pass a similar initiative."
+    ],
+    sources: [
+      ["Unterrichtssprache im Kindergarten neu geregelt (Kanton Zürich)", "https://www.zh.ch/de/news-uebersicht/medienmitteilungen/2011/11/311_unterrichtssprache.html"],
+      ["Kantonale Abstimmungen 2011 (Année politique suisse)", "https://www.anneepolitique.swiss/static_files/Tabellen%202011.pdf"],
+      ["Aargauer Dialekt-Initiative angenommen (SRF)", "https://www.srf.ch/news/schweiz/abstimmungen-ag-rueebli-statt-karotte-aargauer-dialekt-initiative-ist-angenommen"]
+    ]
+  },
+  {
+    title: "And today, Zurich German is more alive than ever, from WhatsApp chats to the schoolyard.",
+    text: [
+      "More and more people now write their dialect too, from greeting cards to text messages. Researchers at the University of Zurich are studying how young people with migration backgrounds are shaping new, multiethnic varieties of it.",
+      "And despite worries that Zurich German will swallow the other dialects, linguists say that's not quite what is happening: regional varieties around Zurich, Bern and Basel are forming instead, and the differences will still be audible decades from now."
+    ],
+    sources: [
+      ["Wie schreibe ich Mundart? (SRF)", "https://www.srf.ch/radio-srf-1/mundart/dialekt-schrift-wie-schreibe-ich-mundart"],
+      ["Multiethnolektales Zürichdeutsch (Universität Zürich, LMU)", "https://lipp.ub.uni-muenchen.de/lipp/article/download/4895/2770/7856"],
+      ["Sprechen wir eines Tages alle Züritüütsch? (SRF)", "https://www.srf.ch/kultur/gesellschaft-religion/schwindende-dialektvielfalt-sprechen-wir-eines-tages-alle-nur-noch-zueritueuetsch"]
+    ]
+  }
+];

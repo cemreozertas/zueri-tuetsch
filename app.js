@@ -1,5 +1,5 @@
 /*
- * Züri-Tüütsch Decoder: app logic
+ * Züritüütsch, a guide to Zurich German: app logic
  * All content comes from data.js. No libraries, no build step.
  */
 (function () {
@@ -127,14 +127,15 @@
 
   /* -------------------------------------------------------------- Router */
 
-  const VIEWS = ["decode", "rules", "cards", "quiz", "plan"];
+  const VIEWS = ["start", "decode", "rules", "cards", "quiz", "plan", "story"];
   let currentView = null;
 
   function route() {
     const hash = decodeURIComponent(location.hash.slice(1));
-    let view = VIEWS.includes(hash) ? hash : "decode";
+    let view = VIEWS.includes(hash) ? hash : "start";
     let target = null;
     if (hash.startsWith("rule-")) { view = "rules"; target = document.getElementById(hash); }
+    if (hash.startsWith("story-")) { view = "story"; target = document.getElementById(hash); if (target) openStory(target, true); }
 
     const changed = view !== currentView;
     currentView = view;
@@ -146,16 +147,24 @@
       }
       else a.removeAttribute("aria-current");
     });
-    const label = { decode: "Decode", rules: "Rules", cards: "Flashcards", quiz: "Quiz", plan: "Listening plan" }[view];
-    document.title = view === "decode" ? "Züri-Tüütsch Decoder" : label + " · Züri-Tüütsch Decoder";
+    const label = { start: "Start", story: "Story", decode: "Decode", rules: "Rules", cards: "Flashcards", quiz: "Quiz", plan: "Listening plan" }[view];
+    document.title = view === "start" ? "Züritüütsch · A guide to Zurich German" : label + " · Züritüütsch";
 
     if (target) target.scrollIntoView({ block: "start", behavior: reduceMotion ? "auto" : "smooth" });
     else if (changed) window.scrollTo(0, 0);
 
     if (view === "decode") demo.resume(); else demo.pause();
+    if (view === "start") startLoop.resume(); else startLoop.pause();
   }
 
   /* --------------------------------------------------------------- Rules */
+
+  // Little tram used wherever the app points from one language to the other.
+  const TRAM_SVG = '<svg class="tram" viewBox="0 0 30 18" aria-hidden="true" focusable="false"><path d="M11 .8h8L15 4.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path fill="currentColor" fill-rule="evenodd" d="M4 4.5h20.5c2.5 0 4.5 2 4.5 4.5v5H1V7.5a3 3 0 0 1 3-3ZM3.5 7h4v3.2h-4Zm6.5 0h4v3.2h-4Zm6.5 0h4v3.2h-4Zm6.5 0h3.2a1.8 1.8 0 0 1 1.8 1.8v1.4h-5Z"/><circle cx="7" cy="15.6" r="1.8" fill="currentColor"/><circle cx="23" cy="15.6" r="1.8" fill="currentColor"/></svg>';
+  // Ticket used as the open/close toggle on the Story page: it gets stamped when opened.
+  const TICKET_SVG = '<svg viewBox="0 0 36 22" aria-hidden="true" focusable="false"><path class="t-body" d="M3 2h30a1 1 0 0 1 1 1v5a3 3 0 0 0 0 6v5a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-5a3 3 0 0 0 0-6V3a1 1 0 0 1 1-1Z"/><path class="t-perf" d="M24 4v14"/><g class="t-stamp"><circle cx="13" cy="11" r="4.2"/><path d="M11 11.1l1.5 1.5 3-3.1"/></g></svg>';
+  function ticket() { const t = document.createElement("template"); t.innerHTML = '<span class="story-ticket">' + TICKET_SVG + '</span>'; return t.content.firstChild; }
+  function tram() { const t = document.createElement("template"); t.innerHTML = TRAM_SVG; return t.content.firstChild; }
 
   function renderRules() {
     const list = $("#rules-list");
@@ -172,7 +181,7 @@
         el("span", { class: "rule-tile", "aria-label": "Rule " + (i + 1), text: String(i + 1).padStart(2, "0") }),
         el("h3", null, [
           el("span", { class: "from", text: r.from }),
-          el("span", { class: "arrow", "aria-label": "becomes", text: "→" }),
+          el("span", { class: "arrow", "aria-label": "in Züritüütsch:" }, [tram()]),
           el("span", { class: "from", text: r.to })
         ]),
         el("p", { class: "rule-explain", text: r.explain }),
@@ -196,10 +205,11 @@
   const strip = (t) => t.replace(/ \(.*\)/, "").replace(" / nothing", "");
   const shortShift = (id) => strip(ruleById[id].to) + " → " + strip(ruleById[id].from);
 
-  function ruleChip(id) {
+  function ruleChip(id, forward) {
+    const r = ruleById[id];
     return el("a", { class: "rule-chip", href: "#rule-" + id }, [
       el("span", { class: "rule-no", text: ruleNo(id) }),
-      document.createTextNode(shortShift(id))
+      document.createTextNode(forward ? strip(r.from) + " → " + strip(r.to) : shortShift(id))
     ]);
   }
 
@@ -213,7 +223,7 @@
     "de": "der", "d": "die", "s": "das", "en": "ein", "e": "eine", "es": "ein (neutral) / es",
     "gseh": "gesehen", "chunnsch": "kommst du", "lueg": "schau!", "los": "hör zu!",
     "mueter": "Mutter", "vatter": "Vater", "spiil": "Spiel", "iichaufe": "einkaufen",
-    "wii": "Wein", "miin": "mein", "ziit": "Zeit"
+    "wii": "Wein", "miin": "mein", "ziit": "Zeit", "gschänk": "Geschenk", "aabig": "Abend", "strass": "Strasse", "meitli": "Mädchen"
   };
 
   const LEXICON = new Map();
@@ -225,6 +235,52 @@
   VOCAB.forEach((v) => addToLexicon(v.zd, v.hd, "vocab"));
   QUIZ.words.forEach((q) => addToLexicon(q.zd, q.hd[0], "rules:" + q.rules.join(",")));
   Object.entries(EXTRA_WORDS).forEach(([zd, hd]) => addToLexicon(zd, hd, "small"));
+  RULES.forEach((r) => r.examples.forEach(([hd, zd]) => addToLexicon(zd, hd, "rules:" + r.id)));
+
+  // The same word list the other way round: Hochdeutsch → Züritüütsch.
+  const LEXICON_HD = new Map();
+  const firstVariant = (zd) => zd.split(" / ")[0].trim();
+  function addToLexiconHd(hd, zd, source) {
+    hd.replace(/\s*\(.*?\)/g, "").split(/ \/ |, /).map(clean).filter(Boolean)
+      .forEach((key) => { if (!LEXICON_HD.has(key)) LEXICON_HD.set(key, { zd: firstVariant(zd), source }); });
+  }
+  RULES.forEach((r) => r.examples.forEach(([hd, zd]) => addToLexiconHd(hd, zd, "rules:" + r.id)));
+  QUIZ.words.forEach((q) => q.hd.forEach((hd) => addToLexiconHd(hd, q.zd, "rules:" + q.rules.join(","))));
+  VOCAB.forEach((v) => addToLexiconHd(v.hd, v.zd, "vocab"));
+  Object.entries(EXTRA_WORDS).forEach(([zd, hd]) => addToLexiconHd(hd, zd, "small"));
+
+  // Forward rules: a best guess at how a Hochdeutsch word sounds in Zurich.
+  const FORWARD = [
+    { id: "ge", apply: (w) => w.length >= 6 && w !== "gegen" && /^ge[bcdfhklmnpqrstvwxz]/.test(w) && /(t|en)$/.test(w) ? "g" + w.slice(2) : null },
+    { id: "k", apply: (w) => /^g?k/.test(w) ? w.replace(/^(g?)k/, "$1ch") : null },
+    { id: "ung", apply: (w) => /.{2,}ung(en)?$/.test(w) ? w.replace(/ung(en)?$/, (m, pl) => pl ? "ige" : "ig") : null },
+    { id: "li", apply: (w, noun) => /lein$/.test(w) || (noun && /.{2,}chen$/.test(w)) ? w.replace(/(lein|chen)$/, "li") : null },
+    { id: "ei", apply: (w) => w.includes("ei") ? w.replace(/ei/g, "ii") : null },
+    { id: "au", apply: (w) => w.includes("au") ? w.replace(/au/g, "uu") : null },
+    { id: "eu", apply: (w) => /eu|äu/.test(w) ? w.replace(/eu|äu/g, "üü") : null },
+    { id: "ue", apply: (w) => /uh|(?<!u)u[bdgfs]e|^[^aeiouäöü]*ut$/.test(w) ? w.replace(/uh/g, "ue").replace(/(?<!u)u([bdgfs])e/g, "ue$1e").replace(/ut$/, "uet") : null },
+    { id: "ueh", apply: (w) => /üh|ü[bdgs]e/.test(w) ? w.replace(/üh/g, "üe").replace(/ü([bdgs])e/g, "üe$1e") : null },
+    { id: "st", apply: (w) => /.st/.test(w) ? w.replace(/(.)st/g, (m, c) => c === "s" ? m : c + "scht") : null },
+    { id: "en", apply: (w) => w.length >= 4 && /[^e]en$/.test(w) ? w.slice(0, -1) : null }
+  ];
+
+  function encode(input) {
+    const raw = input.trim();
+    const key = clean(raw).replace(/ß/g, "ss");
+    if (!key) return null;
+    if (LEXICON_HD.has(key)) {
+      const hit = LEXICON_HD.get(key);
+      return { type: "known", input: raw, out: matchCase(raw, hit.zd), source: hit.source };
+    }
+    const noun = raw[0] !== raw[0].toLowerCase();
+    let word = key;
+    const steps = [];
+    FORWARD.forEach((rule) => {
+      const next = rule.apply(word, noun);
+      if (next && next !== word) { steps.push({ id: rule.id }); word = next; }
+    });
+    return { type: steps.length ? "guess" : "none", input: raw, out: matchCase(raw, word), steps };
+  }
 
   // Reverse rules, applied in order. Each returns the new word, or null if it doesn't apply.
   const REVERSE = [
@@ -255,7 +311,7 @@
     if (!key) return null;
     if (LEXICON.has(key)) {
       const hit = LEXICON.get(key);
-      return { type: "known", input: raw, hd: hit.hd, source: hit.source };
+      return { type: "known", input: raw, out: hit.hd, source: hit.source };
     }
     let word = key;
     const steps = [];
@@ -274,7 +330,7 @@
       REVERSE.slice(altWord.from + 1).forEach((rule) => { const n = rule.apply(a); if (n) a = n; });
       if (a !== word) alt = matchCase(raw, a);
     }
-    return { type: steps.length ? "guess" : "none", input: raw, guess: matchCase(raw, word), alt, steps };
+    return { type: steps.length ? "guess" : "none", input: raw, out: matchCase(raw, word), alt, steps };
   }
 
   function showResult(result, opts) {
@@ -283,9 +339,10 @@
     const status = $("#board-status");
     foot.innerHTML = "";
     status.className = "board-status";
+    const fwd = decoderDir === "hd2zd";
 
     if (result.type === "known") {
-      const target = flapText(result.hd);
+      const target = flapText(result.out);
       if (result.input.length > MAX_FLAPS || target.length > MAX_FLAPS) {
         // Whole phrases are too long for the board: show them as a line of text instead.
         flaps._run = (flaps._run || 0) + 1;
@@ -293,30 +350,35 @@
         flaps.removeAttribute("role");
         flaps.removeAttribute("aria-label");
         flaps.innerHTML = "";
-        flaps.append(el("p", { class: "board-text", text: result.hd }));
+        flaps.append(el("p", { class: "board-text", text: result.out }));
       } else {
         flapTo(flaps, result.input, target, opts);
       }
       status.textContent = "Word list";
       status.classList.add("is-known");
       if (result.source.startsWith("rules:")) {
-        result.source.slice(6).split(",").filter(Boolean).forEach((id) => foot.append(ruleChip(id)));
+        result.source.slice(6).split(",").filter(Boolean).forEach((id) => foot.append(ruleChip(id, fwd)));
       } else if (result.source === "vocab") {
         foot.append(el("p", { text: "No rule explains this one, so it's on the flashcards." }));
       } else {
-        foot.append(el("p", { text: result.input + " = " + result.hd }));
+        foot.append(el("p", { text: result.input + " = " + result.out }));
       }
     } else if (result.type === "guess") {
-      const fits = result.guess.length <= MAX_FLAPS && result.input.length <= MAX_FLAPS;
-      flapTo(flaps, result.input, fits ? result.guess : result.input, opts);
+      const fits = result.out.length <= MAX_FLAPS && result.input.length <= MAX_FLAPS;
+      flapTo(flaps, result.input, fits ? result.out : result.input, opts);
       status.textContent = "Best guess";
       status.classList.add("is-guess");
-      result.steps.forEach((s) => foot.append(ruleChip(s.id)));
-      foot.append(el("p", { text: (result.alt ? "Or: " + result.alt + ". " : "") + "Rules run backwards, so it's a guess." }));
+      result.steps.forEach((s) => foot.append(ruleChip(s.id, fwd)));
+      if (!fits) foot.append(el("p", { text: result.out }));
+      foot.append(el("p", { text: fwd
+        ? "The rules don't fit every word (zwei stays zwei, Baum stays Baum), so treat this as a guess."
+        : (result.alt ? "Or: " + result.alt + ". " : "") + "Rules run backwards, so it's a guess." }));
     } else {
       flapTo(flaps, result.input.slice(0, MAX_FLAPS), result.input.slice(0, MAX_FLAPS), opts);
       status.textContent = "No rule fits";
-      foot.append(el("p", { text: "None of the sound shifts applies. It's a word to learn by heart, or it's spelled the same in Standard German." }));
+      foot.append(el("p", { text: fwd
+        ? "None of the sound shifts applies. It may sound almost the same in Züritüütsch, or it's a word with its own dialect form."
+        : "None of the sound shifts applies. It's a word to learn by heart, or it's spelled the same in Standard German." }));
     }
   }
 
@@ -326,13 +388,14 @@
     i: 0, timer: null, stopped: false,
     show() {
       const [zd, hd, rules] = DEMO[this.i % DEMO.length];
-      flapTo($("#board-flaps"), zd, hd);
+      const fwd = decoderDir === "hd2zd";
+      flapTo($("#board-flaps"), fwd ? hd : zd, fwd ? zd : hd);
       const status = $("#board-status");
       status.className = "board-status";
       status.textContent = "Example " + (this.i % DEMO.length + 1) + "/" + DEMO.length;
       const foot = $("#board-foot");
       foot.innerHTML = "";
-      rules.forEach((id) => foot.append(ruleChip(id)));
+      rules.forEach((id) => foot.append(ruleChip(id, fwd)));
       this.i++;
     },
     resume() {
@@ -345,20 +408,120 @@
     stop() { this.stopped = true; this.pause(); }
   };
 
+  /* --------------------------------------------------------------- Start */
+
+  // A small board on the start page that keeps flipping through examples.
+  const startLoop = {
+    i: 0, timer: null,
+    show() {
+      const [zd, hd] = DEMO[this.i % DEMO.length];
+      flapTo($("#start-flaps"), zd, hd);
+      this.i++;
+    },
+    resume() {
+      if (this.timer) return;
+      if (this.i === 0) this.show();
+      if (reduceMotion) return;
+      this.timer = setInterval(() => { if (!document.hidden) this.show(); }, 3200);
+    },
+    pause() { clearInterval(this.timer); this.timer = null; }
+  };
+
+  /* --------------------------------------------------------------- Story */
+
+  // Turns *word* into italics without ever inserting raw HTML.
+  function richText(node, text) {
+    text.split("*").forEach((part, i) => {
+      if (!part) return;
+      node.append(i % 2 ? el("em", { text: part }) : document.createTextNode(part));
+    });
+    return node;
+  }
+
+  function openStory(item, open) {
+    const btn = item.querySelector(".story-q");
+    const panel = item.querySelector(".story-a");
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    panel.hidden = !open;
+    item.classList.toggle("is-open", open);
+    syncStoryToggle();
+  }
+
+  function syncStoryToggle() {
+    const all = $$("#story-list > li");
+    const allOpen = all.length && all.every((li) => li.classList.contains("is-open"));
+    const t = $("#story-toggle-all");
+    if (t) t.textContent = allOpen ? "Close all" : "Open all";
+  }
+
+  function renderStory() {
+    const list = $("#story-list");
+    STORY.forEach((s, i) => {
+      const n = String(i + 1).padStart(2, "0");
+      const id = "story-" + (i + 1);
+      const btn = el("button", { type: "button", class: "story-q", "aria-expanded": "false", "aria-controls": id + "-a" });
+      btn.append(el("span", { class: "story-num", text: n }), richText(el("span", { class: "story-title" }), s.title), ticket());
+      const panel = el("div", { class: "story-a", id: id + "-a", role: "region", "aria-labelledby": id + "-q" });
+      btn.id = id + "-q";
+      panel.hidden = true;
+      s.text.forEach((t) => panel.append(richText(el("p"), t)));
+      const src = el("p", { class: "story-src" });
+      src.append(el("span", { class: "story-src-label", text: "Sources" }));
+      s.sources.forEach(([label, url], k) => {
+        if (k) src.append(document.createTextNode(" · "));
+        src.append(el("a", { href: url, target: "_blank", rel: "noopener", text: label }));
+      });
+      panel.append(src);
+      const li = el("li", { id });
+      li.append(el("h3", {}, [btn]), panel);
+      btn.addEventListener("click", () => openStory(li, btn.getAttribute("aria-expanded") !== "true"));
+      list.append(li);
+    });
+    $("#story-toggle-all").addEventListener("click", () => {
+      const all = $$("#story-list > li");
+      const open = !all.every((li) => li.classList.contains("is-open"));
+      all.forEach((li) => openStory(li, open));
+    });
+  }
+
+  let decoderDir = "zd2hd";
+  const DIRS = {
+    zd2hd: { from: "Züri", to: "Hochdeutsch", label: "Type a word you heard", placeholder: "e.g. Ziitig, Chuchi, Hüüser",
+      examples: ["Gschänk", "Chrüüz", "Buuch", "schmöcke", "Wurscht", "Hüüsli"], run: decode },
+    hd2zd: { from: "Hochdeutsch", to: "Züri", label: "Type a Hochdeutsch word", placeholder: "e.g. Zeitung, Küche, Häuser",
+      examples: ["Geschenk", "Kreuz", "Bauch", "schmecken", "Wurst", "Häuschen"], run: encode }
+  };
+
   function initDecoder() {
     const form = $("#decoder-form");
     const input = $("#decoder-input");
-    const run = (word) => { const r = decode(word); if (r) { demo.stop(); showResult(r); } };
+    const examples = $("#decoder-examples");
+    const run = (word) => { const r = DIRS[decoderDir].run(word); if (r) { demo.stop(); showResult(r); } };
     form.addEventListener("submit", (e) => { e.preventDefault(); run(input.value); });
     input.addEventListener("focus", () => demo.pause());
     input.addEventListener("blur", () => { if (!input.value) demo.resume(); });
-    const examples = $("#decoder-examples");
-    ["Gschänk", "Chrüüz", "Buuch", "schmöcke", "Wurscht", "Hüüsli"].forEach((w) => {
-      examples.append(el("button", {
+
+    function setDir(dir) {
+      decoderDir = dir;
+      const d = DIRS[dir];
+      $("#dir-toggle").setAttribute("aria-label", "Direction: " + d.from + " to " + d.to + ". Click to switch.");
+      $("#dir-toggle").title = "Switch direction";
+      $("#board-from").textContent = d.from;
+      $("#board-to").textContent = d.to;
+      $("#decoder-label").textContent = d.label;
+      input.placeholder = d.placeholder;
+      examples.innerHTML = "";
+      d.examples.forEach((w) => examples.append(el("button", {
         class: "chip", type: "button", text: w,
         onclick: () => { input.value = w; run(w); }
-      }));
-    });
+      })));
+      store.set("zd-dir", dir);
+      input.value = "";
+      demo.stopped = false; demo.pause(); demo.i = 0;
+      if (currentView === "decode") demo.resume();
+    }
+    $("#dir-toggle").addEventListener("click", () => setDir(decoderDir === "zd2hd" ? "hd2zd" : "zd2hd"));
+    setDir(store.get("zd-dir", "zd2hd") === "hd2zd" ? "hd2zd" : "zd2hd");
     $("#vocab-count").textContent = VOCAB.length;
   }
 
@@ -629,6 +792,7 @@
   initCards();
   initQuiz();
   renderPlan();
+  renderStory();
   if (typeof REPO_URL === "string") $("#repo-link").href = REPO_URL;
   window.addEventListener("hashchange", route);
   route();

@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Züri-Tüütsch Decoder</title>
-  <meta name="description" content="Understand Zurich German faster: the sound-shift rules, flashcards for the words you just have to learn, and a quiz that reverses dialect into Standard German.">
+  <title>Züritüütsch · A guide to Zurich German</title>
+  <meta name="description" content="A guide to Zurich German for anyone who already speaks German: sound patterns, a two-way decoder, flashcards, a quiz, a listening plan and the story behind the dialect.">
   <meta name="theme-color" content="#0070B4">
   <link rel="canonical" href="https://cemreozertas.github.io/zueri-tuetsch/">
   <!-- Link previews (LinkedIn, WhatsApp, Slack, X) -->
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Züri-Tüütsch Decoder">
-  <meta property="og:title" content="Züri-Tüütsch Decoder: you already speak most of it">
-  <meta property="og:description" content="Hear Ziitig, think Zeitung. Sound-shift rules, flashcards and a reverse-it quiz for German speakers in and around Zurich.">
+  <meta property="og:site_name" content="Züritüütsch">
+  <meta property="og:title" content="Züritüütsch: a guide to Zurich German">
+  <meta property="og:description" content="Sound patterns, a two-way decoder, flashcards, a quiz and a listening plan for German speakers in and around Zurich.">
   <meta property="og:url" content="https://cemreozertas.github.io/zueri-tuetsch/">
   <meta property="og:image" content="https://cemreozertas.github.io/zueri-tuetsch/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -27,31 +27,89 @@
 
   <header class="topbar">
     <div class="wrap topbar-row">
-      <a class="brand" href="#decode" aria-label="Züri-Tüütsch Decoder, start">
+      <a class="brand" href="#start" aria-label="Züritüütsch, a guide to Zurich German: start page">
         <span class="brand-flap" aria-hidden="true"><span>Ü</span></span>
-        <span class="brand-name">Züri-Tüütsch <span>Decoder</span></span>
+        <span class="brand-name">Züritüütsch <span>A guide to Zurich German</span></span>
       </a>
       <nav class="tabs" aria-label="Sections">
+        <a href="#start" data-view="start">Start</a>
         <a href="#decode" data-view="decode">Decode</a>
         <a href="#rules" data-view="rules">Rules</a>
         <a href="#cards" data-view="cards">Flashcards</a>
         <a href="#quiz" data-view="quiz">Quiz</a>
         <a href="#plan" data-view="plan">Listening plan</a>
+        <a href="#story" data-view="story">Story</a>
       </nav>
     </div>
   </header>
 
   <main id="main">
 
+    <!-- START -->
+    <section class="view" id="view-start" data-view="start" aria-labelledby="start-title">
+      <div class="band band-start">
+        <div class="wrap start-hero">
+          <div class="start-copy">
+            <p class="kicker">For German speakers in and around Zurich</p>
+            <h1 id="start-title">Zurich German, <span>seen through a translator's&nbsp;eye.</span></h1>
+            <p class="lede">Zurich German is not a variant of Hochdeutsch but a close relative: both descend from medieval German and developed along their own paths. This site is a practical guide to understanding and speaking it, for anyone who already speaks German and wants to feel at home in the language of the city.</p>
+            <div class="start-actions">
+              <a class="btn btn-light" href="#decode">Start decoding</a>
+              <a class="btn btn-on-blue" href="#story">Read the story</a>
+            </div>
+          </div>
+          <div class="board board-mini" aria-hidden="true">
+            <div class="board-head">
+              <span class="board-label">Züri</span>
+              <span class="board-arrow"><svg class="tram" viewBox="0 0 30 18" aria-hidden="true" focusable="false"><path d="M11 .8h8L15 4.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path fill="currentColor" fill-rule="evenodd" d="M4 4.5h20.5c2.5 0 4.5 2 4.5 4.5v5H1V7.5a3 3 0 0 1 3-3ZM3.5 7h4v3.2h-4Zm6.5 0h4v3.2h-4Zm6.5 0h4v3.2h-4Zm6.5 0h3.2a1.8 1.8 0 0 1 1.8 1.8v1.4h-5Z"/><circle cx="7" cy="15.6" r="1.8" fill="currentColor"/><circle cx="23" cy="15.6" r="1.8" fill="currentColor"/></svg></span>
+              <span class="board-label">Hochdeutsch</span>
+            </div>
+            <div class="flaps" id="start-flaps"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap start-body">
+        <p class="section-label">What you'll find here</p>
+        <div class="intro-grid">
+          <div class="intro-card">
+            <span class="num">13</span>
+            <h2>Sound shifts</h2>
+            <p>Many Züritüütsch sounds line up with Hochdeutsch in regular ways. Learn the patterns once and many words decode themselves.</p>
+            <a class="link-arrow" href="#rules">See the rules</a>
+          </div>
+          <div class="intro-card">
+            <span class="num" id="vocab-count">74</span>
+            <h2>Words and phrases to learn</h2>
+            <p>Some everyday words follow no rule at all: luege, poschte, Rüebli. Those go on flashcards.</p>
+            <a class="link-arrow" href="#cards">Practise flashcards</a>
+          </div>
+          <div class="intro-card">
+            <span class="num">45</span>
+            <h2>Reverse-it quiz</h2>
+            <p>Read the Züritüütsch, type the Hochdeutsch, and see which rule did the work.</p>
+            <a class="link-arrow" href="#quiz">Start the quiz</a>
+          </div>
+        </div>
+
+        <p class="start-more">Plus a <a href="#decode">decoder</a> for any word you hear, a <a href="#plan">four-stage listening plan</a> with real Swiss radio and TV, and <a href="#story">the story</a> of where Züritüütsch comes from.</p>
+
+        <aside class="about-note" aria-labelledby="about-title">
+          <h2 id="about-title">Why this exists</h2>
+          <p>This guide was made by a trained translator with Turkish roots and a decade of studying and working in German, in Germany. When a new chapter took her to Zurich, she started picking up words from day one. With a translator's habit of looking for patterns and a musician's ear for sound, she noticed how regularly Zurich German lines up with Hochdeutsch, and kept listening more closely. Everything that helped her along the way is collected here: the sound patterns, the everyday words, practice, a listening plan and the story behind the dialect. It's for anyone who wants to hear and speak Zurich German faster.</p>
+        </aside>
+      </div>
+    </section>
+
     <!-- DECODE -->
-    <section class="view" id="view-decode" data-view="decode" aria-labelledby="decode-title">
+    <section class="view" id="view-decode" data-view="decode" aria-labelledby="decode-title" hidden>
       <div class="band">
         <div class="wrap">
           <p class="kicker">For German speakers in and around Zurich</p>
           <h1 id="decode-title">You already speak most of it. <span>You just can't hear it yet.</span></h1>
 
           <form class="decoder" id="decoder-form" autocomplete="off">
-            <label for="decoder-input">Type a word you heard</label>
+            <label for="decoder-input" id="decoder-label">Type a word you heard</label>
             <div class="field-row">
               <input id="decoder-input" type="text" placeholder="e.g. Ziitig, Chuchi, Hüüser" spellcheck="false" autocapitalize="off">
               <button type="submit" class="btn btn-light">Decode</button>
@@ -60,9 +118,12 @@
 
           <div class="board" id="board" aria-live="polite">
             <div class="board-head">
-              <span class="board-label" id="board-from">Züri</span>
-              <span class="board-arrow" aria-hidden="true">→</span>
-              <span class="board-label" id="board-to">Hochdeutsch</span>
+              <button type="button" class="dir-toggle" id="dir-toggle" aria-label="Switch direction">
+                <span class="board-label" id="board-from">Züri</span>
+                <span class="board-arrow" aria-hidden="true"><svg class="tram" viewBox="0 0 30 18" aria-hidden="true" focusable="false"><path d="M11 .8h8L15 4.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path fill="currentColor" fill-rule="evenodd" d="M4 4.5h20.5c2.5 0 4.5 2 4.5 4.5v5H1V7.5a3 3 0 0 1 3-3ZM3.5 7h4v3.2h-4Zm6.5 0h4v3.2h-4Zm6.5 0h4v3.2h-4Zm6.5 0h3.2a1.8 1.8 0 0 1 1.8 1.8v1.4h-5Z"/><circle cx="7" cy="15.6" r="1.8" fill="currentColor"/><circle cx="23" cy="15.6" r="1.8" fill="currentColor"/></svg></span>
+                <span class="board-label" id="board-to">Hochdeutsch</span>
+                <svg class="swap" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 5h10.5M10 2l3 3-3 3M14 11H3.5M6 8l-3 3 3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
               <span class="board-status" id="board-status">Example</span>
             </div>
             <div class="flaps" id="board-flaps"></div>
@@ -73,26 +134,6 @@
         </div>
       </div>
 
-      <div class="wrap intro-grid">
-        <div class="intro-card">
-          <span class="num">13</span>
-          <h2>Sound shifts</h2>
-          <p>Züritüütsch is Hochdeutsch run through a set of predictable shifts. Learn them once and most words decode themselves.</p>
-          <a class="link-arrow" href="#rules">See the rules</a>
-        </div>
-        <div class="intro-card">
-          <span class="num" id="vocab-count">74</span>
-          <h2>Words and phrases to learn</h2>
-          <p>Some everyday words follow no rule at all: luege, poschte, Rüebli. Those go on flashcards.</p>
-          <a class="link-arrow" href="#cards">Practise flashcards</a>
-        </div>
-        <div class="intro-card">
-          <span class="num">45</span>
-          <h2>Reverse-it quiz</h2>
-          <p>Read the Züritüütsch, type the Hochdeutsch, and see which rule did the work.</p>
-          <a class="link-arrow" href="#quiz">Start the quiz</a>
-        </div>
-      </div>
     </section>
 
     <!-- RULES -->
@@ -100,7 +141,8 @@
       <div class="wrap page">
         <div class="page-head">
           <h2 id="rules-title">The sound shifts</h2>
-          <p>Each rule shows the shift forwards, with examples, and the trick for hearing it backwards. The number stays the same everywhere in the app.</p>
+          <p>Each rule pairs a Hochdeutsch sound with the Züritüütsch sound you hear in its place, with examples and a tip for hearing it in reverse. The number stays the same everywhere in the app.</p>
+          <p class="note">The rules are a learner's shortcut, not history: Zurich German didn't come from Hochdeutsch. Both grew out of medieval German, and for the vowels it was actually Hochdeutsch that changed, while Zurich German kept the older sound. <a href="#story-4">The Story tab explains how.</a></p>
         </div>
         <ol class="rules" id="rules-list"></ol>
         <h3 class="sub">Grammar shortcuts</h3>
@@ -173,6 +215,19 @@
           <span class="habit-label">The habit that makes it stick</span>
           <p id="habit-text"></p>
         </aside>
+      </div>
+    </section>
+    <!-- STORY -->
+    <section class="view" id="view-story" data-view="story" aria-labelledby="story-title" hidden>
+      <div class="wrap page">
+        <div class="page-head">
+          <h2 id="story-title">The story of Züritüütsch</h2>
+          <p>Where the dialect comes from, why it sounds the way it does, and why the Swiss write something else. Read the headlines for the short version, or open any of them for the details and sources.</p>
+        </div>
+        <div class="story-tools">
+          <button type="button" class="btn btn-ghost btn-sm" id="story-toggle-all">Open all</button>
+        </div>
+        <ol class="story" id="story-list"></ol>
       </div>
     </section>
   </main>

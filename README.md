@@ -1,8 +1,10 @@
-# Züri-Tüütsch Decoder
+# Züritüütsch
+
+*A guide to Zurich German*
 
 **My first GitHub project had to be about Züritüütsch.**
 
-Turkish is my mother tongue, German my second home, and Swiss German the language my new neighbours speak. My German is native-level, yet in Zurich it suddenly needed subtitles. So, as a trained translator, I mapped how Hochdeutsch turns into Zurich German and built this little web app with Claude to practise hearing it in reverse.
+Turkish is my mother tongue, German my second home, and Zurich German the language my new neighbours speak. My German is native-level, yet in Zurich I suddenly needed subtitles. So I started listening very closely, and noticed that I could pick up more and more words once I knew how their sounds line up with Hochdeutsch: *Ziit* is *Zeit*, *Huus* is *Haus*, *Chind* is *Kind*. As a trained translator, I couldn't leave those patterns scattered in my head, so I collected them and built this little web app with Claude, for anyone who wants to hear and speak Zurich German faster.
 
 👉 **Try it live: https://cemreozertas.github.io/zueri-tuetsch/**
 
@@ -10,7 +12,7 @@ Turkish is my mother tongue, German my second home, and Swiss German the languag
 
 ## The idea
 
-Zurich German isn't a new language. It's Standard German run through about a dozen predictable sound shifts, plus a few hundred everyday words that don't follow any rule. Learn the shifts, memorise the words, and train the one skill that matters when you're listening: **reversing what you hear back into Standard German.**
+Zurich German isn't a variant of Standard German but its close relative: both grew out of medieval German, and many of their sounds still line up in regular ways. (For the vowels, it was actually Standard German that changed, while Zurich German kept the older sound.) Learn about a dozen of these patterns, memorise the everyday words that follow no pattern at all, and train the skill that matters most when you're listening: **turning what you hear back into words you already know.** The decoder also works the other way round, from Hochdeutsch to Züritüütsch, for when you want to say something.
 
 **Who it's for:** anyone in or around Zurich who speaks German. It works best if you're comfortable in Hochdeutsch (about B1 and up), because the trick is reversing dialect into words you already know.
 
@@ -18,11 +20,13 @@ Zurich German isn't a new language. It's Standard German run through about a doz
 
 | Tab | What it does |
 |---|---|
-| **Decode** | Type a word you heard and watch it flip into Standard German on a departure board. The letters that change light up, and each change links to the rule behind it. Words that aren't in the list get a best guess, made by running the rules backwards. |
+| **Start** | A short introduction: what the site is, how it works and where to begin. |
+| **Decode** | Type a word you heard and watch it flip into Standard German on a departure board. The letters that change light up, and each change links to the rule behind it. Words that aren't in the list get a best guess from the rules. A switch flips the direction, so you can also go from Hochdeutsch to Züritüütsch. |
 | **Rules** | 13 numbered sound shifts (ei → ii, au → uu, k → ch, -ung → -ig …), each with examples, a "reverse it" tip and its exceptions. Plus four grammar shortcuts. |
 | **Flashcards** | 150+ words and phrases the rules can't explain (*luege, poschte, Rüebli, Ziischtig*), including false friends like *springe* = rennen. You can flip the direction, filter by topic, and your progress is saved in your browser. |
 | **Quiz** | Read the dialect, type the Standard German, and see the answer flap into place with the rules that did the work. Two levels: words and sentences. |
 | **Listening plan** | A step-by-step plan from SRF Meteo to Swiss TV series, plus one daily habit. |
+| **Story** | Where Zurich German comes from, in twelve short headlines you can open for details: the Alemanni, the old vowels, why the Swiss write Hochdeutsch, the missing ß, no official spelling and more. Every fact links to its source. |
 
 ![The reverse-it quiz on a phone](docs/screenshot-quiz.png)
 
