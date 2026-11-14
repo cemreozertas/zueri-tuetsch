@@ -127,8 +127,9 @@
 
   /* -------------------------------------------------------------- Router */
 
-  const VIEWS = ["start", "decode", "rules", "cards", "quiz", "plan", "story"];
+  const VIEWS = ["start", "decode", "rules", "cards", "quiz", "worksheets", "plan", "story"];
   let currentView = null;
+  let lastHash = null;
 
   function route() {
     const hash = decodeURIComponent(location.hash.slice(1));
@@ -136,8 +137,11 @@
     let target = null;
     if (hash.startsWith("rule-")) { view = "rules"; target = document.getElementById(hash); }
     if (hash.startsWith("story-")) { view = "story"; target = document.getElementById(hash); if (target) openStory(target, true); }
+    if (hash.startsWith("ws-")) view = "worksheets";
+    if (view === "worksheets") showWorksheet(hash.startsWith("ws-") ? hash.slice(3) : null);
 
-    const changed = view !== currentView;
+    const changed = view !== currentView || (view === "worksheets" && hash !== lastHash);
+    lastHash = hash;
     currentView = view;
     $$(".view").forEach((s) => { s.hidden = s.dataset.view !== view; });
     $$(".tabs a").forEach((a) => {
@@ -147,7 +151,7 @@
       }
       else a.removeAttribute("aria-current");
     });
-    const label = { start: "Start", story: "Story", decode: "Decode", rules: "Rules", cards: "Vocabulary", quiz: "Quiz", plan: "Listening plan" }[view];
+    const label = { start: "Start", story: "Story", decode: "Decode", rules: "Rules", cards: "Vocabulary", quiz: "Quiz", worksheets: "Worksheets", plan: "Listening and reading plan" }[view];
     document.title = view === "start" ? "Züritüütsch · A guide to Zurich German" : label + " · Züritüütsch";
 
     if (target) target.scrollIntoView({ block: "start", behavior: reduceMotion ? "auto" : "smooth" });
@@ -874,17 +878,268 @@
 
   /* ---------------------------------------------------------------- Plan */
 
+  const KINDS = { listen: "Listen", watch: "Watch", read: "Read", go: "Go out" };
+  const plan = { kind: "all", free: false };
+
+  function sourceCard(id) {
+    const src = SOURCES[id];
+    const free = /^free/i.test(src.cost);
+    const card = el("li", { class: "src src-" + src.kind, "data-kind": src.kind, "data-free": free ? "1" : "0" }, [
+      el("div", { class: "src-top" }, [
+        el("span", { class: "src-kind", text: KINDS[src.kind] }),
+        levelBadge(src.lvl)
+      ]),
+      el("h4", null, [el("a", { href: src.url, target: "_blank", rel: "noopener", text: src.name })]),
+      el("p", { class: "src-what", text: src.what }),
+      el("p", { class: "src-meta" }, [
+        el("span", { text: src.cost }),
+        el("span", { text: src.where === "online" ? "Online" : "In Zurich / offline" }),
+        el("span", { class: src.dialect.startsWith("Zurich") ? "is-zurich" : "", text: src.dialect })
+      ])
+    ]);
+    if (src.tip) card.append(el("p", { class: "src-tip", text: src.tip }));
+    return card;
+  }
+
+  function filterPlan() {
+    $$("#plan-list .src").forEach((c) => {
+      c.hidden = (plan.kind !== "all" && c.dataset.kind !== plan.kind) || (plan.free && c.dataset.free !== "1");
+    });
+    $$("#plan-list > li").forEach((stage) => {
+      const any = $$(".src", stage).some((c) => !c.hidden);
+      $(".src-empty", stage).hidden = any;
+    });
+  }
+
   function renderPlan() {
     const list = $("#plan-list");
-    PLAN.forEach((p) => {
-      list.append(el("li", null, [
-        el("span", { class: "when", text: p.when }),
-        el("h3", { text: p.title }),
-        el("p", { text: p.text }),
-        el("ul", null, p.items.map((t) => el("li", { text: t })))
+    PLAN.forEach((p, i) => {
+      list.append(el("li", { class: "stage" }, [
+        el("div", { class: "stage-head" }, [
+          el("span", { class: "stage-no", "aria-hidden": "true", text: String(i + 1) }),
+          el("div", null, [
+            el("p", { class: "when" }, [document.createTextNode(p.when + " "), levelBadge(p.lvl)]),
+            el("h3", { text: p.title }),
+            el("p", { class: "stage-text", text: p.text })
+          ])
+        ]),
+        el("ul", { class: "src-grid" }, p.sources.map(sourceCard)),
+        el("p", { class: "src-empty", hidden: "", text: "Nothing of this kind in this stage." })
       ]));
     });
+    $$("#plan-list .src-empty").forEach((e) => { e.hidden = true; });
+
+    const filters = $("#plan-filters");
+    [["all", "All sources"]].concat(Object.entries(KINDS)).forEach(([k, label]) => {
+      filters.append(el("button", {
+        class: "chip", type: "button", text: label, "aria-pressed": k === "all" ? "true" : "false",
+        onclick: (e) => {
+          plan.kind = k;
+          $$(".chip", filters).forEach((b) => b.setAttribute("aria-pressed", b === e.currentTarget ? "true" : "false"));
+          filterPlan();
+        }
+      }));
+    });
+    $("#plan-free").addEventListener("click", (e) => {
+      plan.free = !plan.free;
+      e.currentTarget.setAttribute("aria-pressed", String(plan.free));
+      filterPlan();
+    });
     $("#habit-text").textContent = HABIT;
+    $("#plan-checked").textContent = "All sources were last checked in " + PLAN_CHECKED + ". Links and schedules change, so check the source before you go.";
+  }
+
+  /* ---------------------------------------------------------- Worksheets */
+
+  const wsStore = (id) => ({
+    get: () => store.get("zd-ws-" + id, {}),
+    set: (v) => store.set("zd-ws-" + id, v)
+  });
+
+  function renderWorksheetList() {
+    const list = $("#ws-list");
+    list.innerHTML = "";
+    WORKSHEETS.forEach((w) => {
+      list.append(el("a", { class: "ws-card", href: "#ws-" + w.id }, [
+        el("span", { class: "ws-card-top" }, [levelBadge(w.lvl), el("span", { class: "ws-min", text: "about " + w.minutes + " min" })]),
+        el("span", { class: "ws-card-title", text: w.title }),
+        el("span", { class: "ws-card-sub", text: w.subtitle + " · " + w.sections.length + " exercises" }),
+        el("span", { class: "ws-card-go", text: "Open worksheet" })
+      ]));
+    });
+    list.append(el("div", { class: "ws-card ws-card-soon" }, [
+      el("span", { class: "ws-card-title", text: "More worksheets are on the way" }),
+      el("span", { class: "ws-card-sub", text: "Written by a learner, for learners. Spotted something a Zurich speaker would say differently? Corrections are welcome." })
+    ]));
+  }
+
+  const same = (a, b) => normalize(a) === normalize(b);
+
+  function showWorksheet(id) {
+    const sheet = WORKSHEETS.find((w) => w.id === id);
+    $("#ws-index").hidden = !!sheet;
+    $("#ws-sheet").hidden = !sheet;
+    if (sheet) renderWorksheet(sheet);
+  }
+
+  function renderWorksheet(w) {
+    const root = $("#ws-sheet");
+    root.innerHTML = "";
+    const saved = wsStore(w.id);
+    const state = saved.get();
+    const save = (key, val) => { state[key] = val; saved.set(state); };
+
+    // Header
+    root.append(
+      el("a", { class: "ws-back no-print", href: "#worksheets", text: "← All worksheets" }),
+      el("header", { class: "ws-head" }, [
+        el("p", { class: "ws-kicker" }, [levelBadge(w.lvl), el("span", { text: "Worksheet · about " + w.minutes + " min" })]),
+        el("h2", { text: w.title }),
+        el("p", { class: "ws-sub", text: w.subtitle }),
+        w.proofread
+          ? el("p", { class: "ws-proof is-done", text: "Proofread by " + w.proofread })
+          : el("p", { class: "ws-proof is-pending" }, [
+              document.createTextNode("Written by a learner, for learners: "),
+              el("a", { href: REPO_URL + "/issues/new?title=" + encodeURIComponent("Correction: " + w.title), target: "_blank", rel: "noopener", text: "corrections welcome" })
+            ]),
+        el("div", { class: "ws-actions no-print" }, [
+          el("label", { class: "ws-key-opt" }, [el("input", { type: "checkbox", id: "ws-key" }), document.createTextNode(" Print with answer key")]),
+          el("button", { class: "btn btn-primary btn-sm", type: "button", text: "Print / Save as PDF", onclick: () => {
+            root.classList.toggle("print-key", $("#ws-key").checked);
+            window.print();
+          } }),
+          el("button", { class: "btn btn-ghost btn-sm", type: "button", text: "Clear my answers", onclick: () => { saved.set({}); renderWorksheet(w); } })
+        ])
+      ])
+    );
+
+    // Text
+    const textBox = el("section", { class: "ws-text" }, [
+      el("h3", { text: "Read" }),
+      ...w.text.map((t) => el("p", { text: t }))
+    ]);
+    const trans = el("div", { class: "ws-trans", hidden: "" }, w.translation.map((t) => el("p", { text: t })));
+    const transBtn = el("button", { class: "link-btn no-print", type: "button", text: "Show the Hochdeutsch version" });
+    transBtn.addEventListener("click", () => {
+      trans.hidden = !trans.hidden;
+      transBtn.textContent = trans.hidden ? "Show the Hochdeutsch version" : "Hide the Hochdeutsch version";
+    });
+    textBox.append(transBtn, trans);
+    root.append(textBox);
+
+    const key = el("section", { class: "ws-key" }, [el("h3", { text: "Answer key" })]);
+
+    w.sections.forEach((sec, si) => {
+      const box = el("section", { class: "ws-sec ws-" + sec.type }, [
+        el("h3", null, [el("span", { class: "ws-no", text: String(si + 1) }), document.createTextNode(sec.title)]),
+        el("p", { class: "ws-intro", text: sec.intro })
+      ]);
+      const checks = [];
+      const keyList = el("ol");
+      const sk = (n) => si + "-" + n;
+
+      if (sec.type === "choice") {
+        sec.items.forEach((it, n) => {
+          const name = "ws-" + w.id + "-" + sk(n);
+          const fs = el("fieldset", { class: "ws-q" }, [el("legend", { text: (n + 1) + ". " + it.q })]);
+          it.options.forEach((o, k) => {
+            const input = el("input", { type: "radio", name, value: String(k) });
+            if (state[sk(n)] === k) input.checked = true;
+            input.addEventListener("change", () => save(sk(n), k));
+            fs.append(el("label", { class: "ws-opt" }, [input, el("span", { text: o })]));
+          });
+          box.append(fs);
+          checks.push(() => {
+            const picked = $("input:checked", fs);
+            const ok = picked && Number(picked.value) === it.answer;
+            $$(".ws-opt", fs).forEach((l, k) => {
+              l.classList.toggle("is-right", k === it.answer);
+              l.classList.toggle("is-wrong", !!picked && k === Number(picked.value) && !ok);
+            });
+            return ok;
+          });
+          keyList.append(el("li", { text: it.options[it.answer] }));
+        });
+      }
+
+      if (sec.type === "decode" || sec.type === "match" || sec.type === "gaps") {
+        if (sec.type === "gaps") box.append(el("p", { class: "ws-bank" }, [el("span", { text: "Word bank: " }), ...sec.bank.map((b) => el("span", { class: "ws-chip", text: b }))]));
+        const rows = el("ol", { class: "ws-rows" });
+        sec.items.forEach((it, n) => {
+          let field;
+          if (sec.type === "match") {
+            field = el("select", { "aria-label": "Meaning of " + it.zd }, [el("option", { value: "", text: "Choose…" }), ...sec.options.map((o) => el("option", { value: o, text: o }))]);
+            if (state[sk(n)]) field.value = state[sk(n)];
+            field.addEventListener("change", () => save(sk(n), field.value));
+          } else {
+            field = el("input", { type: "text", spellcheck: "false", autocapitalize: "off", "aria-label": sec.type === "decode" ? "Hochdeutsch for " + it.zd : "Gap " + (n + 1) });
+            if (state[sk(n)]) field.value = state[sk(n)];
+            field.addEventListener("input", () => save(sk(n), field.value));
+          }
+          const fb = el("span", { class: "ws-fb", "aria-live": "polite" });
+          let row;
+          if (sec.type === "gaps") {
+            const [before, after] = it.text.split("___");
+            row = el("li", { class: "ws-row ws-gap" }, [el("span", { text: before }), field, el("span", { text: after }), fb]);
+          } else {
+            row = el("li", { class: "ws-row" }, [el("span", { class: "ws-zd", text: it.zd }), el("span", { class: "ws-arrow", "aria-hidden": "true" }, [tram()]), field, fb]);
+          }
+          rows.append(row);
+          const answers = sec.type === "match" ? [it.answer] : (sec.type === "gaps" ? it.answer : it.hd);
+          checks.push(() => {
+            const ok = answers.some((a) => same(a, field.value));
+            row.classList.toggle("is-right", ok);
+            row.classList.toggle("is-wrong", !ok);
+            fb.innerHTML = "";
+            fb.append(el("span", { class: "ws-mark", text: ok ? "✓" : "✗ " + answers[0] }));
+            if (sec.type === "decode") fb.append(it.rule ? ruleChip(it.rule, false) : el("span", { class: "ws-norule", text: "no rule: learn it" }));
+            return ok;
+          });
+          keyList.append(el("li", { text: (sec.type === "gaps" ? it.text.replace("___", answers[0]) : it.zd + " = " + answers[0]) + (it.rule ? " (rule " + ruleNo(it.rule) + ")" : "") }));
+        });
+        box.append(rows);
+      }
+
+      if (sec.type === "listen") {
+        box.append(el("p", { class: "ws-source" }, [document.createTextNode("Source: "), el("a", { href: sec.source.url, target: "_blank", rel: "noopener", text: sec.source.name })]));
+        const notes = el("ol", { class: "ws-lines" });
+        for (let n = 0; n < sec.lines; n++) {
+          const input = el("input", { type: "text", "aria-label": "Word " + (n + 1) + " and its rule" });
+          if (state[sk(n)]) input.value = state[sk(n)];
+          input.addEventListener("input", () => save(sk(n), input.value));
+          notes.append(el("li", null, [input]));
+        }
+        box.append(notes);
+        keyList.append(el("li", { text: "Your own answers." }));
+      }
+
+      if (sec.type === "write") {
+        const ta = el("textarea", { rows: "5", "aria-label": "Your text" });
+        if (state[sk(0)]) ta.value = state[sk(0)];
+        ta.addEventListener("input", () => save(sk(0), ta.value));
+        const ex = el("p", { class: "ws-example", hidden: "" }, [el("strong", { text: "Example: " }), document.createTextNode(sec.example)]);
+        const exBtn = el("button", { class: "link-btn no-print", type: "button", text: "Show an example" });
+        exBtn.addEventListener("click", () => { ex.hidden = !ex.hidden; exBtn.textContent = ex.hidden ? "Show an example" : "Hide the example"; });
+        box.append(ta, exBtn, ex);
+        keyList.append(el("li", { text: "Example: " + sec.example }));
+      }
+
+      if (checks.length) {
+        const result = el("span", { class: "ws-result", "aria-live": "polite" });
+        box.append(el("div", { class: "ws-check no-print" }, [
+          el("button", { class: "btn btn-ghost btn-sm", type: "button", text: "Check", onclick: () => {
+            const right = checks.map((c) => c()).filter(Boolean).length;
+            result.textContent = right + " of " + checks.length + " right" + (right === checks.length ? ". Super gmacht!" : "");
+          } }),
+          result
+        ]));
+      }
+      key.append(el("h4", { text: (si + 1) + ". " + sec.title }), keyList);
+      root.append(box);
+    });
+
+    root.append(key);
+    root.append(el("p", { class: "ws-foot", text: "Züritüütsch · A guide to Zurich German · cemreozertas.github.io/zueri-tuetsch" }));
   }
 
   /* ---------------------------------------------------------------- Init */
@@ -894,6 +1149,7 @@
   initCards();
   initQuiz();
   renderPlan();
+  renderWorksheetList();
   renderStory();
   if (typeof REPO_URL === "string") $("#repo-link").href = REPO_URL;
   window.addEventListener("hashchange", route);

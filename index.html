@@ -37,7 +37,8 @@
         <a href="#rules" data-view="rules">Rules</a>
         <a href="#cards" data-view="cards">Vocabulary</a>
         <a href="#quiz" data-view="quiz">Quiz</a>
-        <a href="#plan" data-view="plan">Listening plan</a>
+        <a href="#worksheets" data-view="worksheets">Worksheets</a>
+        <a href="#plan" data-view="plan">Plan</a>
         <a href="#story" data-view="story">Story</a>
       </nav>
     </div>
@@ -220,16 +221,36 @@
     <section class="view" id="view-plan" data-view="plan" aria-labelledby="plan-title" hidden>
       <div class="wrap page">
         <div class="page-head">
-          <h2 id="plan-title">A listening plan</h2>
-          <p>Start short and predictable, then move to people talking freely.</p>
+          <h2 id="plan-title">Listening and reading plan</h2>
+          <p>A step-by-step plan from short and predictable to fast and unscripted, with real sources online and around Zurich. Each card says what you'll actually hear, because not everything on Swiss media is Zurich German.</p>
         </div>
-        <ol class="plan" id="plan-list"></ol>
+        <div class="toolbar plan-tools">
+          <div class="chips topic-chips" id="plan-filters" role="group" aria-label="Show sources"></div>
+          <button class="chip chip-toggle" id="plan-free" type="button" aria-pressed="false">Free only</button>
+        </div>
+        <ol class="plan-stages" id="plan-list"></ol>
         <aside class="habit">
           <span class="habit-label">The habit that makes it stick</span>
           <p id="habit-text"></p>
         </aside>
+        <p class="small-print plan-checked" id="plan-checked"></p>
       </div>
     </section>
+
+    <!-- WORKSHEETS -->
+    <section class="view" id="view-worksheets" data-view="worksheets" aria-labelledby="ws-title" hidden>
+      <div class="wrap page">
+        <div id="ws-index">
+          <div class="page-head">
+            <h2 id="ws-title">Worksheets</h2>
+            <p>Longer texts with exercises: read, decode, match, fill the gaps, then listen to the real thing and write your own. Work on screen, or print the sheet and use a pen.</p>
+          </div>
+          <div class="ws-list" id="ws-list"></div>
+        </div>
+        <article class="ws" id="ws-sheet" hidden></article>
+      </div>
+    </section>
+
     <!-- STORY -->
     <section class="view" id="view-story" data-view="story" aria-labelledby="story-title" hidden>
       <div class="wrap page">
@@ -253,6 +274,7 @@
   </footer>
 
   <script src="data.js"></script>
+  <script src="worksheets.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

@@ -424,43 +424,191 @@ const QUIZ = [
   { zd: "Das isch e nöii Wonig.", hd: ["Das ist eine neue Wohnung."], rules: ["ung"], lvl: 3 }
 ];
 
+/*
+ * Listening and reading plan.
+ * SOURCES is the library; each stage in PLAN lists source ids in the order to use them.
+ * kind: listen | watch | read | go     where: online | offline     lvl: 1 easy, 2 hard, 3 impossible
+ * dialect says honestly what you'll hear: not everything on Swiss media is Zurich German.
+ */
+const PLAN_CHECKED = "November 2026";
+
+const SOURCES = {
+  meteo: {
+    name: "SRF Meteo", kind: "watch", where: "online", lvl: 1, cost: "Free", dialect: "Swiss German, mixed regions",
+    url: "https://www.srf.ch/meteo",
+    what: "The TV weather forecast after the evening news, presented freely in Swiss German since 2005. Four minutes, same words every day: perfect for a first ear.",
+    tip: "Watch the same forecast twice: once for the gist, once to catch the words."
+  },
+  easygerman: {
+    name: "Easy German: episodes filmed in Zurich", kind: "watch", where: "online", lvl: 1, cost: "Free", dialect: "Zurich German, with subtitles",
+    url: "https://www.youtube.com/@EasyGerman",
+    what: "Street interviews with subtitles. Look for «13 Swiss Words That Germans Don't Understand» (538), «How the Swiss Feel about Standard German» (543) and «Introduce Yourself in Slow Swiss German» (Super Easy German 248).",
+    tip: ""
+  },
+  schtaerne: {
+    name: "Schtärneföifi", kind: "listen", where: "online", lvl: 1, cost: "Free to stream", dialect: "Zurich German",
+    url: "https://open.spotify.com/search/Scht%C3%A4rnef%C3%B6ifi",
+    what: "A Zurich children's band that grew out of the city's punk scene. They stopped performing in 2020 but left ten albums, about 160 songs: clear, slow-ish Zurich German with a lot of humour.",
+    tip: "Pair it with the book below, which prints the lyrics in three languages."
+  },
+  zhtourism: {
+    name: "Zürich Tourismus: Zürichdeutsch für Anfänger:innen", kind: "read", where: "online", lvl: 1, cost: "Free", dialect: "Zurich German",
+    url: "https://www.zuerich.com/de/besuchen/praktische-informationen/zuerichdeutsch",
+    what: "A short list of about 40 everyday Zurich words with their Standard German meaning, from Anke to Züri-Gschnätzlets.",
+    tip: ""
+  },
+  kauderwelsch: {
+    name: "Kauderwelsch: Schwiizertüütsch – Das Deutsch der Eidgenossen", kind: "read", where: "offline", lvl: 1, cost: "Paid (book)", dialect: "Swiss German overview",
+    url: "https://www.reise-know-how.de/sites/default/files/kw_schwiizertuutsch_us_inhalt.pdf",
+    what: "A pocket phrasebook by Reise Know-How (author Christine Eggenberg) that explains everyday Swiss German expressions. Not Zurich-only, but a friendly start.",
+    tip: ""
+  },
+  regionaljournal: {
+    name: "Regionaljournal Zürich Schaffhausen (Radio SRF 1)", kind: "listen", where: "online", lvl: 2, cost: "Free", dialect: "Zurich German",
+    url: "https://www.srf.ch/audio/regionaljournal-zuerich-schaffhausen",
+    what: "Daily regional news for Zurich and Schaffhausen, on the radio at 17:30 and as a podcast. Short, local and about places you know.",
+    tip: "News repeats the same story across bulletins. Listen to the morning and evening version of one story."
+  },
+  neumatt: {
+    name: "Neumatt (Play Suisse)", kind: "watch", where: "online", lvl: 2, cost: "Free with a Swiss address", dialect: "Zurich German",
+    url: "https://www.playsuisse.ch/",
+    what: "A drama series about a farming family near Zurich, filmed in the city and on a farm in Uster. Three seasons; Hochdeutsch subtitles available.",
+    tip: "Play Suisse needs a free account with a Swiss postcode. Also on Netflix."
+  },
+  bideluet: {
+    name: "SRF bi de Lüt", kind: "watch", where: "online", lvl: 2, cost: "Free", dialect: "Swiss German, many regions",
+    url: "https://www.srf.ch/sendungen/srf-bi-de-luet",
+    what: "SRF's family series about everyday life in Swiss villages and regions, such as «Landfrauenküche» and «Hüttengeschichten». Real people, real dialects.",
+    tip: ""
+  },
+  mona: {
+    name: "Mona mittendrin", kind: "watch", where: "online", lvl: 2, cost: "Free", dialect: "Thurgau German (host), plus guests",
+    url: "https://www.srf.ch/play/tv/suche?query=Mona%20mittendrin",
+    what: "Reporter Mona Vetsch spends three days in someone else's life, from street workers in Zurich to a mountain rescue team. Episodes on Play SRF often have subtitles.",
+    tip: "Mona is from Thurgau, so her vowels differ a bit from Zurich. Good practice for hearing the difference."
+  },
+  dinimundart: {
+    name: "Dini Mundart (Radio SRF 1 podcast)", kind: "listen", where: "online", lvl: 2, cost: "Free", dialect: "Swiss German, about dialect",
+    url: "https://www.srf.ch/audio/dini-mundart",
+    what: "SRF's dialect team discusses where words come from and how dialects change, with listener questions. A podcast about exactly what this site is about.",
+    tip: ""
+  },
+  schtaernebook: {
+    name: "Züritüütsch isch aifach schön / Zurich German is simply beautiful", kind: "read", where: "offline", lvl: 2, cost: "Paid (book)", dialect: "Zurich German",
+    url: "https://www.exlibris.ch/de/buecher-buch/english-books/paul-g-schreier/zueritueuetsch-isch-aifach-schoen-zurich-german-is-simply-beautifu/id/9783833418884",
+    what: "Schtärneföifi song lyrics transcribed in Zurich German and translated into Standard German and English. Read along while you listen.",
+    tip: ""
+  },
+  egliwildi: {
+    name: "Züritüütsch verstaa, Züritüütsch rede", kind: "read", where: "offline", lvl: 2, cost: "Paid (book + 2 CDs)", dialect: "Zurich German",
+    url: "https://en.wikipedia.org/wiki/Zurich_German",
+    what: "A course book by Renate Egli-Wildi (2007, 108 pages plus two audio CDs), published by the Zurich section of the Society for Swiss German.",
+    tip: "Not easy to find new: ask at the library or look second-hand."
+  },
+  gredig: {
+    name: "Gredig direkt", kind: "watch", where: "online", lvl: 3, cost: "Free", dialect: "Swiss German, varies by guest",
+    url: "https://www.srf.ch/play/tv/suche?query=Gredig%20direkt",
+    what: "Urs Gredig's one-on-one talk show with guests from politics, sport and culture. Long, natural conversation; also available as a podcast.",
+    tip: ""
+  },
+  telezueri: {
+    name: "TeleZüri (ZüriNews, TalkTäglich)", kind: "watch", where: "online", lvl: 3, cost: "Free", dialect: "Zurich German",
+    url: "https://www.telezueri.ch/",
+    what: "Zurich's regional TV station. All its own productions are in Swiss German: daily local news, the talk show TalkTäglich and the Sunday debate SonnTalk.",
+    tip: "Debates are fast and people interrupt each other. That's the point."
+  },
+  radio24: {
+    name: "Radio 24", kind: "listen", where: "online", lvl: 3, cost: "Free", dialect: "Zurich German",
+    url: "https://www.radio24.ch/",
+    what: "Zurich's private radio station, with the morning show «Ufsteller». Fast, chatty presenters between the songs.",
+    tip: ""
+  },
+  bligg: {
+    name: "Bligg", kind: "listen", where: "online", lvl: 3, cost: "Free to stream", dialect: "Zurich German",
+    url: "https://open.spotify.com/search/Bligg",
+    what: "Mundart rapper from Zurich-Schwamendingen and one of Switzerland's most successful artists, active for three decades.",
+    tip: "Rap is the hardest test of all. Look up the lyrics and read along."
+  },
+  schnabelweid: {
+    name: "Dini Mundart – Schnabelweid (Radio SRF 1)", kind: "listen", where: "online", lvl: 3, cost: "Free", dialect: "Swiss German, many regions",
+    url: "https://www.srf.ch/audio/dini-mundart-schnabelweid",
+    what: "SRF 1's weekly hour for dialect: readings by dialect authors, songs, and discussions about language.",
+    tip: ""
+  },
+  hoerspiel: {
+    name: "SRF Hörspiel", kind: "listen", where: "online", lvl: 3, cost: "Free", dialect: "Dialect and Standard German",
+    url: "https://www.srf.ch/hoerspiel",
+    what: "Radio plays and crime stories, many of them recorded in dialect. Pure listening, no pictures to help you.",
+    tip: "Check each episode's description: some are in Standard German."
+  },
+  tschugger: {
+    name: "Tschugger (Play Suisse)", kind: "watch", where: "online", lvl: 3, cost: "Free with a Swiss address", dialect: "Valais German",
+    url: "https://www.playsuisse.ch/",
+    what: "A cult police comedy from the Valais. Its dialect is so different that SRF added fixed subtitles: watch it for fun, and to hear how far Swiss dialects can drift apart.",
+    tip: "Not Zurich German. Treat it as a bonus round."
+  },
+  gallmann: {
+    name: "Zürichdeutsches Wörterbuch (Heinz Gallmann)", kind: "read", where: "offline", lvl: 3, cost: "Paid (book)", dialect: "Zurich German",
+    url: "https://www.galaxus.ch/en/s12/product/zuerichdeutsches-woerterbuch-german-heinz-gallmann-2014-non-fiction-6615801",
+    what: "The standard Zurich German dictionary (NZZ Libro, 2014 edition, 723 pages), with a Hochdeutsch–Zurich register at the back so you can look words up in both directions.",
+    tip: ""
+  },
+  schobinger: {
+    name: "Viktor Schobinger: Ääschme crime novels and language books", kind: "read", where: "offline", lvl: 3, cost: "Paid (books, around CHF 25)", dialect: "Zurich German",
+    url: "https://www.zuerituetsch.ch/index.html",
+    what: "More than 45 short crime novels written entirely in Zurich German, plus a short grammar and dictionaries. He uses his own spelling with extra accents, so expect a few surprises.",
+    tip: "Order through the Buchhandlung im Volkshaus, Stauffacherstrasse 60."
+  },
+  idiotikon: {
+    name: "Schweizerisches Idiotikon", kind: "read", where: "online", lvl: 3, cost: "Free", dialect: "All Swiss German",
+    url: "https://www.idiotikon.ch/",
+    what: "The great dictionary of Swiss German, searchable online. For the moment you want to know where a word really comes from.",
+    tip: ""
+  },
+  pbzcafe: {
+    name: "Schweizerdeutsch-Café (PBZ Pestalozzi-Bibliothek)", kind: "go", where: "offline", lvl: 1, cost: "Check the event page", dialect: "Zurich German",
+    url: "https://www.pbz.ch/event-kalender/?series=schweizerdeutsch-cafe",
+    what: "A relaxed weekly meet-up for adults who want to learn or play with Swiss German. Currently at PBZ Sihlcity, Wednesdays 10:00–11:00.",
+    tip: "The city library also lends books and audio: ask for the Mundart shelf."
+  },
+  maerchen: {
+    name: "Zürcher Märchenbühne", kind: "go", where: "offline", lvl: 1, cost: "Paid (tickets)", dialect: "Zurich German",
+    url: "https://www.theaterhechtplatz.ch/",
+    what: "Fairy tales on stage in dialect, every winter since 1963. Simple stories, clear voices, and you already know the plot.",
+    tip: "The Theater am Hechtplatz is being renovated until spring 2027; shows run at Haus Seefeld meanwhile."
+  },
+  zhlam: {
+    name: "mundartZHlam (Verein Züritüütsch)", kind: "go", where: "offline", lvl: 3, cost: "CHF 10–15", dialect: "Zurich German",
+    url: "https://eventfrog.ch/de/events.html?searchTerm=mundartZHlam",
+    what: "A poetry slam in Zurich German, organised by the Verein Züritüütsch. Fast, funny and full of wordplay.",
+    tip: "Check Eventfrog for the next date."
+  }
+};
+
 const PLAN = [
   {
-    when: "Weeks 1–2",
-    title: "Short and familiar",
-    text: "Pick dialect content where you already know what's coming.",
-    items: [
-      "SRF Meteo: short, predictable topic, spoken in dialect.",
-      "Radio SRF 1 or SRF 3 in the background: the hosts speak dialect between songs."
-    ]
+    when: "Weeks 1–2", lvl: 1,
+    title: "Short and predictable",
+    text: "Start with material where you already know what's coming, so your ear can focus on the sounds.",
+    sources: ["meteo", "easygerman", "schtaerne", "zhtourism", "kauderwelsch", "pbzcafe"]
   },
   {
-    when: "Weeks 3–6",
-    title: "Conversation",
-    text: "Move to people talking freely. Use Standard German subtitles at first and switch them off once you follow about 70%.",
-    items: [
-      "Zivadiliring (SRF podcast): casual chatter from the Zurich area.",
-      "Gredig direkt (SRF): longer interviews."
-    ]
+    when: "Weeks 3–6", lvl: 2,
+    title: "Real people, with subtitles",
+    text: "Move to people talking freely. Keep Hochdeutsch subtitles on at first, and switch them off once you follow most of it.",
+    sources: ["regionaljournal", "neumatt", "bideluet", "mona", "dinimundart", "schtaernebook", "egliwildi", "maerchen"]
   },
   {
-    when: "Then",
-    title: "Fiction and variety",
-    text: "Series with real dialogue, sorted by difficulty.",
-    items: [
-      "Neumatt (Netflix / Play Suisse): set near Zurich.",
-      "Der Bestatter: Aargau dialect, close to Zurich's.",
-      "Tschugger: save it for later. Valais dialect is hard even for Swiss people."
-    ]
+    when: "Months 2–3", lvl: 3,
+    title: "Fast and unscripted",
+    text: "Talk shows, local TV and radio at full speed, a first real book in dialect, and a night out in Zurich German.",
+    sources: ["gredig", "telezueri", "radio24", "schnabelweid", "hoerspiel", "bligg", "gallmann", "schobinger", "zhlam"]
   },
   {
-    when: "Throughout",
-    title: "Real life",
-    text: "The best material is free and all around you.",
-    items: [
-      "Tram announcements, bakery small talk, overheard conversations.",
-      "Play Suisse (free with a Swiss address): lots of dialect content with subtitles."
-    ]
+    when: "Whenever you like", lvl: 3,
+    title: "Bonus rounds",
+    text: "For curiosity rather than progress: how far Swiss dialects can drift, and where the words come from.",
+    sources: ["tschugger", "idiotikon"]
   }
 ];
 
