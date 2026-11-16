@@ -22,6 +22,7 @@
   --hinge: #002B55;
 
   --magenta-soft: #FBE6EE;
+  --blau-soft: #DCEBF6;     /* right answers */
 
   /* One radius scale: tiles 6, every control 10, every card 18 */
   --r-xs: 6px;
@@ -289,10 +290,12 @@ input[type="text"]:disabled { background: var(--panel); color: var(--ink-2); }
 .quiz-prompt { margin: 0 0 20px; font-size: clamp(1.75rem, 4.4vw, 2.5rem); font-weight: 800; letter-spacing: -0.025em; line-height: 1.15; color: var(--dunkelblau); }
 .quiz-feedback { margin-top: 18px; }
 .fb { border-radius: var(--r); padding: 16px 18px; font-size: 0.9375rem; }
-.fb-ok { background: var(--magenta-soft); }
-.fb-miss { background: #fff; box-shadow: inset 0 0 0 2px var(--magenta-soft); }
+/* Right answers are light blue, wrong ones magenta */
+.fb-ok { background: var(--blau-soft); }
+.fb-miss { background: var(--magenta-soft); }
 .fb-title { margin: 0 0 4px; font-weight: 800; }
-.fb-ok .fb-title, .fb-miss .fb-title { color: var(--magenta); }
+.fb-ok .fb-title { color: var(--dunkelblau); }
+.fb-miss .fb-title { color: var(--magenta); }
 .fb-ok .fb-title::before { content: "✓ "; }
 .fb-miss .fb-title::before { content: "✗ "; }
 .fb p { margin: 0 0 6px; }
@@ -351,11 +354,12 @@ input[type="text"]:disabled { background: var(--panel); color: var(--ink-2); }
 .level-btn[aria-pressed="true"] { border-color: var(--blau); background: var(--panel); box-shadow: inset 0 -3px 0 var(--blau); }
 .level-top { display: flex; align-items: center; gap: 8px; }
 .level-name { font-weight: 800; letter-spacing: -0.01em; }
-.level-count { font-family: var(--mono); font-size: 0.75rem; font-weight: 700; color: var(--ink-2); }
+.level-sub { font-family: var(--mono); font-size: 0.75rem; font-weight: 700; color: var(--ink-2); }
+.level-plain { text-transform: uppercase; letter-spacing: 0.06em; }
 .level-desc { margin: 10px 0 16px; color: var(--ink-2); font-size: 0.9375rem; }
 .toolbar .level-desc { margin: 0; }
 
-/* Three little bars, like signal strength: 1 = easy, 2 = hard, 3 = impossible */
+/* Three little bars, like signal strength: 1 = Kurzstrecke, 2 = Zone 110, 3 = Alle Zonen */
 .pips { display: inline-flex; gap: 2px; align-items: flex-end; }
 .pips i { width: 5px; border-radius: 1.5px; background: var(--line); }
 .pips i:nth-child(1) { height: 7px; } .pips i:nth-child(2) { height: 10px; } .pips i:nth-child(3) { height: 13px; }
@@ -402,6 +406,9 @@ input[type="text"]:disabled { background: var(--panel); color: var(--ink-2); }
   .level-bar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .level-bar-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .level-bar-3 .level-count { display: none; }
+  .level-bar-3 .level-btn { padding: 9px 8px; }
+  .level-bar-3 .level-top .pips { display: none; }
+  .level-bar-3 .level-name { font-size: 0.875rem; }
   .word-rows li { grid-template-columns: minmax(0, 1fr) auto; }
   .w-hd { grid-column: 1 / -1; grid-row: 2; }
   /* Topics scroll sideways on phones instead of filling the screen */
@@ -477,8 +484,8 @@ a.ws-card:hover { border-color: var(--blau); }
 .ws-opt { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1.5px solid var(--line); border-radius: var(--r-sm); margin-bottom: 6px; cursor: pointer; }
 .ws-opt:hover { border-color: var(--blau); }
 .ws-opt input { accent-color: var(--blau); width: 18px; height: 18px; }
-.ws-opt.is-right { border-color: var(--magenta); background: var(--magenta-soft); }
-.ws-opt.is-wrong { border-style: dashed; border-color: var(--magenta); }
+.ws-opt.is-right { border-color: var(--blau); background: var(--blau-soft); }
+.ws-opt.is-wrong { border-color: var(--magenta); background: var(--magenta-soft); }
 .ws-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .ws-row { display: grid; grid-template-columns: 120px auto minmax(0, 220px) 1fr; gap: 10px; align-items: center; }
 .ws-gap { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
@@ -490,10 +497,11 @@ a.ws-card:hover { border-color: var(--blau); }
   font: inherit; color: var(--ink); background: #fff; border: 2px solid var(--line); border-radius: var(--r-sm); padding: 8px 10px; min-height: 40px;
 }
 .ws-row input:focus, .ws-row select:focus, .ws-lines input:focus, .ws textarea:focus { outline: none; border-color: var(--blau); }
-.ws-row.is-right input, .ws-row.is-right select { border-color: var(--magenta); background: var(--magenta-soft); }
-.ws-row.is-wrong input, .ws-row.is-wrong select { border-color: var(--magenta); border-style: dashed; }
+.ws-row.is-right input, .ws-row.is-right select { border-color: var(--blau); background: var(--blau-soft); }
+.ws-row.is-wrong input, .ws-row.is-wrong select { border-color: var(--magenta); background: var(--magenta-soft); }
 .ws-fb { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 0.875rem; }
 .ws-mark { font-weight: 700; color: var(--magenta); }
+.ws-mark.is-ok { color: var(--blau); }
 .ws-norule { font-size: 0.75rem; color: var(--ink-2); font-style: italic; }
 .ws-bank { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 0 0 12px; font-size: 0.875rem; color: var(--ink-2); }
 .ws-chip { background: var(--panel); color: var(--dunkelblau); font-weight: 700; border-radius: var(--r-xs); padding: 3px 8px; }

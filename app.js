@@ -22,7 +22,7 @@
         else node.setAttribute(k, v);
       }
     }
-    (children || []).forEach((c) => node.append(c));
+    (children || []).forEach((c) => { if (c !== null && c !== undefined) node.append(c); });
     return node;
   }
 
@@ -612,7 +612,7 @@
     return el("span", { class: "pips", "aria-hidden": "true" }, [el("i"), el("i"), el("i")]);
   }
   function levelBadge(lvl) {
-    return el("span", { class: "lvl-badge lvl-" + lvl, title: "Level: " + LEVELS[lvl].name }, [pips(lvl), el("span", { text: LEVELS[lvl].name })]);
+    return el("span", { class: "lvl-badge lvl-" + lvl, title: "Level: " + LEVELS[lvl].name + " (" + LEVELS[lvl].plain.toLowerCase() + ")" }, [pips(lvl), el("span", { text: LEVELS[lvl].name })]);
   }
 
   // A row of level buttons. counts(level) gives the number shown on each button.
@@ -623,7 +623,10 @@
       const lvl = k === "all" ? null : Number(k);
       const btn = el("button", { type: "button", class: "level-btn" + (lvl ? " lvl-" + lvl : " lvl-all"), "data-lvl": k, "aria-pressed": String(k) === String(opts.current) ? "true" : "false" }, [
         el("span", { class: "level-top" }, [lvl ? pips(lvl) : el("span", { class: "pips pips-all", "aria-hidden": "true" }, [el("i"), el("i"), el("i")]), el("span", { class: "level-name", text: lvl ? LEVELS[lvl].name : "All levels" })]),
-        el("span", { class: "level-count", text: opts.counts(lvl) + " " + opts.unit })
+        el("span", { class: "level-sub" }, [
+          el("span", { class: "level-plain", text: lvl ? LEVELS[lvl].plain : "All" }),
+          el("span", { class: "level-count", text: " · " + opts.counts(lvl) + " " + opts.unit })
+        ])
       ]);
       btn.addEventListener("click", () => {
         $$(".level-btn", container).forEach((b) => b.setAttribute("aria-pressed", b === btn ? "true" : "false"));
@@ -632,7 +635,7 @@
       container.append(btn);
     });
   }
-  const levelText = (k) => k === "all" ? "Everything, from easy to impossible." : LEVELS[k].text;
+  const levelText = (k) => k === "all" ? "Everything, from Kurzstrecke to Alle Zonen." : LEVELS[k].text;
 
   /* ---------------------------------------------------------- Words (flashcards and list) */
 
@@ -1164,7 +1167,7 @@
             row.classList.toggle("is-right", ok);
             row.classList.toggle("is-wrong", !ok);
             fb.innerHTML = "";
-            fb.append(el("span", { class: "ws-mark", text: ok ? "✓" : "✗ " + answers[0] }));
+            fb.append(el("span", { class: "ws-mark " + (ok ? "is-ok" : "is-miss"), text: ok ? "✓" : "✗ " + answers[0] }));
             if (sec.type === "decode") fb.append(it.rule ? ruleChip(it.rule, false) : el("span", { class: "ws-norule", text: "no rule: learn it" }));
             return ok;
           });

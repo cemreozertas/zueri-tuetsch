@@ -23,8 +23,8 @@ Zurich German isn't a variant of Standard German but its close relative: both gr
 | **Start** | A short introduction: what the site is, how it works and where to begin. |
 | **Decode** | Type a word you heard and watch it flip into Standard German on a departure board. The letters that change light up, and each change links to the rule behind it. Words that aren't in the list get a best guess from the rules. A switch flips the direction, so you can also go from Hochdeutsch to Züritüütsch. |
 | **Rules** | 13 numbered sound shifts (ei → ii, au → uu, k → ch, -ung → -ig …), each with examples, a "reverse it" tip and its exceptions. Plus four grammar shortcuts. |
-| **Vocabulary** | 168 words and phrases the rules can't explain (*luege, poschte, Rüebli, Ziischtig*), sorted into ten topics and three levels: easy, hard and impossible. Practise them as flashcards (in either direction, with progress saved in your browser) or browse them as a list. False friends like *springe* = rennen get their own topic. |
-| **Quiz** | Read the dialect, type the Standard German, and see the answer flap into place with the rules that did the work. Three levels: easy (single words), hard (trickier words and short sentences) and impossible (full sentences with slang). |
+| **Vocabulary** | 168 words and phrases the rules can't explain (*luege, poschte, Rüebli, Ziischtig*), sorted into ten topics and three levels named after Zurich's tram tickets: *Kurzstrecke* (easy), *Zone 110* (hard) and *Alle Zonen* (impossible). Practise them as flashcards (in either direction, with progress saved in your browser) or browse them as a list. False friends like *springe* = rennen get their own topic. |
+| **Quiz** | Read the dialect, type the Standard German, and see the answer flap into place with the rules that did the work. The same three ticket levels: Kurzstrecke (single words), Zone 110 (trickier words and short sentences) and Alle Zonen (full sentences with slang). |
 | **Worksheets** | Longer original texts in Zurich German with six kinds of exercises: comprehension, decoding, matching, gap-fill, a listening task with a real source, and your own writing. Check answers on screen (saved in your browser) or print a clean A4 sheet with an optional answer key. |
 | **Plan** | A listening and reading plan in four stages, with 25 checked sources online and around Zurich: SRF Meteo, regional news, Neumatt, TeleZüri, Bligg, the Märchenbühne, the PBZ Schweizerdeutsch-Café, Zurich German books and more. Each source says honestly which dialect you'll hear. |
 | **Story** | Where Zurich German comes from, in twelve short headlines you can open for details: the Alemanni, the old vowels, why the Swiss write Hochdeutsch, the missing ß, no official spelling and more. Every fact links to its source. |
@@ -42,7 +42,7 @@ Zurich German isn't a variant of Standard German but its close relative: both gr
 
 ## Design
 
-The look borrows from the split-flap departure board and uses Zurich's city colours, over a street map of Zurich from Oerlikon to Enge that stays still while the page scrolls. Every tab opens with a blue band. The practice pages (Decode, Vocabulary, Quiz and Worksheets) use a wall of faint split-flap tiles instead of the map, which now and then flip to a new letter. Colours: **Blau** with white as the main pair, **Dunkelblau** for the flaps, and **Magenta** as the one accent colour, for answers, levels, exceptions and false friends. The fonts are Hanken Grotesk and JetBrains Mono, both served from this repo.
+The look borrows from the split-flap departure board and uses Zurich's city colours, over a street map of Zurich from Oerlikon to Enge that stays still while the page scrolls. Every tab opens with a blue band. The three levels are named after Zurich's tram tickets: a short hop, the whole city, the whole canton. The practice pages (Decode, Vocabulary, Quiz and Worksheets) use a wall of faint split-flap tiles instead of the map, which now and then flip to a new letter. Colours: **Blau** with white as the main pair, **Dunkelblau** for the flaps, and **Magenta** as the one accent colour, for answers, levels, exceptions and false friends. The fonts are Hanken Grotesk and JetBrains Mono, both served from this repo.
 
 ## How it's built
 
@@ -83,6 +83,6 @@ Swiss German has no official spelling. This app follows common Zurich usage, wit
 
 [Cemre](https://github.com/cemreozertas) is a Zurich-based tinkerer at heart. She builds automations, templates and apps for creative minds who love a well-run life, with [Claude](https://claude.ai) as her building partner.
 
-Map data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), via [EqualStreetNames Zürich](https://github.com/EqualStreetNames/equalstreetnames-zurich). Fonts: [Hanken Grotesk](https://github.com/marcologous/hanken-grotesk) and [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono), both under the SIL Open Font License.
+The level names are borrowed from ZVV tickets; this project isn't affiliated with ZVV. Map data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), via [EqualStreetNames Zürich](https://github.com/EqualStreetNames/equalstreetnames-zurich). Fonts: [Hanken Grotesk](https://github.com/marcologous/hanken-grotesk) and [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono), both under the SIL Open Font License.
 
 Licensed under the [MIT licence](LICENSE): free to use, copy and adapt.

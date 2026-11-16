@@ -358,10 +358,14 @@ const CATEGORIES = {
 };
 
 // Levels for words, phrases and quiz items.
+/*
+ * Levels are named after ZVV tickets: a short hop, the whole city, the whole canton.
+ * "plain" is the everyday word shown underneath, for anyone who doesn't know the tickets yet.
+ */
 const LEVELS = {
-  1: { name: "Easy", text: "Close to Hochdeutsch. With the sound rules, you'll often guess these." },
-  2: { name: "Hard", text: "Everyday words with no clue in Hochdeutsch. These you learn by heart." },
-  3: { name: "Impossible", text: "Traps, slang and real-life speed. Even long-time residents trip over these." }
+  1: { name: "Kurzstrecke", plain: "Easy", text: "A short hop: close to Hochdeutsch. With the sound rules, you'll often guess these." },
+  2: { name: "Zone 110", plain: "Hard", text: "The whole city: everyday words with no clue in Hochdeutsch. These you learn by heart." },
+  3: { name: "Alle Zonen", plain: "Impossible", text: "The whole canton: traps, slang and real-life speed. Even long-time residents trip over these." }
 };
 
 /*
