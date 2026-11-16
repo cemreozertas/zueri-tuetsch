@@ -81,6 +81,8 @@ Swiss German has no official spelling. This app follows common Zurich usage, wit
 
 ## Credits
 
-Made with love in Zurich by Cemre, built together with [Claude](https://claude.ai). Map data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), via [EqualStreetNames Zürich](https://github.com/EqualStreetNames/equalstreetnames-zurich). Fonts: [Hanken Grotesk](https://github.com/marcologous/hanken-grotesk) and [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono), both under the SIL Open Font License.
+[Cemre](https://github.com/cemreozertas) is a Zurich-based tinkerer at heart. She builds automations, templates and apps for creative minds who love a well-run life, with [Claude](https://claude.ai) as her building partner.
+
+Map data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), via [EqualStreetNames Zürich](https://github.com/EqualStreetNames/equalstreetnames-zurich). Fonts: [Hanken Grotesk](https://github.com/marcologous/hanken-grotesk) and [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono), both under the SIL Open Font License.
 
 Licensed under the [MIT licence](LICENSE): free to use, copy and adapt.
