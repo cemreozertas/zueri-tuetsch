@@ -93,7 +93,7 @@
           </div>
         </div>
 
-        <p class="start-more">Plus a <a href="#decode">decoder</a> for any word you hear, a <a href="#plan">four-stage listening plan</a> with real Swiss radio and TV, and <a href="#story">the story</a> of where Züritüütsch comes from.</p>
+        <p class="start-more">Plus a <a href="#decode">decoder</a> for any word you hear, a <a href="#plan">four-stage listening and reading plan</a> with real sources online and around Zurich, <a href="#worksheets">worksheets</a> to practise with, and <a href="#story">the story</a> of where Züritüütsch comes from.</p>
 
         <aside class="about-note" aria-labelledby="about-title">
           <h2 id="about-title">Why this exists</h2>
@@ -139,12 +139,17 @@
 
     <!-- RULES -->
     <section class="view" id="view-rules" data-view="rules" aria-labelledby="rules-title" hidden>
-      <div class="wrap page">
-        <div class="page-head">
-          <h2 id="rules-title">The sound shifts</h2>
-          <p>Each rule pairs a Hochdeutsch sound with the Züritüütsch sound you hear in its place, with examples and a tip for hearing it in reverse. The number stays the same everywhere in the app.</p>
-          <p class="note">The rules are a learner's shortcut, not history: Zurich German didn't come from Hochdeutsch. Both grew out of medieval German, and for the vowels it was actually Hochdeutsch that changed, while Zurich German kept the older sound. <a href="#story-4">The Story tab explains how.</a></p>
+      <div class="band band-head">
+        <div class="wrap">
+          <div class="page-head">
+            <p class="kicker">Learn the patterns · <span data-count="rules"></span> sound shifts</p>
+            <h2 id="rules-title">The sound shifts</h2>
+            <p>Each rule pairs a Hochdeutsch sound with the Züritüütsch sound you hear in its place, with examples and a tip for hearing it in reverse. The number stays the same everywhere in the app.</p>
+          </div>
         </div>
+      </div>
+      <div class="wrap page">
+        <p class="note">The rules are a learner's shortcut, not history: Zurich German didn't come from Hochdeutsch. Both grew out of medieval German, and for the vowels it was actually Hochdeutsch that changed, while Zurich German kept the older sound. <a href="#story-4">The Story tab explains how.</a></p>
         <ol class="rules" id="rules-list"></ol>
         <h3 class="sub">Grammar shortcuts</h3>
         <div class="grammar-grid" id="grammar-grid"></div>
@@ -153,11 +158,16 @@
 
     <!-- FLASHCARDS -->
     <section class="view" id="view-cards" data-view="cards" aria-labelledby="cards-title" hidden>
-      <div class="wrap page">
-        <div class="page-head">
-          <h2 id="cards-title">Vocabulary</h2>
-          <p>The words the sound rules can't explain, sorted by topic and by how hard they are. Practise them as flashcards, or browse the whole list.</p>
+      <div class="band band-head band-wall">
+        <div class="wrap">
+          <div class="page-head">
+            <p class="kicker">Practise · <span data-count="vocab"></span> words and phrases</p>
+            <h2 id="cards-title">Vocabulary</h2>
+            <p>The words the sound rules can't explain, sorted by topic and by how hard they are. Practise them as flashcards, or browse the whole list.</p>
+          </div>
         </div>
+      </div>
+      <div class="wrap page">
 
         <div class="level-bar" id="word-levels" role="group" aria-label="Level"></div>
         <p class="level-desc" id="word-level-desc"></p>
@@ -194,11 +204,16 @@
 
     <!-- QUIZ -->
     <section class="view" id="view-quiz" data-view="quiz" aria-labelledby="quiz-title" hidden>
-      <div class="wrap page">
-        <div class="page-head">
-          <h2 id="quiz-title">Reverse it into Hochdeutsch</h2>
-          <p>Read the Züritüütsch, then type the Hochdeutsch. Afterwards you'll see which rule did the work.</p>
+      <div class="band band-head band-wall">
+        <div class="wrap">
+          <div class="page-head">
+            <p class="kicker">Test yourself · <span data-count="quiz"></span> questions</p>
+            <h2 id="quiz-title">Reverse it into Hochdeutsch</h2>
+            <p>Read the Züritüütsch, then type the Hochdeutsch. Afterwards you'll see which rule did the work.</p>
+          </div>
         </div>
+      </div>
+      <div class="wrap page">
         <div class="level-bar level-bar-3" id="quiz-levels" role="group" aria-label="Quiz level"></div>
         <div class="toolbar">
           <p class="level-desc" id="quiz-level-desc"></p>
@@ -219,11 +234,16 @@
 
     <!-- PLAN -->
     <section class="view" id="view-plan" data-view="plan" aria-labelledby="plan-title" hidden>
-      <div class="wrap page">
-        <div class="page-head">
-          <h2 id="plan-title">Listening and reading plan</h2>
-          <p>A step-by-step plan from short and predictable to fast and unscripted, with real sources online and around Zurich. Each card says what you'll actually hear, because not everything on Swiss media is Zurich German.</p>
+      <div class="band band-head">
+        <div class="wrap">
+          <div class="page-head">
+            <p class="kicker">Listen and read · <span data-count="sources"></span> sources</p>
+            <h2 id="plan-title">Listening and reading plan</h2>
+            <p>A step-by-step plan from short and predictable to fast and unscripted, with real sources online and around Zurich. Each card says what you'll actually hear, because not everything on Swiss media is Zurich German.</p>
+          </div>
         </div>
+      </div>
+      <div class="wrap page">
         <div class="toolbar plan-tools">
           <div class="chips topic-chips" id="plan-filters" role="group" aria-label="Show sources"></div>
           <button class="chip chip-toggle" id="plan-free" type="button" aria-pressed="false">Free only</button>
@@ -239,12 +259,17 @@
 
     <!-- WORKSHEETS -->
     <section class="view" id="view-worksheets" data-view="worksheets" aria-labelledby="ws-title" hidden>
-      <div class="wrap page">
-        <div id="ws-index">
+      <div class="band band-head band-wall">
+        <div class="wrap">
           <div class="page-head">
+            <p class="kicker">Read and write · <span data-count="worksheets"></span></p>
             <h2 id="ws-title">Worksheets</h2>
             <p>Longer texts with exercises: read, decode, match, fill the gaps, then listen to the real thing and write your own. Work on screen, or print the sheet and use a pen.</p>
           </div>
+        </div>
+      </div>
+      <div class="wrap page">
+        <div id="ws-index">
           <div class="ws-list" id="ws-list"></div>
         </div>
         <article class="ws" id="ws-sheet" hidden></article>
@@ -253,11 +278,16 @@
 
     <!-- STORY -->
     <section class="view" id="view-story" data-view="story" aria-labelledby="story-title" hidden>
-      <div class="wrap page">
-        <div class="page-head">
-          <h2 id="story-title">The story of Züritüütsch</h2>
-          <p>Where the dialect comes from, why it sounds the way it does, and why the Swiss write something else. Read the headlines for the short version, or open any of them for the details and sources.</p>
+      <div class="band band-head">
+        <div class="wrap">
+          <div class="page-head">
+            <p class="kicker">Background · <span data-count="story"></span> chapters</p>
+            <h2 id="story-title">The story of Züritüütsch</h2>
+            <p>Where the dialect comes from, why it sounds the way it does, and why the Swiss write something else. Read the headlines for the short version, or open any of them for the details and sources.</p>
+          </div>
         </div>
+      </div>
+      <div class="wrap page">
         <div class="story-tools">
           <button type="button" class="btn btn-ghost btn-sm" id="story-toggle-all">Open all</button>
         </div>

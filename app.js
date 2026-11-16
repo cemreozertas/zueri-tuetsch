@@ -159,6 +159,7 @@
 
     if (view === "decode") demo.resume(); else demo.pause();
     if (view === "start") startLoop.resume(); else startLoop.pause();
+    if (WALL_VIEWS.includes(view)) wall.show(view); else wall.hide();
   }
 
   /* --------------------------------------------------------------- Rules */
@@ -414,6 +415,78 @@
   };
 
   /* --------------------------------------------------------------- Start */
+
+  // Background for the practice pages: a wall of faint split-flap tiles.
+  // Now and then one flips to a new letter and lights up.
+  const WALL_VIEWS = ["decode", "cards", "quiz", "worksheets"];
+  const wall = {
+    letters: "ZÜRIZIITHUUSCHINDLÜÜTGUETIIUUÜÜSCHTÄCH",
+    boxes: { band: null, page: null }, tiles: [], timer: null,
+    // Decode: tiles in its big blue band. Vocabulary, Quiz, Worksheets: tiles in the blue header band,
+    // plus pale tiles fixed behind the white part of the page, like the map elsewhere.
+    mount(view) {
+      const bandEl = view === "decode" ? $("#view-decode .band") : $("#view-" + view + " .band-wall");
+      this.place("band", bandEl, "flap-wall");
+      if (view === "decode") this.hideBox("page");
+      else this.place("page", $("main"), "flap-wall is-fixed on-white");
+      this.rebuild();
+    },
+    place(name, parent, cls) {
+      let box = this.boxes[name];
+      if (!box) box = this.boxes[name] = el("div", { "aria-hidden": "true" });
+      if (box.parentElement !== parent) { parent.prepend(box); box.dataset.built = ""; }
+      box.className = cls;
+      box.hidden = false;
+    },
+    hideBox(name) { if (this.boxes[name]) this.boxes[name].hidden = true; },
+    rebuild() {
+      this.tiles = [];
+      Object.values(this.boxes).forEach((box) => { if (box && !box.hidden) this.build(box); });
+    },
+    build(box) {
+      const narrow = window.matchMedia("(max-width: 820px)").matches;
+      const tw = narrow ? 44 : 54, th = narrow ? 58 : 70;
+      const fixed = box.classList.contains("is-fixed");
+      const w = Math.max(window.innerWidth, box.parentElement.offsetWidth);
+      const h = fixed ? window.innerHeight : Math.max(box.parentElement.offsetHeight, 120);
+      const cols = Math.ceil(w / tw) + 1, rows = Math.ceil(h / th) + 1;
+      const key = cols + "x" + rows;
+      if (box.dataset.built !== key) {
+        box.dataset.built = key;
+        box.style.setProperty("--cols", cols);
+        box.innerHTML = "";
+        for (let i = 0; i < cols * rows; i++) {
+          const t = el("span", { class: "wall-tile" });
+          if (Math.random() < 0.35) t.textContent = this.pick();
+          if (Math.random() < 0.035) t.classList.add("is-lit");
+          box.append(t);
+        }
+      }
+      this.tiles.push(...box.children);
+    },
+    pick() { return this.letters[Math.floor(Math.random() * this.letters.length)]; },
+    tick() {
+      if (document.hidden || !this.tiles.length) return;
+      const t = this.tiles[Math.floor(Math.random() * this.tiles.length)];
+      t.classList.remove("is-ticking"); void t.offsetWidth; t.classList.add("is-ticking");
+      t.textContent = this.pick();
+      t.classList.add("is-lit");
+      setTimeout(() => t.classList.remove("is-lit"), 2600);
+    },
+    show(view) {
+      document.body.dataset.bg = "wall";
+      this.mount(view);
+      if (this.timer || reduceMotion) return;
+      this.timer = setInterval(() => this.tick(), 700);
+    },
+    hide() {
+      document.body.dataset.bg = "map";
+      this.hideBox("band"); this.hideBox("page");
+      clearInterval(this.timer); this.timer = null;
+    }
+  };
+  let wallResize = null;
+  window.addEventListener("resize", () => { clearTimeout(wallResize); wallResize = setTimeout(() => { if (WALL_VIEWS.includes(currentView)) wall.rebuild(); }, 200); });
 
   // A small board on the start page that keeps flipping through examples.
   const startLoop = {
@@ -1149,6 +1222,9 @@
   initCards();
   initQuiz();
   renderPlan();
+  const COUNTS = { rules: RULES.length, vocab: VOCAB.length, quiz: QUIZ.length, sources: Object.keys(SOURCES).length, story: STORY.length,
+    worksheets: WORKSHEETS.length + (WORKSHEETS.length === 1 ? " worksheet" : " worksheets") };
+  $$("[data-count]").forEach((n) => { n.textContent = COUNTS[n.dataset.count]; });
   renderWorksheetList();
   renderStory();
   if (typeof REPO_URL === "string") $("#repo-link").href = REPO_URL;

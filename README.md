@@ -33,7 +33,7 @@ Zurich German isn't a variant of Standard German but its close relative: both gr
 
 ## Design
 
-The look borrows from the split-flap departure board and uses Zurich's city colours, over a street map of Zurich from Oerlikon to Enge that stays still while the page scrolls: **Blau** with white as the main pair, **Dunkelblau** for the flaps, and **Magenta** as the one accent colour, for answers, levels, exceptions and false friends. The fonts are Hanken Grotesk and JetBrains Mono, both served from this repo.
+The look borrows from the split-flap departure board and uses Zurich's city colours, over a street map of Zurich from Oerlikon to Enge that stays still while the page scrolls. Every tab opens with a blue band. The practice pages (Decode, Vocabulary, Quiz and Worksheets) use a wall of faint split-flap tiles instead of the map, which now and then flip to a new letter. Colours: **Blau** with white as the main pair, **Dunkelblau** for the flaps, and **Magenta** as the one accent colour, for answers, levels, exceptions and false friends. The fonts are Hanken Grotesk and JetBrains Mono, both served from this repo.
 
 ## How it's built
 
