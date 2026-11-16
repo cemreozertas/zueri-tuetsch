@@ -8,7 +8,7 @@ Turkish is my mother tongue, German my second home, and Zurich German the langua
 
 👉 **Try it live: https://cemreozertas.github.io/zueri-tuetsch/**
 
-![The decoder flipping Ziitig into Zeitung on a departure board](docs/screenshot-hero.png)
+![The start page: Zurich German, seen through a translator's eye](docs/screenshot-hero.png)
 
 ## The idea
 
@@ -29,7 +29,16 @@ Zurich German isn't a variant of Standard German but its close relative: both gr
 | **Plan** | A listening and reading plan in four stages, with 25 checked sources online and around Zurich: SRF Meteo, regional news, Neumatt, TeleZüri, Bligg, the Märchenbühne, the PBZ Schweizerdeutsch-Café, Zurich German books and more. Each source says honestly which dialect you'll hear. |
 | **Story** | Where Zurich German comes from, in twelve short headlines you can open for details: the Alemanni, the old vowels, why the Swiss write Hochdeutsch, the missing ß, no official spelling and more. Every fact links to its source. |
 
-![The reverse-it quiz on a phone](docs/screenshot-quiz.png)
+<p>
+  <img src="docs/screenshot-decode.png" width="49%" alt="The decoder turning Hüüser into Häuser on a departure board">
+  <img src="docs/screenshot-plan.png" width="49%" alt="The listening and reading plan with source cards">
+</p>
+
+<p align="center">
+  <img src="docs/screenshot-quiz.png" width="24%" alt="The reverse-it quiz on a phone">&nbsp;
+  <img src="docs/screenshot-vocabulary.png" width="24%" alt="A vocabulary flashcard on a phone">&nbsp;
+  <img src="docs/screenshot-story.png" width="24%" alt="The story of Züritüütsch on a phone">
+</p>
 
 ## Design
 
@@ -72,8 +81,6 @@ Swiss German has no official spelling. This app follows common Zurich usage, wit
 
 ## Credits
 
-[Cemre](https://github.com/cemreozertas) is a Zurich-based tinkerer at heart. She builds automations, templates and apps for creative minds who love a well-run life, with [Claude](https://claude.ai) as her building partner.
-
-Map data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), via [EqualStreetNames Zürich](https://github.com/EqualStreetNames/equalstreetnames-zurich). Fonts: [Hanken Grotesk](https://github.com/marcologous/hanken-grotesk) and [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono), both under the SIL Open Font License.
+Made with love in Zurich by Cemre, built together with [Claude](https://claude.ai). Map data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), via [EqualStreetNames Zürich](https://github.com/EqualStreetNames/equalstreetnames-zurich). Fonts: [Hanken Grotesk](https://github.com/marcologous/hanken-grotesk) and [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono), both under the SIL Open Font License.
 
 Licensed under the [MIT licence](LICENSE): free to use, copy and adapt.
