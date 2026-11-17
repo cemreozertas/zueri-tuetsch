@@ -42,7 +42,7 @@ Zurich German isn't a variant of Standard German but its close relative: both gr
 
 ## Design
 
-The look borrows from the split-flap departure board and uses Zurich's city colours, over a street map of Zurich from Oerlikon to Enge that stays still while the page scrolls. Every tab opens with a blue band. The three levels are named after Zurich's tram tickets: a short hop, the whole city, the whole canton. The practice pages (Decode, Vocabulary, Quiz and Worksheets) use a wall of faint split-flap tiles instead of the map, which now and then flip to a new letter. Colours: **Blau** with white as the main pair, **Dunkelblau** for the flaps, and **Magenta** as the one accent colour, for answers, levels, exceptions and false friends. The fonts are Hanken Grotesk and JetBrains Mono, both served from this repo.
+The look borrows from the split-flap departure board and uses Zurich's city colours, over a street map of Zurich from Oerlikon to Enge that stays still while the page scrolls. Every tab opens with a blue band. The three levels are named after Zurich's tram tickets: a short hop, the whole city, the whole canton. The practice pages (Decode, Vocabulary, Quiz and Worksheets) use a wall of faint split-flap tiles instead of the map, which now and then flip to a new letter. Colours: **Blau** with white as the main pair, **Dunkelblau** for the flaps, and **Magenta** as the one accent colour, for answers, levels, exceptions and false friends. The fonts are Schibsted Grotesk and JetBrains Mono, both served from this repo. Schibsted Grotesk is a sturdy newspaper grotesque in the spirit of Swiss poster type, and the same font is used across all of Cemre's Zurich projects.
 
 ## How it's built
 
@@ -83,6 +83,6 @@ Swiss German has no official spelling. This app follows common Zurich usage, wit
 
 [Cemre](https://github.com/cemreozertas) is a Zurich-based tinkerer at heart. She builds automations, templates and apps for creative minds who love a well-run life, with [Claude](https://claude.ai) as her building partner.
 
-The level names are borrowed from ZVV tickets; this project isn't affiliated with ZVV. Map data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), via [EqualStreetNames Zürich](https://github.com/EqualStreetNames/equalstreetnames-zurich). Fonts: [Hanken Grotesk](https://github.com/marcologous/hanken-grotesk) and [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono), both under the SIL Open Font License.
+The level names are borrowed from ZVV tickets; this project isn't affiliated with ZVV. Map data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), via [EqualStreetNames Zürich](https://github.com/EqualStreetNames/equalstreetnames-zurich). Fonts: [Schibsted Grotesk](https://github.com/schibsted/schibsted-grotesk) and [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono), both under the SIL Open Font License.
 
 Licensed under the [MIT licence](LICENSE): free to use, copy and adapt.
