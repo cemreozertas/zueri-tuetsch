@@ -16,6 +16,8 @@ Zurich German isn't a variant of Standard German but its close relative: both gr
 
 **Who it's for:** anyone in or around Zurich who speaks German. It works best if you're comfortable in Standard German (Hochdeutsch, about B1 and up), because the trick is reversing dialect into words you already know.
 
+**For language lovers:** you don't need to speak German to enjoy this site. Zurich German still carries many sounds that Standard German left behind centuries ago, and the site makes those shifts visible. Scroll through the 13 sound rules, decode a few words on the departure board and see the pattern for yourself. Come for one word, stay for a thousand years of language history.
+
 ## What's inside
 
 | Tab | What it does |
