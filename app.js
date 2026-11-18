@@ -45,6 +45,45 @@
     }
   };
 
+  /* ----------------------------------------------------------- Counting */
+
+  // Anonymous visit counting with GoatCounter (no cookies, no personal data).
+  // Page views: one per tab. Events: decoder lookups (only the kind of result, never the word),
+  // clicks on outside links, and the vote on the "whole messages" idea.
+  // One GoatCounter site can serve all of Cemre's GitHub Pages projects, so every path starts
+  // with this repo's folder (/zueri-tuetsch/...).
+  const BASE = location.pathname.replace(/index\.html$/, "").replace(/\/?$/, "/");
+  const SLUG = BASE.split("/").filter(Boolean).pop() || "site";
+  const stats = {
+    queue: [], ready: false,
+    init() {
+      if (typeof GOATCOUNTER_CODE !== "string" || !GOATCOUNTER_CODE) return;
+      window.goatcounter = { no_onload: true };
+      const s = document.createElement("script");
+      s.async = true;
+      s.src = "https://gc.zgo.at/count.js";
+      s.dataset.goatcounter = "https://" + GOATCOUNTER_CODE + ".goatcounter.com/count";
+      s.onload = () => { this.ready = true; this.queue.splice(0).forEach((v) => this.send(v)); };
+      document.head.append(s);
+      this.on = true;
+    },
+    send(v) {
+      if (!this.on) return;
+      if (!this.ready || !window.goatcounter || !window.goatcounter.count) { this.queue.push(v); return; }
+      try { window.goatcounter.count(v); } catch (e) { /* counting must never break the app */ }
+    },
+    page(path, title) { this.send({ path: BASE + path, title: title }); },
+    event(name, title) { this.send({ path: SLUG + "/" + name, title: title, event: true }); }
+  };
+  stats.init();
+
+  // Clicks on outside links (Plan sources, GitHub, the feedback form) count as events.
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest && e.target.closest("a[href^='http']");
+    if (!a || a.hostname === location.hostname) return;
+    stats.event("out/" + a.hostname.replace(/^www\./, ""), a.textContent.trim().slice(0, 80) || a.hostname);
+  });
+
   /* ------------------------------------------------------- Split-flap tiles */
 
   const FLAP_CHARS = "ABCDEFGHIKLMNOPRSTUZÄÖÜ";
@@ -153,6 +192,8 @@
     });
     const label = { start: "Start", story: "Story", decode: "Decode", rules: "Rules", cards: "Vocabulary", quiz: "Quiz", worksheets: "Worksheets", plan: "Listening and reading plan" }[view];
     document.title = view === "start" ? "Züritüütsch · A guide to Zurich German" : label + " · Züritüütsch";
+
+    if (changed) stats.page(view === "start" ? "" : view === "worksheets" && hash.startsWith("ws-") ? "worksheets/" + hash.slice(3) : view, document.title);
 
     if (target) target.scrollIntoView({ block: "start", behavior: reduceMotion ? "auto" : "smooth" });
     else if (changed) window.scrollTo(0, 0);
@@ -574,8 +615,17 @@
     const form = $("#decoder-form");
     const input = $("#decoder-input");
     const examples = $("#decoder-examples");
-    const run = (word) => { const r = DIRS[decoderDir].run(word); if (r) { demo.stop(); showResult(r); } };
-    form.addEventListener("submit", (e) => { e.preventDefault(); run(input.value); });
+    // Counted: direction, typed or example, and the kind of result. Never the word itself.
+    const RESULT_NAMES = { known: "word list", guess: "best guess", none: "no rule fits" };
+    const run = (word, how) => {
+      const r = DIRS[decoderDir].run(word);
+      if (!r) return;
+      demo.stop(); showResult(r);
+      const d = DIRS[decoderDir];
+      stats.event("decode/" + decoderDir + "/" + how + "/" + r.type,
+        "Decode " + d.from + " → " + d.to + " · " + how + " · " + RESULT_NAMES[r.type]);
+    };
+    form.addEventListener("submit", (e) => { e.preventDefault(); run(input.value, "typed"); });
     input.addEventListener("focus", () => demo.pause());
     input.addEventListener("blur", () => { if (!input.value) demo.resume(); });
 
@@ -591,7 +641,7 @@
       examples.innerHTML = "";
       d.examples.forEach((w) => examples.append(el("button", {
         class: "chip", type: "button", text: w,
-        onclick: () => { input.value = w; run(w); }
+        onclick: () => { input.value = w; run(w, "example"); }
       })));
       store.set("zd-dir", dir);
       input.value = "";
@@ -601,6 +651,44 @@
     $("#dir-toggle").addEventListener("click", () => setDir(decoderDir === "zd2hd" ? "hd2zd" : "zd2hd"));
     setDir(store.get("zd-dir", "zd2hd") === "hd2zd" ? "hd2zd" : "zd2hd");
     $("#vocab-count").textContent = VOCAB.length;
+  }
+
+  /* ------------------------------------------------------- Next stop vote */
+
+  // A one-click vote on the next feature. The vote is counted once per browser,
+  // and the visitor can leave a note in the feedback form if one is set in data.js.
+  function initNextStop() {
+    const ask = $("#next-stop-ask");
+    const thanks = $("#next-stop-thanks");
+    const formUrl = typeof FEEDBACK_FORM_URL === "string" ? FEEDBACK_FORM_URL.trim() : "";
+
+    function showThanks(vote) {
+      ask.hidden = true;
+      thanks.hidden = false;
+      thanks.innerHTML = "";
+      thanks.append(el("strong", { text: "Merci vilmal! " }),
+        document.createTextNode(vote === "yes" ? "Your vote is counted. " : "Good to know, your vote is counted. "));
+      if (formUrl) {
+        const sep = formUrl.includes("?") ? "&" : "?";
+        thanks.append(el("a", {
+          href: formUrl + sep + "vote=" + vote, target: "_blank", rel: "noopener",
+          text: vote === "yes" ? "Tell me what you'd paste, or get a note when it's ready" : "Tell me what would help you instead"
+        }));
+      }
+    }
+
+    $$("#next-stop [data-vote]").forEach((btn) => btn.addEventListener("click", () => {
+      const vote = btn.dataset.vote;
+      if (!store.get("zd-next-stop", null)) stats.event("next-stop/whole-message/" + vote, "Next stop: whole-message decoder · " + (vote === "yes" ? "Yes, I'd use it" : "Not really"));
+      store.set("zd-next-stop", vote);
+      showThanks(vote);
+      // The buttons disappear, so keep keyboard focus in the same place.
+      thanks.setAttribute("tabindex", "-1");
+      thanks.focus({ preventScroll: true });
+    }));
+
+    const saved = store.get("zd-next-stop", null);
+    if (saved === "yes" || saved === "no") showThanks(saved);
   }
 
   /* ---------------------------------------------------------- Levels */
@@ -1222,6 +1310,7 @@
 
   renderRules();
   initDecoder();
+  initNextStop();
   initCards();
   initQuiz();
   renderPlan();

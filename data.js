@@ -16,6 +16,15 @@
 
 const REPO_URL = "https://github.com/cemreozertas/zueri-tuetsch";
 
+// Visitor counting with GoatCounter: no cookies, no personal data, no banner needed.
+// This is the code you chose when you signed up (dashboard: https://CODE.goatcounter.com).
+// Leave it empty ("") to switch counting off.
+const GOATCOUNTER_CODE = "cemreozertas";
+
+// Link to the feedback form for the "decode a whole message" idea (for example a Tally form).
+// If you empty it (""), the vote under the decoder still works and only the note link is hidden.
+const FEEDBACK_FORM_URL = "https://tally.so/r/8NLRDO";
+
 const RULES = [
   {
     id: "ei",

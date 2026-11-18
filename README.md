@@ -46,7 +46,7 @@ The look borrows from the split-flap departure board and uses Zurich's city colo
 
 ## How it's built
 
-It's plain HTML, CSS and JavaScript, with no framework, no build step and no tracking. The content lives in two files, [`data.js`](data.js) and [`worksheets.js`](worksheets.js), separate from the app logic:
+It's plain HTML, CSS and JavaScript, with no framework, no build step and no cookies. Visits are counted anonymously with [GoatCounter](https://www.goatcounter.com/), which stores no personal data. The decoder counts only which kind of result a lookup gets, never the word itself. The content lives in two files, [`data.js`](data.js) and [`worksheets.js`](worksheets.js), separate from the app logic:
 
 ```
 index.html     page structure and the eight tabs
