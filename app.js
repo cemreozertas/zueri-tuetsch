@@ -269,7 +269,7 @@
     "de": "der", "d": "die", "s": "das", "en": "ein", "e": "eine", "es": "ein (neutral) / es",
     "gseh": "gesehen", "chunnsch": "kommst du", "lueg": "schau!", "los": "hör zu!",
     "mueter": "Mutter", "vatter": "Vater", "spiil": "Spiel", "iichaufe": "einkaufen",
-    "wii": "Wein", "miin": "mein", "ziit": "Zeit", "gschänk": "Geschenk", "aabig": "Abend", "strass": "Strasse", "meitli": "Mädchen",
+    "wii": "Wein", "miin": "mein", "ziit": "Zeit", "gschänk": "Geschenk", "aabig": "Abend", "strass": "Straße", "meitli": "Mädchen",
     "höi": "Heu", "föif": "fünf", "nöii": "neue"
   };
 
@@ -288,7 +288,7 @@
   const LEXICON_HD = new Map();
   const firstVariant = (zd) => zd.split(" / ")[0].trim();
   function addToLexiconHd(hd, zd, source) {
-    hd.replace(/\s*\(.*?\)/g, "").split(/ \/ |, /).map(clean).filter(Boolean)
+    hd.replace(/\s*\(.*?\)/g, "").split(/ \/ |, /).map((w) => clean(w).replace(/ß/g, "ss")).filter(Boolean)
       .forEach((key) => { if (!LEXICON_HD.has(key)) LEXICON_HD.set(key, { zd: firstVariant(zd), source }); });
   }
   RULES.forEach((r) => r.examples.forEach(([hd, zd]) => addToLexiconHd(hd, zd, "rules:" + r.id)));
@@ -605,9 +605,9 @@
 
   let decoderDir = "zd2hd";
   const DIRS = {
-    zd2hd: { from: "Züri", to: "Hochdeutsch", label: "Type a word you heard", placeholder: "e.g. Ziitig, Chuchi, Hüüser",
+    zd2hd: { from: "Züritüütsch", to: "Hochdeutsch", label: "Type a word you heard", placeholder: "e.g. Ziitig, Chuchi, Hüüser",
       examples: ["Gschänk", "Chrüüz", "Buuch", "schmöcke", "Wurscht", "Hüüsli"], run: decode },
-    hd2zd: { from: "Hochdeutsch", to: "Züri", label: "Type a Hochdeutsch word", placeholder: "e.g. Zeitung, Küche, Häuser",
+    hd2zd: { from: "Hochdeutsch", to: "Züritüütsch", label: "Type a Hochdeutsch word", placeholder: "e.g. Zeitung, Küche, Häuser",
       examples: ["Geschenk", "Kreuz", "Bauch", "schmecken", "Wurst", "Häuschen"], run: encode }
   };
 
@@ -878,12 +878,12 @@
     const btn = $("#card-direction");
     btn.innerHTML = "";
     btn.append(
-      el("span", { text: zdFirst ? "Züri" : "Hochdeutsch" }),
+      el("span", { text: zdFirst ? "Züritüütsch" : "Hochdeutsch" }),
       tram(),
-      el("span", { text: zdFirst ? "Hochdeutsch" : "Züri" })
+      el("span", { text: zdFirst ? "Hochdeutsch" : "Züritüütsch" })
     );
     const t = document.createElement("template"); t.innerHTML = SWAP_SVG; btn.append(t.content.firstChild);
-    btn.setAttribute("aria-label", "Card direction: " + (zdFirst ? "Züri to Hochdeutsch" : "Hochdeutsch to Züri") + ". Click to switch.");
+    btn.setAttribute("aria-label", "Card direction: " + (zdFirst ? "Züritüütsch to Hochdeutsch" : "Hochdeutsch to Züritüütsch") + ". Click to switch.");
     btn.title = "Switch direction";
   }
 

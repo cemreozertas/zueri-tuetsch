@@ -27,8 +27,8 @@ const WORKSHEETS = [
       "Dihei mach ich mir es feins Zmittag. Am Namittag schiint d Sunne wider, und ich gang mit Fründe go Glace ässe. Es isch en schöne Tag gsi."
     ],
     translation: [
-      "Am Samstag stehe ich um acht auf. Zuerst mache ich mir einen Kaffee und schaue aus dem Fenster: Es regnet in Strömen. Egal, ich muss noch einkaufen gehen. Mit dem Fahrrad geht das nicht, also nehme ich die Strassenbahn.",
-      "In der Strassenbahn höre ich zwei Frauen plaudern. Die eine erzählt, dass ihr Bruder nach Bern umzieht. «Verflixt», sagt die andere, «dann sieht man ihn ja nicht mehr!»",
+      "Am Samstag stehe ich um acht auf. Zuerst mache ich mir einen Kaffee und schaue aus dem Fenster: Es regnet in Strömen. Egal, ich muss noch einkaufen gehen. Mit dem Fahrrad geht das nicht, also nehme ich die Straßenbahn.",
+      "In der Straßenbahn höre ich zwei Frauen plaudern. Die eine erzählt, dass ihr Bruder nach Bern umzieht. «Verflixt», sagt die andere, «dann sieht man ihn ja nicht mehr!»",
       "Im Laden kaufe ich Brot, Butter, Käse und ein paar Karotten. Beim Bezahlen fragt mich die Verkäuferin: «Brauchen Sie eine Tüte?» Ich sage: «Nein, danke.»",
       "Zu Hause mache ich mir ein feines Mittagessen. Am Nachmittag scheint die Sonne wieder, und ich gehe mit Freunden ein Eis essen. Es war ein schöner Tag."
     ],
@@ -39,7 +39,7 @@ const WORKSHEETS = [
         intro: "Read the text, then choose the right answer.",
         items: [
           { q: "Wie ist das Wetter am Morgen?", options: ["Es regnet stark.", "Die Sonne scheint.", "Es schneit."], answer: 0 },
-          { q: "Warum nimmt sie die Strassenbahn?", options: ["Sie hat kein Fahrrad.", "Bei diesem Regen geht es mit dem Fahrrad nicht.", "Die Strassenbahn ist gratis."], answer: 1 },
+          { q: "Warum nimmt sie die Straßenbahn?", options: ["Sie hat kein Fahrrad.", "Bei diesem Regen geht es mit dem Fahrrad nicht.", "Die Straßenbahn ist gratis."], answer: 1 },
           { q: "Was erzählt die eine Frau im Tram?", options: ["Ihr Bruder rennt nach Bern.", "Ihr Bruder arbeitet in Bern.", "Ihr Bruder zieht nach Bern um."], answer: 2 },
           { q: "Was kauft sie nicht?", options: ["Butter", "Kartoffeln", "Karotten", "Käse"], answer: 1 }
         ]

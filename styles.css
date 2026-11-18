@@ -180,7 +180,7 @@ input[type="text"]:disabled { background: var(--panel); color: var(--ink-2); }
   box-shadow: 0 24px 48px -28px rgba(0, 20, 50, 0.6);
   container-type: inline-size; margin-bottom: 18px;
 }
-.board-head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; font-family: var(--mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+.board-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-bottom: 16px; font-family: var(--mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
 .board-label { opacity: 0.85; }
 .board-arrow { opacity: 0.6; }
 .board-status { white-space: nowrap; margin-left: auto; letter-spacing: 0.06em; background: rgba(255, 255, 255, 0.12); padding: 4px 8px; border-radius: var(--r-xs); }
@@ -344,8 +344,12 @@ input[type="text"]:disabled { background: var(--panel); color: var(--ink-2); }
 /* Footer */
 .footer { background: var(--dunkelblau); color: #fff; padding: 28px 0 36px; font-size: 0.875rem; }
 .footer a { color: #fff; }
-.footer-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
-.footer-row p { margin: 0; max-width: 620px; opacity: 0.9; }
+.footer-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px 48px; }
+.footer-row p { margin: 0; }
+.footer-about { max-width: 560px; }
+.footer-bio { font-size: 0.9375rem; line-height: 1.55; }
+.footer-sign { margin-top: 10px !important; font-weight: 800; font-size: 1rem; letter-spacing: -0.01em; }
+.footer-meta { max-width: 460px; display: grid; gap: 10px; font-size: 0.8125rem; opacity: 0.8; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -647,7 +651,7 @@ body[data-bg="wall"] main::before, body[data-bg="wall"] .footer::before, .band-w
 .about-note p { margin: 0; color: var(--ink-2); }
 @media (max-width: 820px) {
   .band-start { padding: 40px 0 40px; }
-  .start-hero { grid-template-columns: 1fr; gap: 32px; }
+  .start-hero { grid-template-columns: minmax(0, 1fr); gap: 32px; }
   .lede { font-size: 1.0625rem; }
 }
 
@@ -712,3 +716,8 @@ body { min-height: 100vh; display: flex; flex-direction: column; }
 main { flex: 1 0 auto; display: flex; flex-direction: column; }
 #view-decode:not([hidden]) { flex: 1 0 auto; display: flex; flex-direction: column; }
 #view-decode .band { flex: 1 0 auto; }
+
+/* Very narrow phones: keep "translator's eye" on one line without running off the screen */
+@media (max-width: 380px) {
+  .band h1 { font-size: 1.875rem; }
+}

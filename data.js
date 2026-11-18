@@ -33,7 +33,7 @@ const RULES = [
     explain: "Many words with ei keep the old long i that Standard German turned into ei.",
     examples: [["Zeit", "Ziit"], ["mein", "miin"], ["bleiben", "bliibe"], ["schreiben", "schriibe"], ["Eis", "Iis"]],
     reverse: "Hear ii? Try ei.",
-    caveat: "Not every ei moves: zwei, heiss and Fleisch stay the same."
+    caveat: "Not every ei moves: zwei, heiß and Fleisch stay the same."
   },
   {
     id: "au",
@@ -58,15 +58,15 @@ const RULES = [
     from: "u (long)", to: "ue",
     title: "Where Hochdeutsch has a long u, you often hear ue",
     explain: "A gliding u-e sound where Standard German has a plain long u.",
-    examples: [["gut", "guet"], ["Bruder", "Brueder"], ["Fuss", "Fuess"], ["Kuh", "Chue"]],
+    examples: [["gut", "guet"], ["Bruder", "Brueder"], ["Fuß", "Fuess"], ["Kuh", "Chue"]],
     reverse: "Hear ue? Drop the e."
   },
   {
     id: "ueh",
     from: "ü (long)", to: "üe",
     title: "Where Hochdeutsch has a long ü, you often hear üe",
-    explain: "The umlauted version of ue. It's also hiding inside Grüezi (grüssen).",
-    examples: [["müde", "müed"], ["früh", "früe"], ["grüssen", "grüesse"], ["Füsse", "Füess"]],
+    explain: "The umlauted version of ue. It's also hiding inside Grüezi (grüßen).",
+    examples: [["müde", "müed"], ["früh", "früe"], ["grüßen", "grüesse"], ["Füße", "Füess"]],
     reverse: "Hear üe? Drop the e."
   },
   {
@@ -211,7 +211,7 @@ const VOCAB = [
   { zd: "gäll", hd: "nicht wahr?", cat: "small", lvl: 2 },
   { zd: "es hät", hd: "es gibt", cat: "small", lvl: 2 },
   { zd: "dihei", hd: "zu Hause", cat: "small", lvl: 2 },
-  { zd: "dusse", hd: "draussen", cat: "small", lvl: 2 },
+  { zd: "dusse", hd: "draußen", cat: "small", lvl: 2 },
   { zd: "öppe", hd: "etwa, ungefähr", cat: "small", lvl: 2 },
   { zd: "nüme", hd: "nicht mehr", cat: "small", lvl: 2 },
   { zd: "äbe", hd: "eben, genau", cat: "small", lvl: 2 },
@@ -244,7 +244,7 @@ const VOCAB = [
   { zd: "schnure", hd: "reden, plaudern", cat: "verbs", lvl: 3 },
   { zd: "chrampfe", hd: "hart arbeiten", cat: "verbs", lvl: 3 },
   { zd: "pfuse", hd: "schlafen", cat: "verbs", lvl: 3 },
-  { zd: "tschuute", hd: "Fussball spielen", cat: "verbs", lvl: 3 },
+  { zd: "tschuute", hd: "Fußball spielen", cat: "verbs", lvl: 3 },
   { zd: "chlöne", hd: "jammern", cat: "verbs", lvl: 3 },
   { zd: "glette", hd: "bügeln", cat: "verbs", lvl: 3 },
   { zd: "wüsche", hd: "fegen, kehren", cat: "verbs", lvl: 3 },
@@ -255,7 +255,7 @@ const VOCAB = [
   { zd: "Gfüül", hd: "Gefühl", cat: "feelings", lvl: 1 },
   { zd: "nöi", hd: "neu", cat: "feelings", lvl: 2, note: "Not nüü: one of the exceptions to rule 03." },
   { zd: "Fröid", hd: "Freude", cat: "feelings", lvl: 2, ex: "Das macht mer Fröid. = Das freut mich." },
-  { zd: "härzig", hd: "niedlich, süss", cat: "feelings", lvl: 3 },
+  { zd: "härzig", hd: "niedlich, süß", cat: "feelings", lvl: 3 },
 
   // Home and people
   { zd: "Mäntsch", hd: "Mensch", cat: "home", lvl: 1 },
@@ -268,7 +268,7 @@ const VOCAB = [
   { zd: "Ghüder", hd: "Müll", cat: "home", lvl: 3, ex: "de Ghüdersack = der Müllsack" },
   { zd: "Pfnüsel", hd: "Schnupfen", cat: "home", lvl: 3 },
   { zd: "Gotte / Götti", hd: "Patin / Pate", cat: "home", lvl: 3 },
-  { zd: "Bünzli", hd: "Spiesser", cat: "home", lvl: 3 },
+  { zd: "Bünzli", hd: "Spießer", cat: "home", lvl: 3 },
   { zd: "Zapfezieher", hd: "Korkenzieher", cat: "home", lvl: 3 },
 
   // Out and about
@@ -345,7 +345,7 @@ const VOCAB = [
   { zd: "Hosesack", hd: "Hosentasche", cat: "false-friends", lvl: 2 },
   { zd: "springe", hd: "rennen", cat: "false-friends", lvl: 3, note: "Not \"springen\"!" },
   { zd: "schmöcke", hd: "riechen", cat: "false-friends", lvl: 3, note: "Not \"schmecken\"!" },
-  { zd: "laufe", hd: "gehen (zu Fuss)", cat: "false-friends", lvl: 3, note: "Not \"rennen\"!" },
+  { zd: "laufe", hd: "gehen (zu Fuß)", cat: "false-friends", lvl: 3, note: "Not \"rennen\"!" },
   { zd: "äxtra", hd: "absichtlich", cat: "false-friends", lvl: 3, note: "Not \"extra\" as in additional." },
   { zd: "Puff", hd: "Unordnung", cat: "false-friends", lvl: 3, ex: "Was für es Puff! = Was für eine Unordnung!" },
   { zd: "Hafe", hd: "Kochtopf", cat: "false-friends", lvl: 3, note: "Not a harbour." },
@@ -392,7 +392,7 @@ const QUIZ = [
   { zd: "Chind", hd: ["Kind"], rules: ["k"], lvl: 1 },
   { zd: "Chuchi", hd: ["Küche"], rules: ["k"], lvl: 1 },
   { zd: "hüt", hd: ["heute"], rules: ["eu"], lvl: 1 },
-  { zd: "Fuess", hd: ["Fuss", "Fuß"], rules: ["ue"], lvl: 1 },
+  { zd: "Fuess", hd: ["Fuß"], rules: ["ue"], lvl: 1 },
   { zd: "gmacht", hd: ["gemacht"], rules: ["ge"], lvl: 1 },
   { zd: "mache", hd: ["machen"], rules: ["en"], lvl: 1 },
   { zd: "Wonig", hd: ["Wohnung"], rules: ["ung"], lvl: 1 },
@@ -412,11 +412,11 @@ const QUIZ = [
   { zd: "Rächnig", hd: ["Rechnung"], rules: ["ae", "ung"], lvl: 2 },
   { zd: "chaufe", hd: ["kaufen"], rules: ["k", "en"], lvl: 2 },
   { zd: "Hüüsli", hd: ["Häuschen"], rules: ["eu", "li"], lvl: 2 },
-  { zd: "grüesse", hd: ["grüssen", "grüßen"], rules: ["ueh", "en"], lvl: 2 },
+  { zd: "grüesse", hd: ["grüßen"], rules: ["ueh", "en"], lvl: 2 },
   { zd: "Das isch guet.", hd: ["Das ist gut."], rules: ["st", "ue"], lvl: 2 },
   { zd: "Ich bi müed.", hd: ["Ich bin müde."], rules: ["ueh"], lvl: 2 },
   { zd: "Chunnsch au?", hd: ["Kommst du auch?"], rules: ["k"], lvl: 2 },
-  { zd: "D Chind sind dusse.", hd: ["Die Kinder sind draussen.", "Die Kinder sind draußen."], rules: ["k"], lvl: 2 },
+  { zd: "D Chind sind dusse.", hd: ["Die Kinder sind draußen."], rules: ["k"], lvl: 2 },
   { zd: "Bisch scho lang da?", hd: ["Bist du schon lange da?", "Bist du schon lang da?"], rules: ["st"], lvl: 2 },
   { zd: "Ich ghöre nüt.", hd: ["Ich höre nichts."], rules: [], lvl: 2 },
   { zd: "Ich ha hüt kei Ziit.", hd: ["Ich habe heute keine Zeit.", "Ich hab heute keine Zeit."], rules: ["eu", "ei", "en"], lvl: 3 },
@@ -433,7 +433,7 @@ const QUIZ = [
   { zd: "Häsch am Ziischtig Ziit?", hd: ["Hast du am Dienstag Zeit?", "Hast du Dienstag Zeit?"], rules: ["ei"], lvl: 3 },
   { zd: "Es schiffet scho wider.", hd: ["Es regnet schon wieder.", "Es schüttet schon wieder."], rules: [], lvl: 3 },
   { zd: "Gäll, du chunnsch morn au?", hd: ["Du kommst morgen auch, oder?", "Du kommst morgen auch, nicht wahr?", "Nicht wahr, du kommst morgen auch?", "Gell, du kommst morgen auch?"], rules: ["k"], lvl: 3 },
-  { zd: "Das isch mega härzig.", hd: ["Das ist sehr niedlich.", "Das ist sehr süss.", "Das ist sehr süß.", "Das ist total süss.", "Das ist total niedlich."], rules: [], lvl: 3 },
+  { zd: "Das isch mega härzig.", hd: ["Das ist sehr niedlich.", "Das ist sehr süß.", "Das ist total süß.", "Das ist total niedlich."], rules: [], lvl: 3 },
   { zd: "Das isch e nöii Wonig.", hd: ["Das ist eine neue Wohnung."], rules: ["ung"], lvl: 3 }
 ];
 
@@ -705,7 +705,7 @@ const STORY = [
   {
     title: "Their written Hochdeutsch has a Swiss flavour of its own, starting with the missing ß.",
     text: [
-      "Swiss Standard German always writes ss: *Strasse*, *gross*, *Fussball*. The Canton of Zurich was the first to stop teaching the ß in schools, in 1935, and the *Neue Zürcher Zeitung* was the last Swiss newspaper to give it up, in 1974.",
+      "Swiss Standard German always writes ss: *Strasse*, *gross*, *Fussball*. (This site writes Hochdeutsch the way Germany and Austria do, with ß, since that's the German most visitors learned. When you type an answer, ss counts too.) The Canton of Zurich was the first to stop teaching the ß in schools, in 1935, and the *Neue Zürcher Zeitung* was the last Swiss newspaper to give it up, in 1974.",
       "It also has its own vocabulary, known as Helvetisms: *Spital* instead of Krankenhaus, *Velo* for bicycle, *Billett* for ticket, and many loanwords from French."
     ],
     sources: [

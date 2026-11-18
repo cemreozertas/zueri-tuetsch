@@ -14,7 +14,7 @@ Turkish is my mother tongue, German my second home, and Zurich German the langua
 
 Zurich German isn't a variant of Standard German but its close relative: both grew out of medieval German, and many of their sounds still line up in regular ways. (For the vowels, it was actually Standard German that changed, while Zurich German kept the older sound.) Learn about a dozen of these patterns, memorise the everyday words that follow no pattern at all, and train the skill that matters most when you're listening: **turning what you hear back into words you already know.** The decoder also works the other way round, from Hochdeutsch to Züritüütsch, for when you want to say something.
 
-**Who it's for:** anyone in or around Zurich who speaks German. It works best if you're comfortable in Hochdeutsch (about B1 and up), because the trick is reversing dialect into words you already know.
+**Who it's for:** anyone in or around Zurich who speaks German. It works best if you're comfortable in Standard German (Hochdeutsch, about B1 and up), because the trick is reversing dialect into words you already know.
 
 ## What's inside
 
@@ -42,7 +42,7 @@ Zurich German isn't a variant of Standard German but its close relative: both gr
 
 ## Design
 
-The look borrows from the split-flap departure board and uses Zurich's city colours, over a street map of Zurich from Oerlikon to Enge that stays still while the page scrolls. Every tab opens with a blue band. The three levels are named after Zurich's tram tickets: a short hop, the whole city, the whole canton. The practice pages (Decode, Vocabulary, Quiz and Worksheets) use a wall of faint split-flap tiles instead of the map, which now and then flip to a new letter. Colours: **Blau** with white as the main pair, **Dunkelblau** for the flaps, and **Magenta** as the one accent colour: for levels, wrong answers, exceptions and false friends, the numbers on the Start page and the story chapter you're reading. Right answers are light blue. The fonts are Schibsted Grotesk and JetBrains Mono, both served from this repo. Schibsted Grotesk is a sturdy newspaper grotesque in the spirit of Swiss poster type, and the same font is used across all of Cemre's Zurich projects.
+The look borrows from the split-flap departure board and uses Zurich's city colours, over a street map of Zurich from Oerlikon to Enge that stays still while the page scrolls. Every tab opens with a blue band. The three levels are named after Zurich's tram tickets: a short hop, the whole city, the whole canton. The practice pages (Decode, Vocabulary, Quiz and Worksheets) use a wall of faint split-flap tiles instead of the map, which now and then flip to a new letter. The colours come from the City of Zurich's palette: **Blue** with white as the main pair, **Dark Blue** for the flaps, and **Magenta** as the one accent colour: for levels, wrong answers, exceptions and false friends, the numbers on the Start page and the story chapter you're reading. Right answers are light blue. The fonts are Schibsted Grotesk and JetBrains Mono, both served from this repo. Schibsted Grotesk is a sturdy newspaper grotesque in the spirit of Swiss poster type, and the same font is used across all of Cemre's Zurich projects.
 
 ## How it's built
 
@@ -82,6 +82,8 @@ Swiss German has no official spelling. This app follows common Zurich usage, wit
 ## Credits
 
 [Cemre](https://github.com/cemreozertas) is a Zurich-based tinkerer at heart. She builds automations, templates and apps for creative minds who love a well-run life, with [Claude](https://claude.ai) as her building partner.
+
+***Mit Liebi gmacht z Züri.***
 
 The level names are borrowed from ZVV tickets; this project isn't affiliated with ZVV. Map data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), via [EqualStreetNames Zürich](https://github.com/EqualStreetNames/equalstreetnames-zurich). Fonts: [Schibsted Grotesk](https://github.com/schibsted/schibsted-grotesk) and [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono), both under the SIL Open Font License.
 
