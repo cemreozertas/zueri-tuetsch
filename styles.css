@@ -337,7 +337,7 @@ input[type="text"]:disabled { background: var(--panel); color: var(--ink-2); }
 .fb-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
 
 /* Plan */
-.habit { margin-top: 24px; background: var(--blau); color: #fff; border-radius: var(--r-lg); padding: 24px 28px; max-width: 760px; }
+.habit { margin-top: 24px; background: var(--blau); color: #fff; border-radius: var(--r-lg); padding: 24px 28px; }
 .habit-label { font-family: var(--mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.85; }
 .habit p { margin: 8px 0 0; font-size: 1.125rem; }
 
@@ -657,7 +657,7 @@ body[data-bg="wall"] main::before, body[data-bg="wall"] .footer::before, .band-w
 .start-more { margin: 20px 0 0; color: var(--ink-2); max-width: 720px; }
 .about-note {
   margin-top: 40px; background: #fff; border: 2px solid var(--line); border-left: 6px solid var(--magenta);
-  border-radius: var(--r-lg); padding: 24px 28px; max-width: 760px;
+  border-radius: var(--r-lg); padding: 24px 28px;
 }
 .about-note h2 { margin: 0 0 8px; font-size: 1.25rem; letter-spacing: -0.01em; }
 .about-note p { margin: 0; color: var(--ink-2); }
