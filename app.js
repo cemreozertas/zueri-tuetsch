@@ -1120,10 +1120,24 @@
     set: (v) => store.set("zd-ws-" + id, v)
   });
 
+  // The worksheet index: a level bar (same as Vocabulary and Quiz) and one card per worksheet.
+  let wsLevel = store.get("zd-ws-level", "all");
+  if (!["all", "1", "2", "3"].includes(String(wsLevel))) wsLevel = "all";
+
   function renderWorksheetList() {
+    levelBar($("#ws-levels"), {
+      all: true, current: wsLevel, unit: "sheets",
+      counts: (lvl) => WORKSHEETS.filter((w) => !lvl || w.lvl === lvl).length,
+      onChange: (k) => { wsLevel = k; store.set("zd-ws-level", k); renderWorksheetCards(); }
+    });
+    renderWorksheetCards();
+  }
+
+  function renderWorksheetCards() {
+    $("#ws-level-desc").textContent = levelText(wsLevel);
     const list = $("#ws-list");
     list.innerHTML = "";
-    WORKSHEETS.forEach((w) => {
+    WORKSHEETS.filter((w) => wsLevel === "all" || w.lvl === Number(wsLevel)).forEach((w) => {
       list.append(el("a", { class: "ws-card", href: "#ws-" + w.id }, [
         el("span", { class: "ws-card-top" }, [levelBadge(w.lvl), el("span", { class: "ws-min", text: "about " + w.minutes + " min" })]),
         el("span", { class: "ws-card-title", text: w.title }),
@@ -1132,8 +1146,13 @@
       ]));
     });
     list.append(el("div", { class: "ws-card ws-card-soon" }, [
-      el("span", { class: "ws-card-title", text: "More worksheets are on the way" }),
-      el("span", { class: "ws-card-sub", text: "Written by a learner, for learners. Spotted something a Zurich speaker would say differently? Corrections are welcome." })
+      el("span", { class: "ws-card-title", text: "Spotted something?" }),
+      el("span", { class: "ws-card-sub" }, [
+        document.createTextNode("These texts are written by a learner, for learners."), el("br"),
+        document.createTextNode("If a Zurich speaker would say something differently, "),
+        el("a", { href: REPO_URL + "/issues/new?title=" + encodeURIComponent("Correction: worksheets"), target: "_blank", rel: "noopener", text: "corrections are welcome" }),
+        document.createTextNode(".")
+      ])
     ]));
   }
 
@@ -1303,6 +1322,17 @@
     });
 
     root.append(key);
+    // Next worksheet: the following one on the same level, or the first one of the next level.
+    const order = WORKSHEETS.slice().sort((x, y) => x.lvl - y.lvl);
+    const next = order[(order.indexOf(w) + 1) % order.length];
+    if (next && next !== w) {
+      root.append(el("nav", { class: "ws-next no-print", "aria-label": "Next worksheet" }, [
+        el("a", { class: "ws-back", href: "#worksheets", text: "← All worksheets" }),
+        el("a", { class: "btn btn-primary", href: "#ws-" + next.id }, [
+          document.createTextNode("Next: " + next.title + " "), levelBadge(next.lvl)
+        ])
+      ]));
+    }
     root.append(el("p", { class: "ws-foot", text: "Züritüütsch · A guide to Zurich German · cemreozertas.github.io/zueri-tuetsch" }));
   }
 

@@ -493,9 +493,21 @@ a.ws-card:hover { border-color: var(--blau); }
 .ws-card-go::after { content: " →"; }
 .ws-card-soon { background: var(--panel); border-style: dashed; }
 .ws-card-soon .ws-card-title { font-size: 1.0625rem; color: var(--ink); }
+/* The corrections card spans the whole row, with the title and text side by side */
+.ws-card-soon { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; }
+.ws-card-soon .ws-card-sub { flex: 1 1 320px; }
 
 .ws { max-width: 820px; }
 .ws-back { display: inline-block; margin-bottom: 16px; font-weight: 700; text-decoration: none; }
+.ws-next { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 32px; padding-top: 20px; border-top: 2px solid var(--line); }
+.ws-next .ws-back { margin: 0; }
+.ws-next .btn { display: inline-flex; align-items: center; gap: 10px; }
+.ws-next .btn .lvl-badge { color: #fff; }
+.ws-next .btn .pips i { background: rgba(255, 255, 255, 0.35); }
+.ws-next .btn.lvl-1 .pips i:nth-child(1), .ws-next .btn .lvl-1 .pips i:nth-child(1),
+.ws-next .btn .lvl-2 .pips i:nth-child(-n+2), .ws-next .btn .lvl-3 .pips i { background: #fff; }
+#ws-index .level-bar { margin-bottom: 8px; }
+#ws-index .level-desc { margin-bottom: 20px; }
 .ws-head h2 { margin: 6px 0 2px; font-size: clamp(2rem, 4.4vw, 2.75rem); letter-spacing: -0.025em; color: var(--dunkelblau); }
 .ws-kicker { margin: 0; display: flex; gap: 12px; align-items: center; font-family: var(--mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-2); }
 .ws-sub { margin: 0 0 10px; font-size: 1.125rem; color: var(--ink-2); }
