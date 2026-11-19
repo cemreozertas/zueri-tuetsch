@@ -10,7 +10,7 @@ const path = require("path");
 const vm = require("vm");
 
 const root = path.join(__dirname, "..");
-const SITE = "https://cemreozertas.github.io/zueri-tuetsch/";
+const SITE = "https://cemreozertas.github.io/zurituutsch/";
 
 // Read the German page title and description from content-de.js, so they're written in one place only.
 const ctx = {};

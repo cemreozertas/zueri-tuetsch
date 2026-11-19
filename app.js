@@ -13,7 +13,7 @@
 
   /* ------------------------------------------------------------ Language */
 
-  // English at /zueri-tuetsch/, German at /zueri-tuetsch/de/. Old ?lang=de links are redirected in the page head.
+  // English at /zurituutsch/, German at /zurituutsch/de/. Old ?lang=de links are redirected in the page head.
   // The language comes from the address: the German site is a copy of this page at /de/ (built by tools/make-de.js).
   const LANG = document.documentElement.getAttribute("data-page-lang") === "de" ? "de" : "en";
   try { if (/[?&]lang=/.test(location.search)) history.replaceState(null, "", location.pathname + location.hash); } catch (e) { /* old browser */ }
@@ -130,7 +130,7 @@
   // Page views: one per tab. Events: decoder lookups (only the kind of result, never the word),
   // clicks on outside links, and the vote on the "whole messages" idea.
   // One GoatCounter site can serve all of Cemre's GitHub Pages projects, so every path starts
-  // with this repo's folder (/zueri-tuetsch/...).
+  // with this repo's folder (/zurituutsch/...).
   const BASE = location.pathname.replace(/index\.html$/, "").replace(/\/?$/, "/");
   const SLUG = BASE.split("/").filter(Boolean).pop() || "site";
   const stats = {
@@ -1055,7 +1055,7 @@
   /* ---------------------------------------------------------------- Quiz */
 
   const ROUND = 10;
-  const SITE_URL = "https://cemreozertas.github.io/zueri-tuetsch/";
+  const SITE_URL = "https://cemreozertas.github.io/zurituutsch/";
   const quiz = { level: "1", items: [], index: 0, right: 0, answered: 0, done: false, results: [] };
 
   function normalize(s) {
@@ -1516,7 +1516,7 @@
         ])
       ]));
     }
-    root.append(el("p", { class: "ws-foot", text: tr("Züritüütsch · A guide to Zurich German · cemreozertas.github.io/zueri-tuetsch") }));
+    root.append(el("p", { class: "ws-foot", text: tr("Züritüütsch · A guide to Zurich German · cemreozertas.github.io/zurituutsch") }));
   }
 
   /* ---------------------------------------------------------------- Init */

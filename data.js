@@ -14,7 +14,7 @@
  * common "Dieth" style used in Zurich (long vowels doubled: Huus, Ziit).
  */
 
-const REPO_URL = "https://github.com/cemreozertas/zueri-tuetsch";
+const REPO_URL = "https://github.com/cemreozertas/zurituutsch";
 
 // Visitor counting with GoatCounter: no cookies, no personal data, no banner needed.
 // This is the code you chose when you signed up (dashboard: https://CODE.goatcounter.com).

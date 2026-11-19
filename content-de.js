@@ -298,7 +298,7 @@ const I18N_DE = {
     "{right} of {n} right": "{right} von {n} richtig",
     "Next worksheet": "Nächstes Arbeitsblatt",
     "Next: {title} ": "Weiter: {title} ",
-    "Züritüütsch · A guide to Zurich German · cemreozertas.github.io/zueri-tuetsch": "Züritüütsch · Wegweiser ins Zürichdeutsche · cemreozertas.github.io/zueri-tuetsch",
+    "Züritüütsch · A guide to Zurich German · cemreozertas.github.io/zurituutsch": "Züritüütsch · Wegweiser ins Zürichdeutsche · cemreozertas.github.io/zurituutsch",
 
     // Worksheets: section titles and instructions (shared)
     "Did you get it?": "Alles verstanden?",

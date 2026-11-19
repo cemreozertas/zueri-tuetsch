@@ -6,9 +6,9 @@
 
 Turkish is my mother tongue, German my second home, and Zurich German the language my new neighbors speak. My German is native-level, yet in Zurich I suddenly needed subtitles. So I started listening very closely, and noticed that I could pick up more and more words once I knew how their sounds line up with Hochdeutsch: *Ziit* is *Zeit*, *Huus* is *Haus*, *Chind* is *Kind*. As a trained translator, I couldn't leave those patterns scattered in my head, so I collected them and built this little web app with Claude. It has been my own practice tool ever since, and it's here for anyone who wants to hear and speak Zurich German faster.
 
-👉 **Try it live: https://cemreozertas.github.io/zueri-tuetsch/**
+👉 **Try it live: https://cemreozertas.github.io/zurituutsch/**
 
-The site works on your laptop and your phone, and it speaks English and German: switch any time with **EN | DE** at the top right, or open the German version directly at [cemreozertas.github.io/zueri-tuetsch/de](https://cemreozertas.github.io/zueri-tuetsch/de/). Each language has its own address, so a shared link opens, and previews, in the right language.
+The site works on your laptop and your phone, and it speaks English and German: switch any time with **EN | DE** at the top right, or open the German version directly at [cemreozertas.github.io/zurituutsch/de](https://cemreozertas.github.io/zurituutsch/de/). Each language has its own address, so a shared link opens, and previews, in the right language.
 
 📄 **Print the one-page cheat sheet** of the 13 sound shifts: [cheat-sheet.pdf](cheat-sheet.pdf), free to print and share (in German: [cheat-sheet-de.pdf](cheat-sheet-de.pdf)).
 
