@@ -25,6 +25,10 @@ const GOATCOUNTER_CODE = "cemreozertas";
 // If you empty it (""), the vote under the decoder still works and only the note link is hidden.
 const FEEDBACK_FORM_URL = "https://tally.so/r/8NLRDO";
 
+// Optional: a form for corrections and word suggestions ("Hear it differently in your Kreis?").
+// Leave it empty and the link opens a GitHub issue instead. The form gets ?topic=Rules or ?topic=Vocabulary.
+const CORRECTIONS_FORM_URL = "";
+
 const RULES = [
   {
     id: "ei",

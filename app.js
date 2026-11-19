@@ -11,6 +11,80 @@
   const ruleNo = (id) => String(RULES.findIndex((r) => r.id === id) + 1).padStart(2, "0");
   const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* ------------------------------------------------------------ Language */
+
+  // English by default. ?lang=de (or a saved choice) switches to German; ?lang=en switches back.
+  const LANGS = ["en", "de"];
+  const LANG = (() => {
+    let fromUrl = null;
+    try { fromUrl = new URLSearchParams(location.search).get("lang"); } catch (e) { /* old browser */ }
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem("zd-lang")); } catch (e) { /* storage off */ }
+    const lang = LANGS.includes(fromUrl) ? fromUrl : (LANGS.includes(saved) ? saved : "en");
+    try { localStorage.setItem("zd-lang", JSON.stringify(lang)); } catch (e) { /* storage off */ }
+    return lang;
+  })();
+  const DE = LANG === "de" && typeof I18N_DE === "object" ? I18N_DE : null;
+
+  // tr("English text", { name: value }): the German text if there is one, else the English, with {name} filled in.
+  function tr(en, vars) {
+    let s = (DE && DE.ui && DE.ui[en]) || en;
+    if (vars) Object.keys(vars).forEach((k) => { s = s.split("{" + k + "}").join(vars[k]); });
+    return s;
+  }
+
+  // Swaps the German content into the data objects before anything is drawn.
+  function applyGerman() {
+    // The Plan uses the English cost and dialect to decide "free" and "Zurich", so remember those first.
+    Object.values(SOURCES).forEach((src) => { src.isFree = /^free/i.test(src.cost); src.isZurich = src.dialect.startsWith("Zurich"); });
+    if (!DE) return;
+    const put = (target, from) => { if (target && from) Object.keys(from).forEach((k) => { target[k] = from[k]; }); };
+    RULES.forEach((r) => put(r, DE.rules && DE.rules[r.id]));
+    (DE.grammar || []).forEach((g, i) => put(GRAMMAR[i], g));
+    if (DE.categories) Object.keys(DE.categories).forEach((k) => { if (k in CATEGORIES) CATEGORIES[k] = DE.categories[k]; });
+    if (DE.levels) Object.keys(DE.levels).forEach((k) => put(LEVELS[k], DE.levels[k]));
+    VOCAB.forEach((v) => put(v, DE.vocab && DE.vocab[v.zd]));
+    if (DE.sources) Object.keys(DE.sources).forEach((k) => put(SOURCES[k], DE.sources[k]));
+    (DE.plan || []).forEach((p, i) => put(PLAN[i], p));
+    (DE.story || []).forEach((st, i) => put(STORY[i], st));
+  }
+
+  // Swaps the German into the page itself: texts, attributes, description and the lang attribute.
+  function translatePage() {
+    if (!DE) return;
+    document.documentElement.lang = "de";
+    Object.entries(DE.html || {}).forEach(([sel, html]) => { const n = document.querySelector(sel); if (n) n.innerHTML = html; });
+    Object.entries(DE.attrs || {}).forEach(([sel, attrs]) => {
+      const n = document.querySelector(sel);
+      if (n) Object.entries(attrs).forEach(([k, v]) => n.setAttribute(k, v));
+    });
+    if (DE.meta) {
+      const d = document.querySelector('meta[name="description"]');
+      if (d && DE.meta.description) d.setAttribute("content", DE.meta.description);
+    }
+  }
+
+  // The EN | DE switch in the header. It reloads the page in the other language and keeps the current tab.
+  function initLangSwitch() {
+    document.querySelectorAll(".lang-switch a[data-lang]").forEach((a) => {
+      const lang = a.dataset.lang;
+      if (lang === LANG) a.setAttribute("aria-current", "true");
+      a.href = "?lang=" + lang + location.hash;
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (lang === LANG) return;
+        try { localStorage.setItem("zd-lang", JSON.stringify(lang)); } catch (err) { /* storage off */ }
+        stats.event("lang/" + lang, "Language switched to " + lang.toUpperCase());
+        location.href = location.pathname + "?lang=" + lang + location.hash;
+      });
+    });
+    window.addEventListener("hashchange", () => {
+      document.querySelectorAll(".lang-switch a[data-lang]").forEach((a) => { a.href = "?lang=" + a.dataset.lang + location.hash; });
+    });
+  }
+
+  applyGerman();
+
   function el(tag, attrs, children) {
     const node = document.createElement(tag);
     if (attrs) {
@@ -124,7 +198,7 @@
     container.style.setProperty("--n", n);
     container.innerHTML = "";
     container.setAttribute("role", "img");
-    container.setAttribute("aria-label", from === to ? to : from + " becomes " + to);
+    container.setAttribute("aria-label", from === to ? to : tr("{from} becomes {to}", { from, to }));
 
     const tiles = [];
     for (let i = 0; i < n; i++) {
@@ -190,8 +264,8 @@
       }
       else a.removeAttribute("aria-current");
     });
-    const label = { start: "Start", story: "Story", decode: "Decode", rules: "Rules", cards: "Vocabulary", quiz: "Quiz", worksheets: "Worksheets", plan: "Listening and reading plan" }[view];
-    document.title = view === "start" ? "Züritüütsch · A guide to Zurich German" : label + " · Züritüütsch";
+    const label = tr({ start: "Start", story: "Story", decode: "Decode", rules: "Rules", cards: "Vocabulary", quiz: "Quiz", worksheets: "Worksheets", plan: "Listening and reading plan" }[view]);
+    document.title = view === "start" ? tr("Züritüütsch · A guide to Zurich German") : label + " · Züritüütsch";
 
     if (changed) stats.page(view === "start" ? "" : view === "worksheets" && hash.startsWith("ws-") ? "worksheets/" + hash.slice(3) : view, document.title);
 
@@ -224,10 +298,10 @@
       ]);
       if (r.caveat) body.append(el("p", { class: "caveat", text: r.caveat }));
       list.append(el("li", { class: "rule", id: "rule-" + r.id }, [
-        el("span", { class: "rule-tile", "aria-label": "Rule " + (i + 1), text: String(i + 1).padStart(2, "0") }),
+        el("span", { class: "rule-tile", "aria-label": tr("Rule {n}", { n: i + 1 }), text: String(i + 1).padStart(2, "0") }),
         el("h3", null, [
           el("span", { class: "from", text: r.from }),
-          el("span", { class: "arrow", "aria-label": "in Züritüütsch:" }, [tram()]),
+          el("span", { class: "arrow", "aria-label": tr("in Züritüütsch:") }, [tram()]),
           el("span", { class: "from", text: r.to })
         ]),
         el("p", { class: "rule-explain", text: r.explain }),
@@ -248,7 +322,7 @@
     });
   }
 
-  const strip = (t) => t.replace(/ \(.*\)/, "").replace(" / nothing", "");
+  const strip = (t) => t.replace(/ \(.*\)/, "").replace(/ \/ (nothing|gar nichts)$/, "");
   const shortShift = (id) => strip(ruleById[id].to) + " → " + strip(ruleById[id].from);
 
   function ruleChip(id, forward) {
@@ -264,7 +338,7 @@
   const EXTRA_WORDS = {
     "isch": "ist", "bisch": "bist", "bi": "bin", "ha": "habe", "häsch": "hast", "hät": "hat",
     "gsi": "gewesen", "gha": "gehabt", "cho": "kommen / gekommen", "gaa": "gehen",
-    "mer": "wir / man", "mir": "wir (or: mir)", "hüt": "heute", "au": "auch", "no": "noch",
+    "mer": "wir / man", "mir": "wir / mir", "hüt": "heute", "au": "auch", "no": "noch",
     "uf": "auf", "us": "aus", "kei": "kein, keine", "züri": "Zürich", "dä": "der (dieser)",
     "de": "der", "d": "die", "s": "das", "en": "ein", "e": "eine", "es": "ein (neutral) / es",
     "gseh": "gesehen", "chunnsch": "kommst du", "lueg": "schau!", "los": "hör zu!",
@@ -380,13 +454,14 @@
     return { type: steps.length ? "guess" : "none", input: raw, out: matchCase(raw, word), alt, steps };
   }
 
-  function showResult(result, opts) {
-    const flaps = $("#board-flaps");
-    const foot = $("#board-foot");
-    const status = $("#board-status");
+  // ui: which board to write to. Defaults to the big board on the Decode tab.
+  function showResult(result, opts, ui) {
+    const flaps = ui ? ui.flaps : $("#board-flaps");
+    const foot = ui ? ui.foot : $("#board-foot");
+    const status = ui ? ui.status : $("#board-status");
     foot.innerHTML = "";
     status.className = "board-status";
-    const fwd = decoderDir === "hd2zd";
+    const fwd = ui ? false : decoderDir === "hd2zd";
 
     if (result.type === "known") {
       const target = flapText(result.out);
@@ -401,31 +476,31 @@
       } else {
         flapTo(flaps, result.input, target, opts);
       }
-      status.textContent = "Word list";
+      status.textContent = tr("Word list");
       status.classList.add("is-known");
       if (result.source.startsWith("rules:")) {
         result.source.slice(6).split(",").filter(Boolean).forEach((id) => foot.append(ruleChip(id, fwd)));
       } else if (result.source === "vocab") {
-        foot.append(el("p", { text: "No rule explains this one, so it's on the flashcards." }));
+        foot.append(el("p", { text: tr("No rule explains this one, so it's on the flashcards.") }));
       } else {
         foot.append(el("p", { text: result.input + " = " + result.out }));
       }
     } else if (result.type === "guess") {
       const fits = result.out.length <= MAX_FLAPS && result.input.length <= MAX_FLAPS;
       flapTo(flaps, result.input, fits ? result.out : result.input, opts);
-      status.textContent = "Best guess";
+      status.textContent = tr("Best guess");
       status.classList.add("is-guess");
       result.steps.forEach((s) => foot.append(ruleChip(s.id, fwd)));
       if (!fits) foot.append(el("p", { text: result.out }));
       foot.append(el("p", { text: fwd
-        ? "The rules don't fit every word (zwei stays zwei, Baum stays Baum), so treat this as a guess."
-        : (result.alt ? "Or: " + result.alt + ". " : "") + "Rules run backwards, so it's a guess." }));
+        ? tr("The rules don't fit every word (zwei stays zwei, Baum stays Baum), so treat this as a guess.")
+        : (result.alt ? tr("Or: {alt}. ", { alt: result.alt }) : "") + tr("Rules run backwards, so it's a guess.") }));
     } else {
       flapTo(flaps, result.input.slice(0, MAX_FLAPS), result.input.slice(0, MAX_FLAPS), opts);
-      status.textContent = "No rule fits";
+      status.textContent = tr("No rule fits");
       foot.append(el("p", { text: fwd
-        ? "None of the sound shifts applies. It may sound almost the same in Züritüütsch, or it's a word with its own dialect form."
-        : "None of the sound shifts applies. It's a word to learn by heart, or it's spelled the same in Standard German." }));
+        ? tr("None of the sound shifts applies. It may sound almost the same in Züritüütsch, or it's a word with its own dialect form.")
+        : tr("None of the sound shifts applies. It's a word to learn by heart, or it's spelled the same in Standard German.") }));
     }
   }
 
@@ -439,7 +514,7 @@
       flapTo($("#board-flaps"), fwd ? hd : zd, fwd ? zd : hd);
       const status = $("#board-status");
       status.className = "board-status";
-      status.textContent = "Example " + (this.i % DEMO.length + 1) + "/" + DEMO.length;
+      status.textContent = tr("Example {n}/{total}", { n: this.i % DEMO.length + 1, total: DEMO.length });
       const foot = $("#board-foot");
       foot.innerHTML = "";
       rules.forEach((id) => foot.append(ruleChip(id, fwd)));
@@ -529,16 +604,23 @@
   let wallResize = null;
   window.addEventListener("resize", () => { clearTimeout(wallResize); wallResize = setTimeout(() => { if (WALL_VIEWS.includes(currentView)) wall.rebuild(); }, 200); });
 
-  // A small board on the start page that keeps flipping through examples.
+  // The board on the start page flips through examples until the visitor types a word or taps one.
   const startLoop = {
-    i: 0, timer: null,
+    i: 0, timer: null, stopped: false,
     show() {
-      const [zd, hd] = DEMO[this.i % DEMO.length];
+      const [zd, hd, rules] = DEMO[this.i % DEMO.length];
       flapTo($("#start-flaps"), zd, hd);
+      const status = $("#start-status");
+      status.className = "board-status";
+      status.textContent = tr("Example");
+      const foot = $("#start-foot");
+      foot.innerHTML = "";
+      rules.forEach((id) => foot.append(ruleChip(id, false)));
       this.i++;
     },
+    stop() { this.stopped = true; this.pause(); },
     resume() {
-      if (this.timer) return;
+      if (this.timer || this.stopped) return;
       if (this.i === 0) this.show();
       if (reduceMotion) return;
       this.timer = setInterval(() => { if (!document.hidden) this.show(); }, 3200);
@@ -570,7 +652,7 @@
     const all = $$("#story-list > li");
     const allOpen = all.length && all.every((li) => li.classList.contains("is-open"));
     const t = $("#story-toggle-all");
-    if (t) t.textContent = allOpen ? "Close all" : "Open all";
+    if (t) t.textContent = allOpen ? tr("Close all") : tr("Open all");
   }
 
   function renderStory() {
@@ -585,7 +667,7 @@
       panel.hidden = true;
       s.text.forEach((t) => panel.append(richText(el("p"), t)));
       const src = el("p", { class: "story-src" });
-      src.append(el("span", { class: "story-src-label", text: "Sources" }));
+      src.append(el("span", { class: "story-src-label", text: tr("Sources") }));
       s.sources.forEach(([label, url], k) => {
         if (k) src.append(document.createTextNode(" · "));
         src.append(el("a", { href: url, target: "_blank", rel: "noopener", text: label }));
@@ -605,9 +687,9 @@
 
   let decoderDir = "zd2hd";
   const DIRS = {
-    zd2hd: { from: "Züritüütsch", to: "Hochdeutsch", label: "Type a word you heard", placeholder: "e.g. Ziitig, Chuchi, Hüüser",
+    zd2hd: { from: "Züritüütsch", to: "Hochdeutsch", label: tr("Type a word you heard"), placeholder: tr("e.g. Ziitig, Chuchi, Hüüser"),
       examples: ["Gschänk", "Chrüüz", "Buuch", "schmöcke", "Wurscht", "Hüüsli"], run: decode },
-    hd2zd: { from: "Hochdeutsch", to: "Züritüütsch", label: "Type a Hochdeutsch word", placeholder: "e.g. Zeitung, Küche, Häuser",
+    hd2zd: { from: "Hochdeutsch", to: "Züritüütsch", label: tr("Type a Hochdeutsch word"), placeholder: tr("e.g. Zeitung, Küche, Häuser"),
       examples: ["Geschenk", "Kreuz", "Bauch", "schmecken", "Wurst", "Häuschen"], run: encode }
   };
 
@@ -632,8 +714,8 @@
     function setDir(dir) {
       decoderDir = dir;
       const d = DIRS[dir];
-      $("#dir-toggle").setAttribute("aria-label", "Direction: " + d.from + " to " + d.to + ". Click to switch.");
-      $("#dir-toggle").title = "Switch direction";
+      $("#dir-toggle").setAttribute("aria-label", tr("Direction: {from} to {to}. Click to switch.", { from: d.from, to: d.to }));
+      $("#dir-toggle").title = tr("Switch direction");
       $("#board-from").textContent = d.from;
       $("#board-to").textContent = d.to;
       $("#decoder-label").textContent = d.label;
@@ -653,6 +735,45 @@
     $("#vocab-count").textContent = VOCAB.length;
   }
 
+  // The same decoder, right in the start page hero: always Züritüütsch → Hochdeutsch.
+  function initStartDecoder() {
+    const input = $("#start-input");
+    const ui = { flaps: $("#start-flaps"), foot: $("#start-foot"), status: $("#start-status") };
+    const RESULT_NAMES = { known: "word list", guess: "best guess", none: "no rule fits" };
+    const run = (word, how) => {
+      const r = decode(word);
+      if (!r) return;
+      startLoop.stop();
+      showResult(r, null, ui);
+      stats.event("start-decode/" + how + "/" + r.type, "Start page decode · " + how + " · " + RESULT_NAMES[r.type]);
+    };
+    $("#start-form").addEventListener("submit", (e) => { e.preventDefault(); run(input.value, "typed"); });
+    input.addEventListener("focus", () => startLoop.pause());
+    input.addEventListener("blur", () => { if (!input.value && currentView === "start") startLoop.resume(); });
+    const examples = $("#start-examples");
+    examples.append(el("span", { class: "chips-label", text: tr("Try:") }));
+    ["Ziit", "luege", "poschte"].forEach((w) => examples.append(el("button", {
+      class: "chip", type: "button", text: w,
+      onclick: () => { input.value = w; run(w, "example"); }
+    })));
+  }
+
+  // "Hear it differently in your Kreis?" — an invitation to correct or add words, under Rules and Vocabulary.
+  function kreisCard(topic) {
+    const formUrl = typeof CORRECTIONS_FORM_URL === "string" ? CORRECTIONS_FORM_URL.trim() : "";
+    const href = formUrl
+      ? formUrl + (formUrl.includes("?") ? "&" : "?") + "topic=" + encodeURIComponent(topic)
+      : REPO_URL + "/issues/new?title=" + encodeURIComponent("Suggestion: " + topic);
+    return el("aside", { class: "kreis-card" }, [
+      el("h3", { text: tr("Hear it differently in your Kreis?") }),
+      el("p", null, [
+        document.createTextNode(tr("Zurich German changes from Kreis to Kreis and from family to family. If you'd say a word differently, or a word you hear all the time is missing, ")),
+        el("a", { href, target: "_blank", rel: "noopener", text: tr("tell me") }),
+        document.createTextNode(".")
+      ])
+    ]);
+  }
+
   /* ------------------------------------------------------- Next stop vote */
 
   // A one-click vote on the next feature. The vote is counted once per browser,
@@ -667,12 +788,12 @@
       thanks.hidden = false;
       thanks.innerHTML = "";
       thanks.append(el("strong", { text: "Merci vilmal! " }),
-        document.createTextNode(vote === "yes" ? "Your vote is counted. " : "Good to know, your vote is counted. "));
+        document.createTextNode(vote === "yes" ? tr("Your vote is counted. ") : tr("Good to know, your vote is counted. ")));
       if (formUrl) {
         const sep = formUrl.includes("?") ? "&" : "?";
         thanks.append(el("a", {
           href: formUrl + sep + "vote=" + vote, target: "_blank", rel: "noopener",
-          text: vote === "yes" ? "Tell me what you'd paste, or get a note when it's ready" : "Tell me what would help you instead"
+          text: vote === "yes" ? tr("Tell me what you'd paste, or get a note when it's ready") : tr("Tell me what would help you instead")
         }));
       }
     }
@@ -700,7 +821,7 @@
     return el("span", { class: "pips", "aria-hidden": "true" }, [el("i"), el("i"), el("i")]);
   }
   function levelBadge(lvl) {
-    return el("span", { class: "lvl-badge lvl-" + lvl, title: "Level: " + LEVELS[lvl].name + " (" + LEVELS[lvl].plain.toLowerCase() + ")" }, [pips(lvl), el("span", { text: LEVELS[lvl].name })]);
+    return el("span", { class: "lvl-badge lvl-" + lvl, title: tr("Level: {name} ({plain})", { name: LEVELS[lvl].name, plain: LEVELS[lvl].plain.toLowerCase() }) }, [pips(lvl), el("span", { text: LEVELS[lvl].name })]);
   }
 
   // A row of level buttons. counts(level) gives the number shown on each button.
@@ -710,10 +831,10 @@
     keys.forEach((k) => {
       const lvl = k === "all" ? null : Number(k);
       const btn = el("button", { type: "button", class: "level-btn" + (lvl ? " lvl-" + lvl : " lvl-all"), "data-lvl": k, "aria-pressed": String(k) === String(opts.current) ? "true" : "false" }, [
-        el("span", { class: "level-top" }, [lvl ? pips(lvl) : el("span", { class: "pips pips-all", "aria-hidden": "true" }, [el("i"), el("i"), el("i")]), el("span", { class: "level-name", text: lvl ? LEVELS[lvl].name : "All levels" })]),
+        el("span", { class: "level-top" }, [lvl ? pips(lvl) : el("span", { class: "pips pips-all", "aria-hidden": "true" }, [el("i"), el("i"), el("i")]), el("span", { class: "level-name", text: lvl ? LEVELS[lvl].name : tr("All levels") })]),
         el("span", { class: "level-sub" }, [
-          el("span", { class: "level-plain", text: lvl ? LEVELS[lvl].plain : "All" }),
-          el("span", { class: "level-count", text: " · " + opts.counts(lvl) + " " + opts.unit })
+          el("span", { class: "level-plain", text: lvl ? LEVELS[lvl].plain : tr("All") }),
+          el("span", { class: "level-count", text: " · " + opts.counts(lvl) + " " + tr(opts.unit) })
         ])
       ]);
       btn.addEventListener("click", () => {
@@ -723,7 +844,7 @@
       container.append(btn);
     });
   }
-  const levelText = (k) => k === "all" ? "Everything, from Kurzstrecke to Alle Zonen." : LEVELS[k].text;
+  const levelText = (k) => k === "all" ? tr("Everything, from Kurzstrecke to Alle Zonen.") : LEVELS[k].text;
 
   /* ---------------------------------------------------------- Words (flashcards and list) */
 
@@ -746,7 +867,7 @@
     filters.innerHTML = "";
     const pool = VOCAB.filter(inLevel);
     if (cards.filter !== "all" && !pool.some((v) => v.cat === cards.filter)) cards.filter = "all";
-    [["all", "All topics"]].concat(Object.entries(CATEGORIES)).forEach(([id, label]) => {
+    [["all", tr("All topics")]].concat(Object.entries(CATEGORIES)).forEach(([id, label]) => {
       const n = id === "all" ? pool.length : pool.filter((v) => v.cat === id).length;
       if (!n) return;
       filters.append(el("button", {
@@ -814,7 +935,7 @@
     back.innerHTML = "";
     const total = deck().length;
     const learned = deck().filter((v) => cards.known.has(v.zd)).length;
-    $("#card-progress").textContent = learned + " of " + total + " learned";
+    $("#card-progress").textContent = tr("{n} of {total} learned", { n: learned, total });
 
     const c = cards.current;
     const knownBtn = $("#card-known");
@@ -822,11 +943,11 @@
     if (!c) {
       knownBtn.disabled = againBtn.disabled = true;
       front.append(
-        el("span", { class: "card-cat", text: "All done" }),
+        el("span", { class: "card-cat", text: tr("All done") }),
         el("span", { class: "card-word", text: "Super gmacht!" }),
-        el("span", { class: "card-hint", text: "You know every card in this set. Click to start it again." })
+        el("span", { class: "card-hint", text: tr("You know every card in this set. Click to start it again.") })
       );
-      card.setAttribute("aria-label", "All cards learned. Activate to start again.");
+      card.setAttribute("aria-label", tr("All cards learned. Activate to start again."));
       return;
     }
     knownBtn.disabled = againBtn.disabled = false;
@@ -838,7 +959,7 @@
       el("span", { class: "card-corner" }, [levelBadge(c.lvl)]),
       el("span", { class: catClass, text: CATEGORIES[c.cat] }),
       el("span", { class: "card-word", text: frontText }),
-      el("span", { class: "card-hint", text: zdFirst ? "What does it mean?" : "How do you say it in Züritüütsch?" })
+      el("span", { class: "card-hint", text: zdFirst ? tr("What does it mean?") : tr("How do you say it in Züritüütsch?") })
     );
     back.append(
       el("span", { class: "card-cat", text: zdFirst ? "Hochdeutsch" : "Züritüütsch" }),
@@ -846,7 +967,7 @@
     );
     if (c.note) back.append(el("span", { class: "card-extra", text: c.note }));
     if (c.ex) back.append(el("span", { class: "card-extra", text: c.ex }));
-    card.setAttribute("aria-label", cards.flipped ? "Answer: " + backText : "Card: " + frontText + ". Activate to flip.");
+    card.setAttribute("aria-label", cards.flipped ? tr("Answer: {w}", { w: backText }) : tr("Card: {w}. Activate to flip.", { w: frontText }));
   }
 
   function flip() {
@@ -883,8 +1004,8 @@
       el("span", { text: zdFirst ? "Hochdeutsch" : "Züritüütsch" })
     );
     const t = document.createElement("template"); t.innerHTML = SWAP_SVG; btn.append(t.content.firstChild);
-    btn.setAttribute("aria-label", "Card direction: " + (zdFirst ? "Züritüütsch to Hochdeutsch" : "Hochdeutsch to Züritüütsch") + ". Click to switch.");
-    btn.title = "Switch direction";
+    btn.setAttribute("aria-label", tr("Card direction: {from} to {to}. Click to switch.", zdFirst ? { from: "Züritüütsch", to: "Hochdeutsch" } : { from: "Hochdeutsch", to: "Züritüütsch" }));
+    btn.title = tr("Switch direction");
   }
 
   function initCards() {
@@ -928,7 +1049,9 @@
 
   /* ---------------------------------------------------------------- Quiz */
 
-  const quiz = { level: "1", items: [], index: 0, right: 0, answered: 0, done: false };
+  const ROUND = 10;
+  const SITE_URL = "https://cemreozertas.github.io/zueri-tuetsch/";
+  const quiz = { level: "1", items: [], index: 0, right: 0, answered: 0, done: false, results: [] };
 
   function normalize(s) {
     return s.toLowerCase()
@@ -940,8 +1063,9 @@
 
   function startQuiz(level) {
     quiz.level = level;
-    quiz.items = shuffle(QUIZ.filter((q) => q.lvl === Number(level)));
-    $("#quiz-level-desc").textContent = { 1: "Single words, one sound rule each.", 2: "Words with two rules, and short sentences.", 3: "Full sentences at real-life speed, with slang and traps." }[level];
+    quiz.items = shuffle(QUIZ.filter((q) => q.lvl === Number(level))).slice(0, ROUND);
+    quiz.results = [];
+    $("#quiz-level-desc").textContent = tr({ 1: "Single words, one sound rule each.", 2: "Words with two rules, and short sentences.", 3: "Full sentences at real-life speed, with slang and traps." }[level]);
     quiz.index = 0;
     quiz.right = 0;
     quiz.answered = 0;
@@ -949,24 +1073,25 @@
   }
 
   function updateScore() {
-    $("#quiz-score").textContent = quiz.answered ? "Score " + quiz.right + " / " + quiz.answered : "";
+    $("#quiz-score").textContent = quiz.answered ? tr("Score {right} / {n}", { right: quiz.right, n: quiz.answered }) : "";
     $("#quiz-count").textContent = Math.min(quiz.index + 1, quiz.items.length) + " / " + quiz.items.length;
   }
 
   function showQuestion() {
     quiz.done = false;
+    $("#quiz-form").hidden = false;
     $("#quiz-prompt").textContent = quiz.items[quiz.index].zd;
     $("#quiz-feedback").innerHTML = "";
     const input = $("#quiz-input");
     input.value = "";
     input.disabled = false;
-    $("#quiz-submit").textContent = "Check";
+    $("#quiz-submit").textContent = tr("Check");
     $("#quiz-submit").disabled = false;
     updateScore();
   }
 
   function rulesList(item) {
-    if (!item.rules.length) return el("p", { text: "No sound rule here: these are flashcard words." });
+    if (!item.rules.length) return el("p", { text: tr("No sound rule here: these are flashcard words.") });
     return el("ul", { class: "fb-rules" }, item.rules.map((id) => el("li", null, [
       el("a", { class: "rule-no", href: "#rule-" + id, text: ruleNo(id) }),
       el("strong", { text: shortShift(id) }),
@@ -976,18 +1101,7 @@
 
   function nextQuestion() {
     quiz.index++;
-    if (quiz.index >= quiz.items.length) {
-      $("#quiz-prompt").textContent = "Fertig! " + quiz.right + " / " + quiz.items.length;
-      $("#quiz-input").disabled = true;
-      $("#quiz-submit").disabled = true;
-      const fb = $("#quiz-feedback");
-      fb.innerHTML = "";
-      fb.append(el("div", { class: "fb-actions" }, [
-        el("button", { class: "btn btn-primary", type: "button", text: "Play again", onclick: () => startQuiz(quiz.level) })
-      ]));
-      updateScore();
-      return;
-    }
+    if (quiz.index >= quiz.items.length) { showQuizResult(); return; }
     showQuestion();
     $("#quiz-input").focus();
   }
@@ -1001,13 +1115,14 @@
     quiz.done = true;
     quiz.answered++;
     if (ok) quiz.right++;
+    quiz.results.push(ok);
     $("#quiz-input").disabled = true;
-    $("#quiz-submit").textContent = "Next →";
+    $("#quiz-submit").textContent = tr("Next →");
 
     const fb = $("#quiz-feedback");
     fb.innerHTML = "";
     const box = el("div", { class: "fb " + (ok ? "fb-ok" : "fb-miss") }, [
-      el("p", { class: "fb-title", text: ok ? "Genau! That's right." : (answer.trim() ? "Not quite." : "Here's the answer.") })
+      el("p", { class: "fb-title", text: ok ? tr("Genau! That's right.") : (answer.trim() ? tr("Not quite.") : tr("Here's the answer.")) })
     ]);
     if (!item.zd.includes(" ") && item.hd[0].length <= MAX_FLAPS) {
       const flaps = el("div", { class: "flaps" });
@@ -1020,14 +1135,77 @@
     if (!ok && answer.trim()) {
       box.append(el("div", { class: "fb-actions" }, [
         el("button", {
-          class: "btn btn-ghost btn-sm", type: "button", text: "I meant that, count it",
-          onclick: (ev) => { quiz.right++; updateScore(); ev.currentTarget.remove(); $("#quiz-submit").focus(); }
+          class: "btn btn-ghost btn-sm", type: "button", text: tr("I meant that, count it"),
+          onclick: (ev) => { quiz.right++; quiz.results[quiz.results.length - 1] = true; updateScore(); ev.currentTarget.remove(); $("#quiz-submit").focus(); }
         })
       ]));
     }
     fb.append(box);
     updateScore();
     $("#quiz-submit").focus();
+  }
+
+  function quizVerdict(right, n, level) {
+    const next = LEVELS[Number(level) + 1];
+    if (right === n) return next ? tr("Perfect round. Ready for {next}?", { next: next.name }) : tr("Perfect round on Alle Zonen. Respect.");
+    if (right >= n - 2) return tr("Genau! You're hearing it.");
+    if (right >= n / 2) return tr("Good ride. A few more rounds and the patterns stick.");
+    return tr("Every line starts at the first stop. The rules page helps.");
+  }
+
+  // End of a round: a ticket with the score, and a result to copy or share (Wordle style, no names, no data).
+  function showQuizResult() {
+    const n = quiz.items.length, right = quiz.right, lvl = Number(quiz.level);
+    $("#quiz-prompt").textContent = tr("Fertig!");
+    $("#quiz-form").hidden = true;
+    updateScore();
+    $("#quiz-count").textContent = n + " / " + n;
+    stats.event("quiz/round/" + lvl + "/" + right, "Quiz round · " + LEVELS[lvl].name + " · " + right + "/" + n);
+
+    const squares = quiz.results.map((ok) => ok ? "🟦" : "⬜").join("");
+    const url = SITE_URL + (LANG === "de" ? "?lang=de" : "") + "#quiz";
+    const text = tr("Züritüütsch quiz · {level}", { level: LEVELS[lvl].name }) + "\n" + right + "/" + n + " " + squares + "\n" + tr("Can you hear it?") + " " + url;
+
+    const status = el("p", { class: "share-status", "aria-live": "polite" });
+    const copy = () => {
+      const done = () => { status.textContent = tr("Copied. Paste it anywhere."); stats.event("quiz/share/copy", "Quiz result copied"); };
+      const fallback = () => {
+        const ta = el("textarea", { class: "share-text", readonly: "", rows: "3" });
+        ta.value = text;
+        status.replaceChildren(document.createTextNode(tr("Copy this:")), ta);
+        ta.select();
+      };
+      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fallback);
+      else fallback();
+    };
+    const actions = [el("button", { class: "btn btn-primary", type: "button", text: tr("Copy your result"), onclick: copy })];
+    if (navigator.share) actions.push(el("button", {
+      class: "btn btn-ghost", type: "button", text: tr("Share…"),
+      onclick: () => navigator.share({ text }).then(() => stats.event("quiz/share/native", "Quiz result shared"), () => {})
+    }));
+    actions.push(el("button", { class: "btn btn-ghost", type: "button", text: tr("Play again"), onclick: () => { startQuiz(quiz.level); $("#quiz-input").focus(); } }));
+    if (LEVELS[lvl + 1]) actions.push(el("button", {
+      class: "btn btn-ghost", type: "button", text: tr("Try {next} →", { next: LEVELS[lvl + 1].name }),
+      onclick: () => { const b = $('#quiz-levels [data-lvl="' + (lvl + 1) + '"]'); if (b) b.click(); $("#quiz-input").focus(); }
+    }));
+
+    const fb = $("#quiz-feedback");
+    fb.innerHTML = "";
+    fb.append(el("div", { class: "quiz-result" }, [
+      el("div", { class: "ticket-card lvl-" + lvl }, [
+        el("div", { class: "ticket-main" }, [
+          el("p", { class: "ticket-kicker", text: tr("Züritüütsch · Quiz ticket") }),
+          el("p", { class: "ticket-level" }, [pips(lvl), el("span", { text: LEVELS[lvl].name })]),
+          el("p", { class: "ticket-score", text: right + "/" + n }),
+          el("div", { class: "ticket-squares", role: "img", "aria-label": tr("{right} of {n} right", { right, n }) },
+            quiz.results.map((ok) => el("span", { class: ok ? "is-right" : "is-wrong" })))
+        ]),
+        el("div", { class: "ticket-stub", "aria-hidden": "true" }, [el("span", { text: LEVELS[lvl].plain })])
+      ]),
+      el("p", { class: "ticket-verdict", text: quizVerdict(right, n, lvl) }),
+      el("div", { class: "fb-actions" }, actions),
+      status
+    ]));
   }
 
   function initQuiz() {
@@ -1042,12 +1220,12 @@
 
   /* ---------------------------------------------------------------- Plan */
 
-  const KINDS = { listen: "Listen", watch: "Watch", read: "Read", go: "Go out" };
+  const KINDS = { listen: tr("Listen"), watch: tr("Watch"), read: tr("Read"), go: tr("Go out") };
   const plan = { kind: "all", free: false };
 
   function sourceCard(id) {
     const src = SOURCES[id];
-    const free = /^free/i.test(src.cost);
+    const free = src.isFree;
     const card = el("li", { class: "src src-" + src.kind, "data-kind": src.kind, "data-free": free ? "1" : "0" }, [
       el("div", { class: "src-top" }, [
         el("span", { class: "src-kind", text: KINDS[src.kind] }),
@@ -1057,8 +1235,8 @@
       el("p", { class: "src-what", text: src.what }),
       el("p", { class: "src-meta" }, [
         el("span", { text: src.cost }),
-        el("span", { text: src.where === "online" ? "Online" : "In Zurich / offline" }),
-        el("span", { class: src.dialect.startsWith("Zurich") ? "is-zurich" : "", text: src.dialect })
+        el("span", { text: src.where === "online" ? tr("Online") : tr("In Zurich / offline") }),
+        el("span", { class: src.isZurich ? "is-zurich" : "", text: src.dialect })
       ])
     ]);
     if (src.tip) card.append(el("p", { class: "src-tip", text: src.tip }));
@@ -1088,13 +1266,13 @@
           ])
         ]),
         el("ul", { class: "src-grid" }, p.sources.map(sourceCard)),
-        el("p", { class: "src-empty", hidden: "", text: "Nothing of this kind in this stage." })
+        el("p", { class: "src-empty", hidden: "", text: tr("Nothing of this kind in this stage.") })
       ]));
     });
     $$("#plan-list .src-empty").forEach((e) => { e.hidden = true; });
 
     const filters = $("#plan-filters");
-    [["all", "All sources"]].concat(Object.entries(KINDS)).forEach(([k, label]) => {
+    [["all", tr("All sources")]].concat(Object.entries(KINDS)).forEach(([k, label]) => {
       filters.append(el("button", {
         class: "chip", type: "button", text: label, "aria-pressed": k === "all" ? "true" : "false",
         onclick: (e) => {
@@ -1109,8 +1287,8 @@
       e.currentTarget.setAttribute("aria-pressed", String(plan.free));
       filterPlan();
     });
-    $("#habit-text").textContent = HABIT;
-    $("#plan-checked").textContent = "All sources were last checked in " + PLAN_CHECKED + ". Links and schedules change, so check the source before you go.";
+    $("#habit-text").textContent = (DE && DE.habit) || HABIT;
+    $("#plan-checked").textContent = tr("All sources were last checked in {date}. Links and schedules change, so check the source before you go.", { date: (DE && DE.planChecked) || PLAN_CHECKED });
   }
 
   /* ---------------------------------------------------------- Worksheets */
@@ -1139,18 +1317,18 @@
     list.innerHTML = "";
     WORKSHEETS.filter((w) => wsLevel === "all" || w.lvl === Number(wsLevel)).forEach((w) => {
       list.append(el("a", { class: "ws-card", href: "#ws-" + w.id }, [
-        el("span", { class: "ws-card-top" }, [levelBadge(w.lvl), el("span", { class: "ws-min", text: "about " + w.minutes + " min" })]),
+        el("span", { class: "ws-card-top" }, [levelBadge(w.lvl), el("span", { class: "ws-min", text: tr("about {m} min", { m: w.minutes }) })]),
         el("span", { class: "ws-card-title", text: w.title }),
-        el("span", { class: "ws-card-sub", text: w.subtitle + " · " + w.sections.length + " exercises" }),
-        el("span", { class: "ws-card-go", text: "Open worksheet" })
+        el("span", { class: "ws-card-sub", text: tr("{sub} · {n} exercises", { sub: tr(w.subtitle), n: w.sections.length }) }),
+        el("span", { class: "ws-card-go", text: tr("Open worksheet") })
       ]));
     });
     list.append(el("div", { class: "ws-card ws-card-soon" }, [
-      el("span", { class: "ws-card-title", text: "Spotted something?" }),
+      el("span", { class: "ws-card-title", text: tr("Spotted something?") }),
       el("span", { class: "ws-card-sub" }, [
-        document.createTextNode("These texts are written by a learner, for learners."), el("br"),
-        document.createTextNode("If a Zurich speaker would say something differently, "),
-        el("a", { href: REPO_URL + "/issues/new?title=" + encodeURIComponent("Correction: worksheets"), target: "_blank", rel: "noopener", text: "corrections are welcome" }),
+        document.createTextNode(tr("These texts are written by a learner, for learners.")), el("br"),
+        document.createTextNode(tr("If a Zurich speaker would say something differently, ")),
+        el("a", { href: REPO_URL + "/issues/new?title=" + encodeURIComponent("Correction: worksheets"), target: "_blank", rel: "noopener", text: tr("corrections are welcome") }),
         document.createTextNode(".")
       ])
     ]));
@@ -1174,48 +1352,48 @@
 
     // Header
     root.append(
-      el("a", { class: "ws-back no-print", href: "#worksheets", text: "← All worksheets" }),
+      el("a", { class: "ws-back no-print", href: "#worksheets", text: tr("← All worksheets") }),
       el("header", { class: "ws-head" }, [
-        el("p", { class: "ws-kicker" }, [levelBadge(w.lvl), el("span", { text: "Worksheet · about " + w.minutes + " min" })]),
+        el("p", { class: "ws-kicker" }, [levelBadge(w.lvl), el("span", { text: tr("Worksheet · about {m} min", { m: w.minutes }) })]),
         el("h2", { text: w.title }),
-        el("p", { class: "ws-sub", text: w.subtitle }),
+        el("p", { class: "ws-sub", text: tr(w.subtitle) }),
         w.proofread
-          ? el("p", { class: "ws-proof is-done", text: "Proofread by " + w.proofread })
+          ? el("p", { class: "ws-proof is-done", text: tr("Proofread by {name}", { name: w.proofread }) })
           : el("p", { class: "ws-proof is-pending" }, [
-              document.createTextNode("Written by a learner, for learners: "),
-              el("a", { href: REPO_URL + "/issues/new?title=" + encodeURIComponent("Correction: " + w.title), target: "_blank", rel: "noopener", text: "corrections welcome" })
+              document.createTextNode(tr("Written by a learner, for learners: ")),
+              el("a", { href: REPO_URL + "/issues/new?title=" + encodeURIComponent("Correction: " + w.title), target: "_blank", rel: "noopener", text: tr("corrections welcome") })
             ]),
         el("div", { class: "ws-actions no-print" }, [
-          el("label", { class: "ws-key-opt" }, [el("input", { type: "checkbox", id: "ws-key" }), document.createTextNode(" Print with answer key")]),
-          el("button", { class: "btn btn-primary btn-sm", type: "button", text: "Print / Save as PDF", onclick: () => {
+          el("label", { class: "ws-key-opt" }, [el("input", { type: "checkbox", id: "ws-key" }), document.createTextNode(tr(" Print with answer key"))]),
+          el("button", { class: "btn btn-primary btn-sm", type: "button", text: tr("Print / Save as PDF"), onclick: () => {
             root.classList.toggle("print-key", $("#ws-key").checked);
             window.print();
           } }),
-          el("button", { class: "btn btn-ghost btn-sm", type: "button", text: "Clear my answers", onclick: () => { saved.set({}); renderWorksheet(w); } })
+          el("button", { class: "btn btn-ghost btn-sm", type: "button", text: tr("Clear my answers"), onclick: () => { saved.set({}); renderWorksheet(w); } })
         ])
       ])
     );
 
     // Text
     const textBox = el("section", { class: "ws-text" }, [
-      el("h3", { text: "Read" }),
+      el("h3", { text: tr("Read") }),
       ...w.text.map((t) => el("p", { text: t }))
     ]);
     const trans = el("div", { class: "ws-trans", hidden: "" }, w.translation.map((t) => el("p", { text: t })));
-    const transBtn = el("button", { class: "link-btn no-print", type: "button", text: "Show the Hochdeutsch version" });
+    const transBtn = el("button", { class: "link-btn no-print", type: "button", text: tr("Show the Hochdeutsch version") });
     transBtn.addEventListener("click", () => {
       trans.hidden = !trans.hidden;
-      transBtn.textContent = trans.hidden ? "Show the Hochdeutsch version" : "Hide the Hochdeutsch version";
+      transBtn.textContent = trans.hidden ? tr("Show the Hochdeutsch version") : tr("Hide the Hochdeutsch version");
     });
     textBox.append(transBtn, trans);
     root.append(textBox);
 
-    const key = el("section", { class: "ws-key" }, [el("h3", { text: "Answer key" })]);
+    const key = el("section", { class: "ws-key" }, [el("h3", { text: tr("Answer key") })]);
 
     w.sections.forEach((sec, si) => {
       const box = el("section", { class: "ws-sec ws-" + sec.type }, [
-        el("h3", null, [el("span", { class: "ws-no", text: String(si + 1) }), document.createTextNode(sec.title)]),
-        el("p", { class: "ws-intro", text: sec.intro })
+        el("h3", null, [el("span", { class: "ws-no", text: String(si + 1) }), document.createTextNode(tr(sec.title))]),
+        el("p", { class: "ws-intro", text: tr(sec.intro) })
       ]);
       const checks = [];
       const keyList = el("ol");
@@ -1246,16 +1424,16 @@
       }
 
       if (sec.type === "decode" || sec.type === "match" || sec.type === "gaps") {
-        if (sec.type === "gaps") box.append(el("p", { class: "ws-bank" }, [el("span", { text: "Word bank: " }), ...sec.bank.map((b) => el("span", { class: "ws-chip", text: b }))]));
+        if (sec.type === "gaps") box.append(el("p", { class: "ws-bank" }, [el("span", { text: tr("Word bank: ") }), ...sec.bank.map((b) => el("span", { class: "ws-chip", text: b }))]));
         const rows = el("ol", { class: "ws-rows" });
         sec.items.forEach((it, n) => {
           let field;
           if (sec.type === "match") {
-            field = el("select", { "aria-label": "Meaning of " + it.zd }, [el("option", { value: "", text: "Choose…" }), ...sec.options.map((o) => el("option", { value: o, text: o }))]);
+            field = el("select", { "aria-label": tr("Meaning of {w}", { w: it.zd }) }, [el("option", { value: "", text: tr("Choose…") }), ...sec.options.map((o) => el("option", { value: o, text: o }))]);
             if (state[sk(n)]) field.value = state[sk(n)];
             field.addEventListener("change", () => save(sk(n), field.value));
           } else {
-            field = el("input", { type: "text", spellcheck: "false", autocapitalize: "off", "aria-label": sec.type === "decode" ? "Hochdeutsch for " + it.zd : "Gap " + (n + 1) });
+            field = el("input", { type: "text", spellcheck: "false", autocapitalize: "off", "aria-label": sec.type === "decode" ? tr("Hochdeutsch for {w}", { w: it.zd }) : tr("Gap {n}", { n: n + 1 }) });
             if (state[sk(n)]) field.value = state[sk(n)];
             field.addEventListener("input", () => save(sk(n), field.value));
           }
@@ -1275,49 +1453,49 @@
             row.classList.toggle("is-wrong", !ok);
             fb.innerHTML = "";
             fb.append(el("span", { class: "ws-mark " + (ok ? "is-ok" : "is-miss"), text: ok ? "✓" : "✗ " + answers[0] }));
-            if (sec.type === "decode") fb.append(it.rule ? ruleChip(it.rule, false) : el("span", { class: "ws-norule", text: "no rule: learn it" }));
+            if (sec.type === "decode") fb.append(it.rule ? ruleChip(it.rule, false) : el("span", { class: "ws-norule", text: tr("no rule: learn it") }));
             return ok;
           });
-          keyList.append(el("li", { text: (sec.type === "gaps" ? it.text.replace("___", answers[0]) : it.zd + " = " + answers[0]) + (it.rule ? " (rule " + ruleNo(it.rule) + ")" : "") }));
+          keyList.append(el("li", { text: (sec.type === "gaps" ? it.text.replace("___", answers[0]) : it.zd + " = " + answers[0]) + (it.rule ? tr(" (rule {n})", { n: ruleNo(it.rule) }) : "") }));
         });
         box.append(rows);
       }
 
       if (sec.type === "listen") {
-        box.append(el("p", { class: "ws-source" }, [document.createTextNode("Source: "), el("a", { href: sec.source.url, target: "_blank", rel: "noopener", text: sec.source.name })]));
+        box.append(el("p", { class: "ws-source" }, [document.createTextNode(tr("Source: ")), el("a", { href: sec.source.url, target: "_blank", rel: "noopener", text: sec.source.name })]));
         const notes = el("ol", { class: "ws-lines" });
         for (let n = 0; n < sec.lines; n++) {
-          const input = el("input", { type: "text", "aria-label": "Word " + (n + 1) + " and its rule" });
+          const input = el("input", { type: "text", "aria-label": tr("Word {n} and its rule", { n: n + 1 }) });
           if (state[sk(n)]) input.value = state[sk(n)];
           input.addEventListener("input", () => save(sk(n), input.value));
           notes.append(el("li", null, [input]));
         }
         box.append(notes);
-        keyList.append(el("li", { text: "Your own answers." }));
+        keyList.append(el("li", { text: tr("Your own answers.") }));
       }
 
       if (sec.type === "write") {
-        const ta = el("textarea", { rows: "5", "aria-label": "Your text" });
+        const ta = el("textarea", { rows: "5", "aria-label": tr("Your text") });
         if (state[sk(0)]) ta.value = state[sk(0)];
         ta.addEventListener("input", () => save(sk(0), ta.value));
-        const ex = el("p", { class: "ws-example", hidden: "" }, [el("strong", { text: "Example: " }), document.createTextNode(sec.example)]);
-        const exBtn = el("button", { class: "link-btn no-print", type: "button", text: "Show an example" });
-        exBtn.addEventListener("click", () => { ex.hidden = !ex.hidden; exBtn.textContent = ex.hidden ? "Show an example" : "Hide the example"; });
+        const ex = el("p", { class: "ws-example", hidden: "" }, [el("strong", { text: tr("Example: ") }), document.createTextNode(sec.example)]);
+        const exBtn = el("button", { class: "link-btn no-print", type: "button", text: tr("Show an example") });
+        exBtn.addEventListener("click", () => { ex.hidden = !ex.hidden; exBtn.textContent = ex.hidden ? tr("Show an example") : tr("Hide the example"); });
         box.append(ta, exBtn, ex);
-        keyList.append(el("li", { text: "Example: " + sec.example }));
+        keyList.append(el("li", { text: tr("Example: ") + sec.example }));
       }
 
       if (checks.length) {
         const result = el("span", { class: "ws-result", "aria-live": "polite" });
         box.append(el("div", { class: "ws-check no-print" }, [
-          el("button", { class: "btn btn-ghost btn-sm", type: "button", text: "Check", onclick: () => {
+          el("button", { class: "btn btn-ghost btn-sm", type: "button", text: tr("Check"), onclick: () => {
             const right = checks.map((c) => c()).filter(Boolean).length;
-            result.textContent = right + " of " + checks.length + " right" + (right === checks.length ? ". Super gmacht!" : "");
+            result.textContent = tr("{right} of {n} right", { right, n: checks.length }) + (right === checks.length ? ". Super gmacht!" : "");
           } }),
           result
         ]));
       }
-      key.append(el("h4", { text: (si + 1) + ". " + sec.title }), keyList);
+      key.append(el("h4", { text: (si + 1) + ". " + tr(sec.title) }), keyList);
       root.append(box);
     });
 
@@ -1326,26 +1504,31 @@
     const order = WORKSHEETS.slice().sort((x, y) => x.lvl - y.lvl);
     const next = order[(order.indexOf(w) + 1) % order.length];
     if (next && next !== w) {
-      root.append(el("nav", { class: "ws-next no-print", "aria-label": "Next worksheet" }, [
-        el("a", { class: "ws-back", href: "#worksheets", text: "← All worksheets" }),
+      root.append(el("nav", { class: "ws-next no-print", "aria-label": tr("Next worksheet") }, [
+        el("a", { class: "ws-back", href: "#worksheets", text: tr("← All worksheets") }),
         el("a", { class: "btn btn-primary", href: "#ws-" + next.id }, [
-          document.createTextNode("Next: " + next.title + " "), levelBadge(next.lvl)
+          document.createTextNode(tr("Next: {title} ", { title: next.title })), levelBadge(next.lvl)
         ])
       ]));
     }
-    root.append(el("p", { class: "ws-foot", text: "Züritüütsch · A guide to Zurich German · cemreozertas.github.io/zueri-tuetsch" }));
+    root.append(el("p", { class: "ws-foot", text: tr("Züritüütsch · A guide to Zurich German · cemreozertas.github.io/zueri-tuetsch") }));
   }
 
   /* ---------------------------------------------------------------- Init */
 
+  translatePage();
+  initLangSwitch();
+  $("#view-rules .wrap.page").append(kreisCard("Rules"));
+  $("#view-cards .wrap.page").append(kreisCard("Vocabulary"));
   renderRules();
   initDecoder();
+  initStartDecoder();
   initNextStop();
   initCards();
   initQuiz();
   renderPlan();
   const COUNTS = { rules: RULES.length, vocab: VOCAB.length, quiz: QUIZ.length, sources: Object.keys(SOURCES).length, story: STORY.length,
-    worksheets: WORKSHEETS.length + (WORKSHEETS.length === 1 ? " worksheet" : " worksheets") };
+    worksheets: tr(WORKSHEETS.length === 1 ? "{n} worksheet" : "{n} worksheets", { n: WORKSHEETS.length }) };
   $$("[data-count]").forEach((n) => { n.textContent = COUNTS[n.dataset.count]; });
   renderWorksheetList();
   renderStory();

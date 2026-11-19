@@ -8,7 +8,11 @@ Turkish is my mother tongue, German my second home, and Zurich German the langua
 
 👉 **Try it live: https://cemreozertas.github.io/zueri-tuetsch/**
 
-![The start page: Zurich German, seen through a translator's eye](docs/screenshot-hero.png)
+The site speaks English and German: switch any time with **EN | DE** at the top right, or open the German version directly at [cemreozertas.github.io/zueri-tuetsch/?lang=de](https://cemreozertas.github.io/zueri-tuetsch/?lang=de).
+
+📄 **Print the one-page cheat sheet** of the 13 sound shifts: [cheat-sheet.pdf](cheat-sheet.pdf), free to print and share.
+
+![The start page: You already speak most of it. You just can't hear it yet.](docs/screenshot-hero.png)
 
 ## The idea
 
@@ -22,11 +26,11 @@ Zurich German isn't a variant of Standard German but its close relative: both gr
 
 | Tab | What it does |
 |---|---|
-| **Start** | A short introduction: what the site is, how it works and where to begin. |
+| **Start** | Try the decoder straight away with a word you heard, then follow "Your first 15 minutes": decode three words, read the first five sound shifts and play one quiz round. |
 | **Decode** | Type a word you heard and watch it flip into Standard German on a departure board. The letters that change light up, and each change links to the rule behind it. Words that aren't in the list get a best guess from the rules. A switch flips the direction, so you can also go from Hochdeutsch to Züritüütsch. |
-| **Rules** | 13 numbered sound shifts (ei → ii, au → uu, k → ch, -ung → -ig …), each with examples, a "reverse it" tip and its exceptions. Plus four grammar shortcuts. |
+| **Rules** | 13 numbered sound shifts (ei → ii, au → uu, k → ch, -ung → -ig …), each with examples, a "reverse it" tip and its exceptions. Plus four grammar shortcuts and a one-page cheat sheet to print as a PDF. |
 | **Vocabulary** | 168 words and phrases the rules can't explain (*luege, poschte, Rüebli, Ziischtig*), sorted into ten topics and three levels named after Zurich's tram tickets: *Kurzstrecke* (easy), *Zone 110* (hard) and *Alle Zonen* (impossible). Practise them as flashcards (in either direction, with progress saved in your browser) or browse them as a list. False friends like *springe* = rennen get their own topic. |
-| **Quiz** | Read the dialect, type the Standard German, and see the answer flap into place with the rules that did the work. The same three ticket levels: Kurzstrecke (single words), Zone 110 (trickier words and short sentences) and Alle Zonen (full sentences with slang). |
+| **Quiz** | Read the dialect, type the Standard German, and see the answer flap into place with the rules that did the work. The same three ticket levels: Kurzstrecke (single words), Zone 110 (trickier words and short sentences) and Alle Zonen (full sentences with slang). Each round has ten questions and ends with a ticket showing your score, ready to copy or share (Wordle style, with a link back). |
 | **Worksheets** | Nine original texts in Zurich German, three per level: from ordering in a café (Kurzstrecke) to moving house (Zone 110) and a phone call full of slang (Alle Zonen). Each comes with six kinds of exercises: comprehension, decoding, matching, gap-fill, a listening task with a real source, and your own writing. Check answers on screen (saved in your browser) or print a clean A4 sheet with an optional answer key. |
 | **Plan** | A listening and reading plan in four stages, with 25 checked sources online and around Zurich: SRF Meteo, regional news, Neumatt, TeleZüri, Bligg, the Märchenbühne, the PBZ Schweizerdeutsch-Café, Zurich German books and more. Each source says honestly which dialect you'll hear. |
 | **Story** | Where Zurich German comes from, in twelve short headlines you can open for details: the Alemanni, the old vowels, why the Swiss write Hochdeutsch, the missing ß, no official spelling and more. Every fact links to its source. |
@@ -56,6 +60,9 @@ styles.css     look and feel
 app.js         split-flap board, decoder, flashcards, quiz, worksheets, plan
 data.js        all rules, words, quiz items, the story and the listening and reading plan
 worksheets.js  worksheet texts and exercises (copy one to add a new worksheet)
+content-de.js  the German version of every text (anything missing here simply stays English)
+cheat-sheet.pdf  the one-page cheat sheet of the sound shifts
+tools/         the source of the cheat sheet (it reads data.js; print it again after changing a rule)
 map-on-*.svg   the Zurich street map, one colour per background
 fonts/         self-hosted fonts (SIL Open Font License)
 docs/          screenshots for this README
@@ -75,7 +82,7 @@ Open `data.js` and add a line to the right list, for example:
 { zd: "Chäschtli", hd: "Kästchen", cat: "everyday" },
 ```
 
-Got a correction or a favourite word? [Open an issue](../../issues) or send a pull request.
+Got a correction or a favourite word? [Open an issue](../../issues) or send a pull request. The Rules and Vocabulary pages ask the same question: *hear it differently in your Kreis?*
 
 ## A note on spelling
 

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Züritüütsch cheat sheet · 13 sound shifts</title>
+<!--
+  Source of cheat-sheet.pdf. It reads the rules from data.js, so the sheet stays in step with the site.
+  To regenerate: open this file in Chrome, Print → Save as PDF, A4, margins "None", background graphics on.
+-->
+<style>
+@font-face { font-family: "Schibsted Grotesk"; src: url("../fonts/schibsted-grotesk-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "Schibsted Grotesk"; src: url("../fonts/schibsted-grotesk-latin-600-normal.woff2") format("woff2"); font-weight: 600; }
+@font-face { font-family: "Schibsted Grotesk"; src: url("../fonts/schibsted-grotesk-latin-800-normal.woff2") format("woff2"); font-weight: 800; }
+@font-face { font-family: "JetBrains Mono"; src: url("../fonts/jetbrains-mono-latin-700-normal.woff2") format("woff2"); font-weight: 700; }
+@page { size: A4; margin: 0; }
+:root { --blau: #0070B4; --dunkelblau: #00407C; --magenta: #D40053; --panel: #EEF4F9; --line: #D3E1EC; --ink: #0B2340; --ink-2: #4A5D75; }
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { font-family: "Schibsted Grotesk", Arial, sans-serif; color: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.sheet { width: 210mm; height: 297mm; display: flex; flex-direction: column; overflow: hidden; }
+.mono { font-family: "JetBrains Mono", monospace; font-weight: 700; }
+
+header { background: var(--blau); color: #fff; padding: 8mm 13mm 6.5mm; display: flex; justify-content: space-between; align-items: flex-end; gap: 10mm; }
+.kicker { font-size: 8pt; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.85; margin: 0 0 2.5mm; }
+h1 { margin: 0; font-size: 21pt; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+h1 span { opacity: 0.72; display: block; }
+.sub { margin: 3mm 0 0; font-size: 10pt; line-height: 1.4; max-width: 125mm; opacity: 0.95; }
+.flaps { display: flex; gap: 1.5mm; flex: none; }
+.flaps span { width: 13mm; height: 17mm; border-radius: 1.6mm; background: var(--dunkelblau); display: grid; place-items: center; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 20pt; position: relative; }
+.flaps span::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 0.35mm; background: var(--blau); }
+
+main { flex: 1; padding: 5mm 13mm 4.5mm; display: flex; flex-direction: column; gap: 4mm; }
+.how { background: var(--panel); border-radius: 2.4mm; padding: 2.6mm 3.4mm; font-size: 8.4pt; color: var(--ink-2); line-height: 1.4; display: flex; flex-direction: column; justify-content: center; }
+.how p { margin: 0; }
+.how b { color: var(--ink); }
+.how i { font-style: normal; color: var(--blau); font-weight: 600; }
+.rules { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1.8mm 5mm; }
+.rule { display: grid; grid-template-columns: 9mm 1fr; gap: 0 3mm; padding: 1.8mm 3mm 2mm 2.6mm; border: 0.35mm solid var(--line); border-radius: 2.4mm; break-inside: avoid; }
+.tile { grid-row: span 3; width: 9mm; height: 10.5mm; border-radius: 1.2mm; background: var(--dunkelblau); color: #fff; display: grid; place-items: center; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 10.5pt; }
+.shift { margin: 0; font-size: 11.5pt; font-weight: 800; letter-spacing: -0.01em; line-height: 1.2; }
+.shift .to { color: var(--blau); }
+.shift .arr { font-weight: 600; color: var(--ink-2); margin: 0 1mm; }
+.ex { margin: 0.8mm 0 0; font-size: 8.6pt; line-height: 1.35; color: var(--ink-2); }
+.ex b { color: var(--ink); font-weight: 600; }
+.ex i { font-style: normal; color: var(--blau); font-weight: 600; }
+.tip { margin: 0.8mm 0 0; font-size: 8pt; line-height: 1.3; }
+.tip .rev { color: var(--dunkelblau); font-weight: 600; }
+.tip .cav { color: var(--magenta); }
+
+.grammar-title { margin: 0 0 2mm; font-size: 8pt; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blau); }
+.grammar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; }
+.g { background: var(--panel); border-radius: 2.4mm; padding: 2.6mm 3mm; }
+.g h3 { margin: 0 0 0.8mm; font-size: 9pt; font-weight: 800; }
+.g p { margin: 0; font-size: 7.8pt; line-height: 1.35; color: var(--ink-2); }
+.g p i { font-style: normal; color: var(--blau); font-weight: 600; }
+
+footer { margin-top: auto; background: var(--dunkelblau); color: #fff; padding: 4mm 13mm; display: flex; align-items: center; gap: 6mm; }
+.qr { background: #fff; padding: 1.6mm; border-radius: 1.6mm; flex: none; }
+.qr img { display: block; width: 19mm; height: 19mm; }
+.foot-text { flex: 1; font-size: 8.6pt; line-height: 1.45; }
+.foot-text strong { font-size: 10pt; }
+.sign { font-weight: 800; font-size: 10pt; text-align: right; flex: none; }
+.sign small { display: block; font-weight: 400; font-size: 7.5pt; opacity: 0.8; margin-top: 1mm; }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <header>
+    <div>
+      <p class="kicker mono">Züritüütsch · Cheat sheet</p>
+      <h1>13 sound shifts <span>to hear Zurich German</span></h1>
+      <p class="sub">Hochdeutsch on the left, the Zurich German sound you hear in its place on the right. A learner's shortcut: the patterns fit many words, not every word.</p>
+    </div>
+    <div class="flaps" aria-hidden="true"><span>Z</span><span>H</span></div>
+  </header>
+  <main>
+    <ol class="rules" id="rules"></ol>
+    <section>
+      <p class="grammar-title mono">Four grammar shortcuts</p>
+      <div class="grammar" id="grammar"></div>
+    </section>
+  </main>
+  <footer>
+    <div class="qr"><img src="qr.svg" alt=""></div>
+    <div class="foot-text">
+      <strong>The full guide, free:</strong> decoder, flashcards, quiz, worksheets and a listening plan<br>
+      <span class="mono">cemreozertas.github.io/zueri-tuetsch</span><br>
+      Swiss German has no official spelling, so you'll meet variants in the wild.
+    </div>
+    <div class="sign" lang="gsw">Mit Liebi gmacht z Züri.<small>Free to print and share · MIT licence</small></div>
+  </footer>
+</div>
+<script src="../data.js"></script>
+<script>
+  const strip = (t) => t.replace(/ \(.*\)/, "");
+  const esc = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  document.getElementById("rules").innerHTML = RULES.map((r, i) => `
+    <li class="rule">
+      <span class="tile">${String(i + 1).padStart(2, "0")}</span>
+      <p class="shift">${esc(r.from)}<span class="arr">→</span><span class="to">${esc(r.to)}</span></p>
+      <p class="ex">${r.examples.slice(0, 3).map(([hd, zd]) => `${esc(hd)} <b>→</b> <i>${esc(zd)}</i>`).join(" · ")}</p>
+      <p class="tip"><span class="rev">${esc(r.reverse)}</span>${r.caveat ? ` <span class="cav">${esc(r.caveat)}</span>` : ""}</p>
+    </li>`).join("") + `
+    <li class="how"><p><b>Heard a word you don't know?</b> Run the shift backwards: hear <b>ii</b>, try <b>ei</b>; hear <b>ch</b> at the start, try <b>k</b>. Often two or three shifts hide in one word: <i>Chuchichäschtli</i> is Küchenkästchen (07, 10, 12).</p></li>`;
+  document.getElementById("grammar").innerHTML = GRAMMAR.map((g) => `
+    <div class="g"><h3>${esc(g.title)}</h3><p>${esc(g.text)} ${g.examples.slice(0, 2).map(([hd, zd]) => `${esc(hd)} = <i>${esc(zd)}</i>`).join(", ")}.</p></div>`).join("");
+</script>
+</body>
+</html>

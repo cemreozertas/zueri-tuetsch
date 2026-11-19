@@ -58,11 +58,12 @@ a:hover { color: var(--dunkelblau); }
 
 /* ---------- Top bar ---------- */
 .topbar { background: var(--blau); color: #fff; position: sticky; top: 0; z-index: 20; }
-.topbar-row { display: flex; align-items: center; gap: 24px; min-height: 64px; }
+.topbar-row { display: flex; align-items: center; gap: 16px; min-height: 64px; }
 .brand { display: flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; font-weight: 800; font-size: 1.125rem; letter-spacing: -0.01em; }
 .brand:hover { color: #fff; }
+.brand { flex: none; } .brand-name { white-space: nowrap; }
 .brand-name span { font-weight: 600; opacity: 0.8; font-size: 0.875rem; margin-left: 6px; }
-@media (max-width: 1100px) { .brand-name span { display: none; } }
+@media (max-width: 1180px) { .brand-name span { display: none; } }
 .brand-flaps { display: inline-flex; gap: 3px; }
 .brand-flap {
   width: 24px; height: 36px; border-radius: 5px; position: relative;
@@ -72,6 +73,10 @@ a:hover { color: var(--dunkelblau); }
 }
 
 .tabs { display: flex; gap: 2px; margin-left: auto; }
+.tabs a { white-space: nowrap; }
+/* The German tab names are longer: make room by hiding the subtitle next to the logo earlier */
+html[lang="de"] .brand-name span { display: none; }
+@media (max-width: 1240px) { html[lang="de"] .tabs a { padding: 0 10px; } }
 .tabs a {
   color: #fff; text-decoration: none; font-size: 0.9375rem; font-weight: 600;
   min-height: 40px; display: inline-flex; align-items: center;
@@ -81,12 +86,23 @@ a:hover { color: var(--dunkelblau); }
 .tabs a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); color: #fff; }
 .tabs a[aria-current="page"] { opacity: 1; background: var(--dunkelblau); }
 
-@media (max-width: 820px) {
+/* EN | DE switch at the top right */
+.lang-switch { display: flex; gap: 2px; padding: 3px; border-radius: var(--r-sm); box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.35); flex: none; }
+.lang-switch a { color: #fff; text-decoration: none; font-family: var(--mono); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; padding: 6px 8px; border-radius: 5px; opacity: 0.8; line-height: 1; }
+.lang-switch a:hover { opacity: 1; background: rgba(255, 255, 255, 0.12); color: #fff; }
+.lang-switch a[aria-current="true"] { opacity: 1; background: #fff; color: var(--blau); }
+
+/* Narrower screens: logo and language switch on top, the tabs scroll sideways underneath */
+@media (max-width: 1060px) {
   .topbar-row { flex-wrap: wrap; gap: 0; padding-top: 10px; }
+  .lang-switch { order: 1; margin-left: auto; }
+  .tabs { order: 2; }
   .tabs { margin: 8px -24px 0; padding: 0 16px 10px; width: calc(100% + 48px); overflow-x: auto; scrollbar-width: none; }
   .tabs::-webkit-scrollbar { display: none; }
   .tabs a { white-space: nowrap; }
   .tabs { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
+}
+@media (max-width: 820px) {
   .band h1 { font-size: 2.25rem; }
 }
 
@@ -267,6 +283,8 @@ input[type="text"]:disabled { background: var(--panel); color: var(--ink-2); }
 .reverse::before { content: "Reverse it: "; color: var(--blau); }
 .caveat { margin: 0; font-size: 0.875rem; color: var(--magenta); }
 .caveat::before { content: "Exception: "; font-weight: 700; }
+html[lang="de"] .reverse::before { content: "Rückwärts: "; }
+html[lang="de"] .caveat::before { content: "Ausnahme: "; }
 @media (max-width: 820px) { .rules { grid-template-columns: 1fr; } }
 
 .grammar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
@@ -306,7 +324,7 @@ input[type="text"]:disabled { background: var(--panel); color: var(--ink-2); }
 .card-hint { font-size: 0.875rem; opacity: 0.8; }
 .card-extra { font-size: 0.9375rem; color: var(--ink-2); max-width: 420px; }
 .card-word, .card-cat { margin-top: 0; }
-.card-controls { display: flex; justify-content: center; align-items: center; gap: 12px; }
+.card-controls { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px; }
 #card-again { color: var(--magenta); }
 #card-again:hover { border-color: var(--magenta); }
 .card-progress { font-size: 0.8125rem; color: var(--ink-2); text-align: center; }
@@ -501,7 +519,7 @@ a.ws-card:hover { border-color: var(--blau); }
 .ws-back { display: inline-block; margin-bottom: 16px; font-weight: 700; text-decoration: none; }
 .ws-next { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 32px; padding-top: 20px; border-top: 2px solid var(--line); }
 .ws-next .ws-back { margin: 0; }
-.ws-next .btn { display: inline-flex; align-items: center; gap: 10px; }
+.ws-next .btn { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; max-width: 100%; text-align: left; }
 .ws-next .btn .lvl-badge { color: #fff; }
 .ws-next .btn .pips i { background: rgba(255, 255, 255, 0.35); }
 .ws-next .btn.lvl-1 .pips i:nth-child(1), .ws-next .btn .lvl-1 .pips i:nth-child(1),
@@ -733,3 +751,89 @@ main { flex: 1 0 auto; display: flex; flex-direction: column; }
 @media (max-width: 380px) {
   .band h1 { font-size: 1.875rem; }
 }
+
+/* German headlines have longer words: a touch smaller on phones so they never run off the screen */
+@media (max-width: 480px) {
+  html[lang="de"] .band h1 { font-size: 2rem; }
+}
+@media (max-width: 380px) {
+  html[lang="de"] .band h1 { font-size: 1.75rem; }
+}
+.band h1 { hyphens: manual; overflow-wrap: break-word; }
+
+/* ---------- Start: try the decoder right in the hero ---------- */
+.start-try { min-width: 0; }
+.decoder-mini { margin-bottom: 14px; }
+.decoder-mini label { font-family: var(--mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.85; }
+.start-try .board-mini { margin-bottom: 12px; }
+.start-try .board-foot { min-height: 0; margin-top: 14px; font-size: 0.875rem; }
+.start-try .board-foot:empty { display: none; }
+/* Magenta stays reserved for the numbers and the Why bar on the start page */
+.start-try .board-status.is-known { background: rgba(255, 255, 255, 0.22); }
+.start-try .board-status.is-guess { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.6); }
+.chips-label { align-self: center; font-size: 0.875rem; font-weight: 600; opacity: 0.85; margin-right: 2px; }
+
+/* ---------- Start: your first 15 minutes, drawn as a tram line with three stops ---------- */
+.path { margin-bottom: 44px; }
+.path-label { margin: 0 0 18px; font-family: var(--mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--blau); }
+.path-stops { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; position: relative; }
+.path-stops::before { content: ""; position: absolute; left: 21px; right: calc(100% / 3 - 37px); top: 19px; height: 4px; border-radius: 2px; background: var(--blau); z-index: 0; }
+.path-stop { position: relative; display: flex; flex-direction: column; gap: 6px; }
+.path-dot {
+  position: relative; z-index: 1; width: 42px; height: 42px; border-radius: 50%;
+  display: grid; place-items: center; background: #fff; border: 4px solid var(--blau);
+  font-family: var(--mono); font-weight: 700; font-size: 1rem; color: var(--blau); margin-bottom: 8px;
+}
+.path-stop:first-child .path-dot { background: var(--blau); color: #fff; }
+.path-time { font-family: var(--mono); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; color: var(--ink-2); }
+.path-stop h2 { margin: 0; font-size: 1.1875rem; letter-spacing: -0.01em; }
+.path-stop p { margin: 0; color: var(--ink-2); font-size: 0.9375rem; flex: 1; }
+@media (max-width: 820px) {
+  .path-stops { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .path-stops::before { left: 19px; right: auto; top: 20px; bottom: 20px; width: 4px; height: auto; }
+  .path-stop { padding-left: 62px; }
+  .path-dot { position: absolute; left: 0; top: 0; margin: 0; }
+}
+
+/* ---------- Rules: download the cheat sheet ---------- */
+.head-actions { margin: 18px 0 0 !important; }
+.band-head .page-head .head-actions .btn { color: var(--blau); }
+
+/* ---------- Rules and Vocabulary: "Hear it differently in your Kreis?" ---------- */
+.kreis-card { margin-top: 32px; background: var(--panel); border: 2px dashed var(--line); border-radius: var(--r-lg); padding: 20px 24px; }
+.kreis-card h3 { margin: 0 0 6px; font-size: 1.0625rem; }
+.kreis-card p { margin: 0; color: var(--ink-2); font-size: 0.9375rem; }
+.kreis-card a { font-weight: 700; }
+
+/* ---------- Quiz: the ticket at the end of a round ---------- */
+.quiz-result { display: grid; gap: 14px; }
+.ticket-card {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; max-width: 440px;
+  background: var(--blau); color: #fff; border-radius: var(--r-lg); overflow: hidden;
+  box-shadow: 0 18px 36px -24px rgba(0, 20, 50, 0.6);
+}
+.ticket-main { padding: 18px 22px 20px; }
+.ticket-main p { margin: 0; }
+.ticket-kicker { font-family: var(--mono); font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.85; }
+.ticket-level { display: flex; align-items: center; gap: 8px; margin-top: 10px !important; font-weight: 800; font-size: 1.25rem; letter-spacing: -0.01em; }
+.ticket-level .pips i { background: rgba(255, 255, 255, 0.35); }
+.ticket-card.lvl-1 .pips i:nth-child(1), .ticket-card.lvl-2 .pips i:nth-child(-n+2), .ticket-card.lvl-3 .pips i { background: #fff; }
+.ticket-score { font-family: var(--mono); font-weight: 700; font-size: 2.75rem; line-height: 1.1; margin-top: 6px !important; }
+.ticket-squares { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
+.ticket-squares span { width: 18px; height: 18px; border-radius: 4px; }
+.ticket-squares .is-right { background: #fff; }
+.ticket-squares .is-wrong { background: var(--magenta); }
+.ticket-stub {
+  display: grid; place-items: center; padding: 0 14px; background: var(--dunkelblau);
+  border-left: 2px dashed rgba(255, 255, 255, 0.45);
+}
+.ticket-stub span { writing-mode: vertical-rl; transform: rotate(180deg); font-family: var(--mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; }
+.ticket-verdict { margin: 0; font-weight: 700; color: var(--dunkelblau); }
+.quiz-result .fb-actions { margin-top: 0; }
+.share-status { margin: 0; font-size: 0.875rem; color: var(--ink-2); min-height: 1.2em; }
+.share-text { display: block; width: 100%; margin-top: 6px; font: inherit; font-size: 0.875rem; padding: 8px; border: 1.5px solid var(--line); border-radius: var(--r-sm); }
+
+/* ---------- Footer links ---------- */
+.footer-links { margin-top: 8px !important; font-size: 0.9375rem; font-weight: 600; }
+
+@media print { .start-try, .path, .kreis-card, .head-actions { display: none; } }

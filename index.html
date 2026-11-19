@@ -7,6 +7,9 @@
   <meta name="description" content="A guide to Zurich German for anyone who already speaks German: sound patterns, a two-way decoder, flashcards, a quiz, a listening plan and the story behind the dialect.">
   <meta name="theme-color" content="#0070B4">
   <link rel="canonical" href="https://cemreozertas.github.io/zueri-tuetsch/">
+  <link rel="alternate" hreflang="en" href="https://cemreozertas.github.io/zueri-tuetsch/">
+  <link rel="alternate" hreflang="de" href="https://cemreozertas.github.io/zueri-tuetsch/?lang=de">
+  <link rel="alternate" hreflang="x-default" href="https://cemreozertas.github.io/zueri-tuetsch/">
   <!-- Link previews (LinkedIn, WhatsApp, Slack, X) -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Züritüütsch">
@@ -41,6 +44,10 @@
         <a href="#plan" data-view="plan">Plan</a>
         <a href="#story" data-view="story">Story</a>
       </nav>
+      <div class="lang-switch" role="group" aria-label="Language / Sprache">
+        <a href="?lang=en" data-lang="en" lang="en" hreflang="en" title="English">EN</a>
+        <a href="?lang=de" data-lang="de" lang="de" hreflang="de" title="Deutsch">DE</a>
+      </div>
     </div>
   </header>
 
@@ -52,25 +59,64 @@
         <div class="wrap start-hero">
           <div class="start-copy">
             <p class="kicker">For German speakers in and around Zurich</p>
-            <h1 id="start-title">Zurich German, <span>seen through a translator's&nbsp;eye.</span></h1>
-            <p class="lede">Zurich German (Züritüütsch) is not a variant of Standard German (Hochdeutsch) but a close relative: both descend from medieval German and developed along their own paths. This site is a practical guide to understanding and speaking it, for anyone who already speaks German and wants to feel at home in the language of the city.</p>
+            <h1 id="start-title">You already speak most of it. <span>You just can't hear it yet.</span></h1>
+            <p class="lede">Zurich German (Züritüütsch) is not a variant of Standard German (Hochdeutsch) but a close relative: both descend from medieval German and developed along their own paths. Seen through a translator's eye, most of the differences follow patterns. This site is a practical guide to hearing and speaking it, for anyone who already speaks German and wants to feel at home in the language of the city.</p>
             <div class="start-actions">
-              <a class="btn btn-light" href="#decode">Start decoding</a>
+              <a class="btn btn-light" href="#decode">Open the full decoder</a>
               <a class="btn btn-on-blue" href="#story">Read the story</a>
             </div>
           </div>
-          <div class="board board-mini" aria-hidden="true">
+          <div class="start-try">
+            <form class="decoder decoder-mini" id="start-form" autocomplete="off">
+            <label for="start-input" id="start-label">Try it: type a word you heard</label>
+            <div class="field-row">
+              <input id="start-input" type="text" placeholder="e.g. Ziit, luege, poschte" spellcheck="false" autocapitalize="off">
+              <button type="submit" class="btn btn-light">Decode</button>
+            </div>
+          </form>
+          <div class="board board-mini" id="start-board" aria-live="polite">
             <div class="board-head">
               <span class="board-label">Züritüütsch</span>
               <span class="board-arrow"><svg class="tram" viewBox="0 0 30 18" aria-hidden="true" focusable="false"><path d="M11 .8h8L15 4.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path fill="currentColor" fill-rule="evenodd" d="M4 4.5h20.5c2.5 0 4.5 2 4.5 4.5v5H1V7.5a3 3 0 0 1 3-3ZM3.5 7h4v3.2h-4Zm6.5 0h4v3.2h-4Zm6.5 0h4v3.2h-4Zm6.5 0h3.2a1.8 1.8 0 0 1 1.8 1.8v1.4h-5Z"/><circle cx="7" cy="15.6" r="1.8" fill="currentColor"/><circle cx="23" cy="15.6" r="1.8" fill="currentColor"/></svg></span>
               <span class="board-label">Hochdeutsch</span>
+              <span class="board-status" id="start-status">Example</span>
             </div>
             <div class="flaps" id="start-flaps"></div>
+            <div class="board-foot" id="start-foot"></div>
+          </div>
+            <div class="chips chips-on-blue" id="start-examples" aria-label="Try an example"></div>
           </div>
         </div>
       </div>
 
       <div class="wrap start-body">
+        <section class="path" aria-labelledby="path-title">
+          <p class="path-label" id="path-title">Your first 15 minutes</p>
+          <ol class="path-stops">
+            <li class="path-stop">
+              <span class="path-dot" aria-hidden="true">1</span>
+              <span class="path-time">5 min</span>
+              <h2>Decode three words</h2>
+              <p>Type words you've heard around town, or tap an example, and watch them turn back into Hochdeutsch.</p>
+              <a class="link-arrow" href="#decode">Open the decoder</a>
+            </li>
+            <li class="path-stop">
+              <span class="path-dot" aria-hidden="true">2</span>
+              <span class="path-time">5 min</span>
+              <h2>Read the first five sound shifts</h2>
+              <p><span lang="gsw">Ziit</span>, <span lang="gsw">Huus</span>, <span lang="gsw">Lüüt</span>, <span lang="gsw">Brueder</span>, <span lang="gsw">Füess</span>: five patterns that unlock hundreds of words.</p>
+              <a class="link-arrow" href="#rules">See the rules</a>
+            </li>
+            <li class="path-stop">
+              <span class="path-dot" aria-hidden="true">3</span>
+              <span class="path-time">5 min</span>
+              <h2>Play one quiz round</h2>
+              <p>Ten words at Kurzstrecke level. At the end you get a ticket with your score to share.</p>
+              <a class="link-arrow" href="#quiz">Start the quiz</a>
+            </li>
+          </ol>
+        </section>
+
         <p class="section-label">What you'll find here</p>
         <div class="intro-grid">
           <div class="intro-card">
@@ -93,7 +139,7 @@
           </div>
         </div>
 
-        <p class="start-more">Plus a <a href="#decode">decoder</a> for any word you hear, a <a href="#plan">four-stage listening and reading plan</a> with real sources online and around Zurich, <a href="#worksheets">worksheets</a> to practise with, and <a href="#story">the story</a> of where Züritüütsch comes from.</p>
+        <p class="start-more">Plus a <a href="#decode">decoder</a> for any word you hear, a <a href="cheat-sheet.pdf" download>one-page cheat sheet</a> of the sound shifts to print, a <a href="#plan">four-stage listening and reading plan</a> with real sources online and around Zurich, <a href="#worksheets">worksheets</a> to practise with, and <a href="#story">the story</a> of where Züritüütsch comes from.</p>
 
         <aside class="about-note" aria-labelledby="about-title">
           <h2 id="about-title">Why this exists</h2>
@@ -107,7 +153,7 @@
       <div class="band">
         <div class="wrap">
           <p class="kicker">For German speakers in and around Zurich</p>
-          <h1 id="decode-title">You already speak most of it. <span>You just can't hear it yet.</span></h1>
+          <h1 id="decode-title">Type a word, <span>watch the board decode it.</span></h1>
 
           <form class="decoder" id="decoder-form" autocomplete="off">
             <label for="decoder-input" id="decoder-label">Type a word you heard</label>
@@ -161,6 +207,7 @@
             <p class="kicker">Learn the patterns · <span data-count="rules"></span> sound shifts</p>
             <h2 id="rules-title">The sound shifts</h2>
             <p>Each rule pairs a Hochdeutsch sound with the Züritüütsch sound you hear in its place, with examples and a tip for hearing it in reverse. The number stays the same everywhere in the app.</p>
+            <p class="head-actions"><a class="btn btn-light btn-sm" href="cheat-sheet.pdf" download>Download the cheat sheet (PDF)</a></p>
           </div>
         </div>
       </div>
@@ -318,6 +365,7 @@
     <div class="wrap footer-row">
       <div class="footer-about">
         <p class="footer-bio"><a href="https://github.com/cemreozertas">Cemre</a> is a Zurich-based tinkerer at heart. She builds automations, templates and apps for creative minds who love a well-run life, with <a href="https://claude.ai/">Claude</a> as her building partner.</p>
+        <p class="footer-links"><a href="https://www.linkedin.com/in/cemreozertas/">LinkedIn</a> · <a href="https://github.com/cemreozertas">GitHub</a></p>
         <p class="footer-sign" lang="gsw">Mit Liebi gmacht z Züri.</p>
       </div>
       <div class="footer-meta">
@@ -329,6 +377,7 @@
 
   <script src="data.js"></script>
   <script src="worksheets.js"></script>
+  <script src="content-de.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
