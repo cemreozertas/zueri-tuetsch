@@ -6,6 +6,7 @@
 <!--
   Source of cheat-sheet.pdf. It reads the rules from data.js, so the sheet stays in step with the site.
   To regenerate: open this file in Chrome, Print → Save as PDF, A4, margins "None", background graphics on.
+  For the German sheet (cheat-sheet-de.pdf), open it with ?lang=de: it then also reads content-de.js.
 -->
 <style>
 @font-face { font-family: "Schibsted Grotesk"; src: url("../fonts/schibsted-grotesk-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
@@ -60,6 +61,17 @@ footer { margin-top: auto; background: var(--dunkelblau); color: #fff; padding: 
 .foot-text { flex: 1; font-size: 8.6pt; line-height: 1.45; }
 .foot-text strong { font-size: 10pt; }
 .sign { font-weight: 800; font-size: 10pt; text-align: right; flex: none; }
+/* German runs longer: tighten a little so the sheet stays on one page */
+html[lang="de"] main { gap: 3.5mm; padding-top: 4.5mm; }
+html[lang="de"] header { padding: 7mm 13mm 5.5mm; }
+html[lang="de"] footer { padding: 3.5mm 13mm; }
+html[lang="de"] .rules { gap: 1.5mm 5mm; }
+html[lang="de"] .rule { padding: 1.5mm 3mm 1.7mm 2.6mm; }
+html[lang="de"] .ex { font-size: 8.3pt; margin-top: 0.5mm; }
+html[lang="de"] .tip { font-size: 7.6pt; line-height: 1.25; margin-top: 0.6mm; }
+html[lang="de"] .how { font-size: 8pt; }
+html[lang="de"] .g { padding: 2.2mm 2.8mm; }
+html[lang="de"] .g p { font-size: 7.5pt; line-height: 1.3; }
 .sign small { display: block; font-weight: 400; font-size: 7.5pt; opacity: 0.8; margin-top: 1mm; }
 </style>
 </head>
@@ -67,31 +79,52 @@ footer { margin-top: auto; background: var(--dunkelblau); color: #fff; padding: 
 <div class="sheet">
   <header>
     <div>
-      <p class="kicker mono">Züritüütsch · Cheat sheet</p>
-      <h1>13 sound shifts <span>to hear Zurich German</span></h1>
-      <p class="sub">Hochdeutsch on the left, the Zurich German sound you hear in its place on the right. A learner's shortcut: the patterns fit many words, not every word.</p>
+      <p class="kicker mono" id="t-kicker">Züritüütsch · Cheat sheet</p>
+      <h1 id="t-h1">13 sound shifts <span>to hear Zurich German</span></h1>
+      <p class="sub" id="t-sub">Hochdeutsch on the left, the Zurich German sound you hear in its place on the right. A learner's shortcut: the patterns fit many words, not every word.</p>
     </div>
     <div class="flaps" aria-hidden="true"><span>Z</span><span>H</span></div>
   </header>
   <main>
     <ol class="rules" id="rules"></ol>
     <section>
-      <p class="grammar-title mono">Four grammar shortcuts</p>
+      <p class="grammar-title mono" id="t-grammar">Four grammar shortcuts</p>
       <div class="grammar" id="grammar"></div>
     </section>
   </main>
   <footer>
-    <div class="qr"><img src="qr.svg" alt=""></div>
-    <div class="foot-text">
+    <div class="qr"><img id="t-qr" src="qr.svg" alt=""></div>
+    <div class="foot-text" id="t-foot">
       <strong>The full guide, free:</strong> decoder, flashcards, quiz, worksheets and a listening plan<br>
       <span class="mono">cemreozertas.github.io/zueri-tuetsch</span><br>
       Swiss German has no official spelling, so you'll meet variants in the wild.
     </div>
-    <div class="sign" lang="gsw">Mit Liebi gmacht z Züri.<small>Free to print and share · MIT licence</small></div>
+    <div class="sign" lang="gsw">Mit Liebi gmacht z Züri.<small id="t-free">Free to print and share · MIT licence</small></div>
   </footer>
 </div>
 <script src="../data.js"></script>
+<script src="../content-de.js"></script>
 <script>
+  const DE = new URLSearchParams(location.search).get("lang") === "de" ? I18N_DE : null;
+  if (DE) {
+    document.documentElement.lang = "de";
+    document.title = "Züritüütsch-Spickzettel · 13 Lautmuster";
+    RULES.forEach((r) => Object.assign(r, DE.rules[r.id] || {}));
+    GRAMMAR.forEach((g, i) => Object.assign(g, DE.grammar[i] || {}));
+    const T = {
+      "t-kicker": "Züritüütsch · Spickzettel",
+      "t-h1": "13 Lautmuster, <span>die Zürichdeutsch hörbar machen</span>",
+      "t-sub": "Links das Hochdeutsche, rechts der zürichdeutsche Laut an seiner Stelle. Eine Abkürzung zum Lernen: Die Muster passen auf viele Wörter, nicht auf alle.",
+      "t-grammar": "Grammatik in Kürze",
+      "t-foot": "<strong>Der ganze Wegweiser, kostenlos:</strong> Decoder, Karteikarten, Quiz, Arbeitsblätter und ein Hörplan<br><span class=\"mono\">cemreozertas.github.io/zueri-tuetsch/?lang=de</span><br>Für Schweizerdeutsch gibt es keine offizielle Rechtschreibung, im Alltag begegnen dir also auch andere Schreibweisen.",
+      "t-free": "Frei zum Ausdrucken und Weitergeben · MIT-Lizenz"
+    };
+    Object.entries(T).forEach(([id, html]) => { document.getElementById(id).innerHTML = html; });
+    document.getElementById("t-qr").src = "qr-de.svg";
+  }
+  const HOW = DE
+    ? `<b>Ein Wort nicht verstanden?</b> Lies das Muster rückwärts: Hörst du <b>ii</b>, probier <b>ei</b>; hörst du am Wortanfang <b>ch</b>, probier <b>k</b>. Oft stecken zwei, drei Muster in einem Wort: <i>Chuchichäschtli</i> ist das Küchenkästchen (07, 10, 12).`
+    : `<b>Heard a word you don't know?</b> Run the shift backwards: hear <b>ii</b>, try <b>ei</b>; hear <b>ch</b> at the start, try <b>k</b>. Often two or three shifts hide in one word: <i>Chuchichäschtli</i> is Küchenkästchen (07, 10, 12).`;
   const strip = (t) => t.replace(/ \(.*\)/, "");
   const esc = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;");
   document.getElementById("rules").innerHTML = RULES.map((r, i) => `
@@ -101,7 +134,7 @@ footer { margin-top: auto; background: var(--dunkelblau); color: #fff; padding: 
       <p class="ex">${r.examples.slice(0, 3).map(([hd, zd]) => `${esc(hd)} <b>→</b> <i>${esc(zd)}</i>`).join(" · ")}</p>
       <p class="tip"><span class="rev">${esc(r.reverse)}</span>${r.caveat ? ` <span class="cav">${esc(r.caveat)}</span>` : ""}</p>
     </li>`).join("") + `
-    <li class="how"><p><b>Heard a word you don't know?</b> Run the shift backwards: hear <b>ii</b>, try <b>ei</b>; hear <b>ch</b> at the start, try <b>k</b>. Often two or three shifts hide in one word: <i>Chuchichäschtli</i> is Küchenkästchen (07, 10, 12).</p></li>`;
+    <li class="how"><p>${HOW}</p></li>`;
   document.getElementById("grammar").innerHTML = GRAMMAR.map((g) => `
     <div class="g"><h3>${esc(g.title)}</h3><p>${esc(g.text)} ${g.examples.slice(0, 2).map(([hd, zd]) => `${esc(hd)} = <i>${esc(zd)}</i>`).join(", ")}.</p></div>`).join("");
 </script>

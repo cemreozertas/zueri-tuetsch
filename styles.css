@@ -774,7 +774,8 @@ main { flex: 1 0 auto; display: flex; flex-direction: column; }
 .chips-label { align-self: center; font-size: 0.875rem; font-weight: 600; opacity: 0.85; margin-right: 2px; }
 
 /* ---------- Start: your first 15 minutes, drawn as a tram line with three stops ---------- */
-.path { margin-bottom: 44px; }
+.path { margin-bottom: 44px; background: var(--blau-soft); border-radius: var(--r-lg); padding: 28px 32px 30px; }
+@media (max-width: 600px) { .path { padding: 22px 20px 24px; } }
 .path-label { margin: 0 0 18px; font-family: var(--mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--blau); }
 .path-stops { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; position: relative; }
 .path-stops::before { content: ""; position: absolute; left: 21px; right: calc(100% / 3 - 37px); top: 19px; height: 4px; border-radius: 2px; background: var(--blau); z-index: 0; }

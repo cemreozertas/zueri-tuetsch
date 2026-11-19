@@ -10,7 +10,7 @@ Turkish is my mother tongue, German my second home, and Zurich German the langua
 
 The site speaks English and German: switch any time with **EN | DE** at the top right, or open the German version directly at [cemreozertas.github.io/zueri-tuetsch/?lang=de](https://cemreozertas.github.io/zueri-tuetsch/?lang=de).
 
-📄 **Print the one-page cheat sheet** of the 13 sound shifts: [cheat-sheet.pdf](cheat-sheet.pdf), free to print and share.
+📄 **Print the one-page cheat sheet** of the 13 sound shifts: [cheat-sheet.pdf](cheat-sheet.pdf), free to print and share (in German: [cheat-sheet-de.pdf](cheat-sheet-de.pdf)).
 
 ![The start page: You already speak most of it. You just can't hear it yet.](docs/screenshot-hero.png)
 
@@ -61,8 +61,8 @@ app.js         split-flap board, decoder, flashcards, quiz, worksheets, plan
 data.js        all rules, words, quiz items, the story and the listening and reading plan
 worksheets.js  worksheet texts and exercises (copy one to add a new worksheet)
 content-de.js  the German version of every text (anything missing here simply stays English)
-cheat-sheet.pdf  the one-page cheat sheet of the sound shifts
-tools/         the source of the cheat sheet (it reads data.js; print it again after changing a rule)
+cheat-sheet.pdf  the one-page cheat sheet of the sound shifts (cheat-sheet-de.pdf in German)
+tools/         the source of both cheat sheets (it reads data.js and content-de.js; print it again after changing a rule)
 map-on-*.svg   the Zurich street map, one colour per background
 fonts/         self-hosted fonts (SIL Open Font License)
 docs/          screenshots for this README
