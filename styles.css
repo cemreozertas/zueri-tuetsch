@@ -62,8 +62,12 @@ a:hover { color: var(--dunkelblau); }
 .brand { display: flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; font-weight: 800; font-size: 1.125rem; letter-spacing: -0.01em; }
 .brand:hover { color: #fff; }
 .brand { flex: none; } .brand-name { white-space: nowrap; }
-.brand-name span { font-weight: 600; opacity: 0.8; font-size: 0.875rem; margin-left: 6px; }
-@media (max-width: 1180px) { .brand-name span { display: none; } }
+/* The descriptor sits under the name, so it fits next to the tabs in both languages */
+.brand-name { line-height: 1.15; }
+.brand-name span { display: block; font-weight: 600; opacity: 0.8; font-size: 0.75rem; letter-spacing: 0; }
+/* Very small phones: no room for the descriptor next to the EN | DE switch */
+@media (max-width: 340px) { .brand-name span { display: none; } }
+@media (max-width: 380px) { html[lang="de"] .brand-name span { display: none; } }
 .brand-flaps { display: inline-flex; gap: 3px; }
 .brand-flap {
   width: 24px; height: 36px; border-radius: 5px; position: relative;
@@ -74,8 +78,7 @@ a:hover { color: var(--dunkelblau); }
 
 .tabs { display: flex; gap: 2px; margin-left: auto; }
 .tabs a { white-space: nowrap; }
-/* The German tab names are longer: make room by hiding the subtitle next to the logo earlier */
-html[lang="de"] .brand-name span { display: none; }
+/* The German tab names are longer */
 @media (max-width: 1240px) { html[lang="de"] .tabs a { padding: 0 10px; } }
 .tabs a {
   color: #fff; text-decoration: none; font-size: 0.9375rem; font-weight: 600;

@@ -2,7 +2,7 @@
  * Züritüütsch: the German version of the site.
  * ---------------------------------------------
  * The English stays in index.html, data.js and worksheets.js. This file holds the German,
- * and the app swaps it in when someone picks DE (or opens a link with ?lang=de).
+ * and the app swaps it in on the German page (de/index.html), which is built from index.html by tools/make-de.js.
  * Anything that is missing here simply stays English, so a gap never breaks the page.
  *
  *   ui          short texts from app.js, keyed by their English original ({n} = a number or name)
@@ -17,7 +17,7 @@
 const I18N_DE = {
   meta: {
     title: "Züritüütsch · Wegweiser ins Zürichdeutsche",
-    description: "Ein Wegweiser ins Zürichdeutsche für alle, die schon Deutsch können: Lautmuster, ein Decoder in beide Richtungen, Karteikarten, ein Quiz, ein Hör- und Leseplan und die Geschichte hinter dem Dialekt."
+    description: "Ein Wegweiser ins Zürichdeutsche für alle, die schon Deutsch können: Lautmuster, ein Decoder in beide Richtungen, Karteikarten, ein Quiz, ein Lernplan und die Geschichte hinter dem Dialekt."
   },
 
   html: {
@@ -27,7 +27,7 @@ const I18N_DE = {
     ".tabs a[data-view='rules']": "Regeln",
     ".tabs a[data-view='cards']": "Wortschatz",
     ".tabs a[data-view='worksheets']": "Arbeitsblätter",
-    ".tabs a[data-view='plan']": "Hör- &amp; Leseplan",
+    ".tabs a[data-view='plan']": "Lernplan",
     ".tabs a[data-view='story']": "Geschichte",
 
     // Start
@@ -63,9 +63,9 @@ const I18N_DE = {
     "#view-start .intro-card:nth-child(3) h2": "Rückwärts-Quiz",
     "#view-start .intro-card:nth-child(3) p": "Lies das Zürichdeutsche, tipp das Hochdeutsche und schau, welche Regel dir geholfen hat.",
     "#view-start .intro-card:nth-child(3) .link-arrow": "Zum Quiz",
-    "#view-start .start-more": "Dazu ein <a href=\"#decode\">Decoder</a> für jedes Wort, das du aufschnappst, ein <a href=\"cheat-sheet-de.pdf\" download>Spickzettel</a> mit allen Lautmustern auf einer Seite zum Ausdrucken, ein <a href=\"#plan\">Hör- und Leseplan in vier Etappen</a> mit echten Quellen, online und in Zürich, <a href=\"#worksheets\">Arbeitsblätter</a> zum Üben und <a href=\"#story\">die Geschichte</a>, woher das Züritüütsch kommt.",
+    "#view-start .start-more": "Dazu ein <a href=\"#decode\">Decoder</a> für jedes Wort, das du aufschnappst, ein <a href=\"cheat-sheet-de.pdf\" download>Spickzettel</a> mit allen Lautmustern auf einer Seite zum Ausdrucken, ein <a href=\"#plan\">Lernplan in vier Etappen</a> mit echten Quellen, online und in Zürich, <a href=\"#worksheets\">Arbeitsblätter</a> zum Üben und <a href=\"#story\">die Geschichte</a>, woher das Züritüütsch kommt.",
     "#about-title": "Warum es diese Seite gibt",
-    "#view-start .about-note p": "Hinter diesem Wegweiser steht eine mehrsprachige Übersetzerin, die zur Functional Consultant wurde: mit türkischen Wurzeln, einem Berufsleben auf Deutsch und Englisch und einer Faszination, die nie nachgelassen hat. Wie können zwei Sprachen aus denselben Wurzeln wachsen und trotzdem wie zwei Welten klingen? Nach zehn Jahren Studium und Arbeit in Deutschland führte sie ein neues Kapitel nach Zürich, und vom ersten Tag an schnappte sie Wörter auf. Mit dem Blick einer Übersetzerin für Muster und dem Ohr einer Musikerin für Klang merkte sie, wie regelmäßig sich Zürichdeutsch und Hochdeutsch entsprechen, und hörte immer genauer hin. Was ihr dabei geholfen hat, ist hier versammelt: die Lautmuster, die Alltagswörter, Übungen, ein Hörplan und die Geschichte hinter dem Dialekt. Für alle, die Zürichdeutsch schneller verstehen und sprechen wollen.",
+    "#view-start .about-note p": "Hinter diesem Wegweiser steht eine mehrsprachige Übersetzerin, die zur Functional Consultant wurde: mit türkischen Wurzeln, einem Berufsleben auf Deutsch und Englisch und einer Faszination, die nie nachgelassen hat. Wie können zwei Sprachen aus denselben Wurzeln wachsen und trotzdem wie zwei Welten klingen? Nach zehn Jahren Studium und Arbeit in Deutschland führte sie ein neues Kapitel nach Zürich, und vom ersten Tag an schnappte sie Wörter auf. Mit dem Blick einer Übersetzerin für Muster und dem Ohr einer Musikerin für Klang merkte sie, wie regelmäßig sich Zürichdeutsch und Hochdeutsch entsprechen, und hörte immer genauer hin. Was ihr dabei geholfen hat, ist hier versammelt: die Lautmuster, die Alltagswörter, Übungen, ein Lernplan und die Geschichte hinter dem Dialekt. Für alle, die Zürichdeutsch schneller verstehen und sprechen wollen.",
 
     // Decode
     "#view-decode .kicker": "Für alle, die in und um Zürich Deutsch sprechen",
@@ -106,7 +106,7 @@ const I18N_DE = {
 
     // Plan
     "#view-plan .kicker": "Hören und lesen · <span data-count=\"sources\"></span> Quellen",
-    "#plan-title": "Hör- und Leseplan",
+    "#plan-title": "Lernplan",
     "#view-plan .page-head p:not(.kicker)": "Ein Plan in Etappen, von kurz und vorhersehbar bis schnell und frei gesprochen, mit echten Quellen online und in Zürich. Jede Karte sagt dir, was du wirklich hörst, denn nicht alles in Schweizer Medien ist Zürichdeutsch.",
     "#plan-free": "Nur kostenlose",
     ".habit-label": "Die Gewohnheit, mit der es hängen bleibt",
@@ -153,7 +153,7 @@ const I18N_DE = {
     "Vocabulary": "Wortschatz",
     "Quiz": "Quiz",
     "Worksheets": "Arbeitsblätter",
-    "Listening and reading plan": "Hör- und Leseplan",
+    "Learning plan": "Lernplan",
     "Züritüütsch · A guide to Zurich German": "Züritüütsch · Wegweiser ins Zürichdeutsche",
 
     // Board and decoder

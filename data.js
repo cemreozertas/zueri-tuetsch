@@ -8,7 +8,7 @@
  *   GRAMMAR     grammar shortcuts that help comprehension
  *   VOCAB       words the rules don't explain: learn them by heart (flashcards)
  *   QUIZ        "reverse it into Standard German" items
- *   PLAN        the listening plan
+ *   PLAN        the learning plan
  *
  * Spelling: Swiss German has no official spelling. This file follows the
  * common "Dieth" style used in Zurich (long vowels doubled: Huus, Ziit).
@@ -352,7 +352,7 @@ const VOCAB = [
   { zd: "laufe", hd: "gehen (zu Fuß)", cat: "false-friends", lvl: 3, note: "Not \"rennen\"!" },
   { zd: "äxtra", hd: "absichtlich", cat: "false-friends", lvl: 3, note: "Not \"extra\" as in additional." },
   { zd: "Puff", hd: "Unordnung", cat: "false-friends", lvl: 3, ex: "Was für es Puff! = Was für eine Unordnung!" },
-  { zd: "Hafe", hd: "Kochtopf", cat: "false-friends", lvl: 3, note: "Not a harbour." },
+  { zd: "Hafe", hd: "Kochtopf", cat: "false-friends", lvl: 3, note: "Not a harbor." },
   { zd: "Schale", hd: "Milchkaffee", cat: "false-friends", lvl: 3, note: "Not a bowl: e Schale is a cup of milky coffee." },
   { zd: "glatt", hd: "lustig, witzig", cat: "false-friends", lvl: 3, note: "Not \"smooth\": Das isch glatt! = Das ist lustig!" }
 ];
@@ -384,7 +384,7 @@ const LEVELS = {
 /*
  * Quiz: "reverse it into Standard German".
  * hd: every accepted answer (case and punctuation are ignored).
- * rules: ids from RULES that the item practises.
+ * rules: ids from RULES that the item practices.
  */
 const QUIZ = [
   { zd: "Ziit", hd: ["Zeit"], rules: ["ei"], lvl: 1 },
@@ -442,7 +442,7 @@ const QUIZ = [
 ];
 
 /*
- * Listening and reading plan.
+ * Learning plan.
  * SOURCES is the library; each stage in PLAN lists source ids in the order to use them.
  * kind: listen | watch | read | go     where: online | offline     lvl: 1 easy, 2 hard, 3 impossible
  * dialect says honestly what you'll hear: not everything on Swiss media is Zurich German.
@@ -465,7 +465,7 @@ const SOURCES = {
   schtaerne: {
     name: "Schtärneföifi", kind: "listen", where: "online", lvl: 1, cost: "Free to stream", dialect: "Zurich German",
     url: "https://open.spotify.com/search/Scht%C3%A4rnef%C3%B6ifi",
-    what: "A Zurich children's band that grew out of the city's punk scene. They stopped performing in 2020 but left ten albums, about 160 songs: clear, slow-ish Zurich German with a lot of humour.",
+    what: "A Zurich children's band that grew out of the city's punk scene. They stopped performing in 2020 but left ten albums, about 160 songs: clear, slow-ish Zurich German with a lot of humor.",
     tip: "Pair it with the book below, which prints the lyrics in three languages."
   },
   zhtourism: {
@@ -597,7 +597,7 @@ const SOURCES = {
   zhlam: {
     name: "mundartZHlam (Verein Züritüütsch)", kind: "go", where: "offline", lvl: 3, cost: "CHF 10–15", dialect: "Zurich German",
     url: "https://eventfrog.ch/de/events.html?searchTerm=mundartZHlam",
-    what: "A poetry slam in Zurich German, organised by the Verein Züritüütsch. Fast, funny and full of wordplay.",
+    what: "A poetry slam in Zurich German, organized by the Verein Züritüütsch. Fast, funny and full of wordplay.",
     tip: "Check Eventfrog for the next date."
   }
 };
@@ -629,7 +629,7 @@ const PLAN = [
   }
 ];
 
-const HABIT = "When you catch a word you didn't recognise, say the Standard German equivalent aloud and see which sound rule bridges them. After a few weeks you start doing it automatically.";
+const HABIT = "When you catch a word you didn't recognize, say the Standard German equivalent aloud and see which sound rule bridges them. After a few weeks you start doing it automatically.";
 
 
 /*
@@ -707,7 +707,7 @@ const STORY = [
     ]
   },
   {
-    title: "Their written Hochdeutsch has a Swiss flavour of its own, starting with the missing ß.",
+    title: "Their written Hochdeutsch has a Swiss flavor of its own, starting with the missing ß.",
     text: [
       "Swiss Standard German always writes ss: *Strasse*, *gross*, *Fussball*. (This site writes Hochdeutsch the way Germany and Austria do, with ß, since that's the German most visitors learned. When you type an answer, ss counts too.) The Canton of Zurich was the first to stop teaching the ß in schools, in 1935, and the *Neue Zürcher Zeitung* was the last Swiss newspaper to give it up, in 1974.",
       "It also has its own vocabulary, known as Helvetisms: *Spital* instead of Krankenhaus, *Velo* for bicycle, *Billett* for ticket, and many loanwords from French."
@@ -721,7 +721,7 @@ const STORY = [
     title: "The spoken dialects, meanwhile, change from city to city, so Zurich, Bern and Basel are easy to tell apart.",
     text: [
       "Basel is the odd one out: its dialect is Low Alemannic, an island in High Alemannic country, so a child there is a *Kind*, not a *Chind*.",
-      "Bern is known for turning l into a u-sound, so *Milch* becomes *Miuch*. Linguists have tracked this habit spreading south and west from Bern, but hardly towards Zurich or Basel."
+      "Bern is known for turning l into a u-sound, so *Milch* becomes *Miuch*. Linguists have tracked this habit spreading south and west from Bern, but hardly toward Zurich or Basel."
     ],
     sources: [
       ["Basel German (Wikipedia)", "https://en.wikipedia.org/wiki/Basel_German"],

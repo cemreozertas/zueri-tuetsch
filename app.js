@@ -13,17 +13,10 @@
 
   /* ------------------------------------------------------------ Language */
 
-  // English by default. ?lang=de (or a saved choice) switches to German; ?lang=en switches back.
-  const LANGS = ["en", "de"];
-  const LANG = (() => {
-    let fromUrl = null;
-    try { fromUrl = new URLSearchParams(location.search).get("lang"); } catch (e) { /* old browser */ }
-    let saved = null;
-    try { saved = JSON.parse(localStorage.getItem("zd-lang")); } catch (e) { /* storage off */ }
-    const lang = LANGS.includes(fromUrl) ? fromUrl : (LANGS.includes(saved) ? saved : "en");
-    try { localStorage.setItem("zd-lang", JSON.stringify(lang)); } catch (e) { /* storage off */ }
-    return lang;
-  })();
+  // English at /zueri-tuetsch/, German at /zueri-tuetsch/de/. Old ?lang=de links are redirected in the page head.
+  // The language comes from the address: the German site is a copy of this page at /de/ (built by tools/make-de.js).
+  const LANG = document.documentElement.getAttribute("data-page-lang") === "de" ? "de" : "en";
+  try { if (/[?&]lang=/.test(location.search)) history.replaceState(null, "", location.pathname + location.hash); } catch (e) { /* old browser */ }
   const DE = LANG === "de" && typeof I18N_DE === "object" ? I18N_DE : null;
 
   // tr("English text", { name: value }): the German text if there is one, else the English, with {name} filled in.
@@ -65,21 +58,33 @@
   }
 
   // The EN | DE switch in the header. It reloads the page in the other language and keeps the current tab.
+  // EN | DE: each language has its own address, so a link copied from the German site opens (and previews) in German.
+  function langHref(lang) {
+    return (lang === "de" ? "de/" : "../") + (location.protocol === "file:" ? "index.html" : "") + location.hash;
+  }
   function initLangSwitch() {
-    document.querySelectorAll(".lang-switch a[data-lang]").forEach((a) => {
+    const links = document.querySelectorAll(".lang-switch a[data-lang]");
+    const update = () => links.forEach((a) => { a.href = a.dataset.lang === LANG ? location.hash || "#" : langHref(a.dataset.lang); });
+    links.forEach((a) => {
       const lang = a.dataset.lang;
       if (lang === LANG) a.setAttribute("aria-current", "true");
-      a.href = "?lang=" + lang + location.hash;
       a.addEventListener("click", (e) => {
         e.preventDefault();
         if (lang === LANG) return;
-        try { localStorage.setItem("zd-lang", JSON.stringify(lang)); } catch (err) { /* storage off */ }
         stats.event("lang/" + lang, "Language switched to " + lang.toUpperCase());
-        location.href = location.pathname + "?lang=" + lang + location.hash;
+        location.href = langHref(lang);
       });
     });
-    window.addEventListener("hashchange", () => {
-      document.querySelectorAll(".lang-switch a[data-lang]").forEach((a) => { a.href = "?lang=" + a.dataset.lang + location.hash; });
+    update();
+    window.addEventListener("hashchange", update);
+  }
+
+  // The German page sits one folder down, so links to files (like the cheat sheet) need "../" in front.
+  function fixFileLinks() {
+    if (LANG !== "de") return;
+    document.querySelectorAll("a[href]").forEach((a) => {
+      const h = a.getAttribute("href");
+      if (h && !/^(#|\?|\/|\.\.?\/|[a-z][a-z0-9+.-]*:)/i.test(h)) a.setAttribute("href", "../" + h);
     });
   }
 
@@ -264,7 +269,7 @@
       }
       else a.removeAttribute("aria-current");
     });
-    const label = tr({ start: "Start", story: "Story", decode: "Decode", rules: "Rules", cards: "Vocabulary", quiz: "Quiz", worksheets: "Worksheets", plan: "Listening and reading plan" }[view]);
+    const label = tr({ start: "Start", story: "Story", decode: "Decode", rules: "Rules", cards: "Vocabulary", quiz: "Quiz", worksheets: "Worksheets", plan: "Learning plan" }[view]);
     document.title = view === "start" ? tr("Züritüütsch · A guide to Zurich German") : label + " · Züritüütsch";
 
     if (changed) stats.page(view === "start" ? "" : view === "worksheets" && hash.startsWith("ws-") ? "worksheets/" + hash.slice(3) : view, document.title);
@@ -1163,7 +1168,7 @@
     stats.event("quiz/round/" + lvl + "/" + right, "Quiz round · " + LEVELS[lvl].name + " · " + right + "/" + n);
 
     const squares = quiz.results.map((ok) => ok ? "🟦" : "⬜").join("");
-    const url = SITE_URL + (LANG === "de" ? "?lang=de" : "") + "#quiz";
+    const url = SITE_URL + (LANG === "de" ? "de/" : "") + "#quiz";
     const text = tr("Züritüütsch quiz · {level}", { level: LEVELS[lvl].name }) + "\n" + right + "/" + n + " " + squares + "\n" + tr("Can you hear it?") + " " + url;
 
     const status = el("p", { class: "share-status", "aria-live": "polite" });
@@ -1517,6 +1522,7 @@
   /* ---------------------------------------------------------------- Init */
 
   translatePage();
+  fixFileLinks();
   initLangSwitch();
   $("#view-rules .wrap.page").append(kreisCard("Rules"));
   $("#view-cards .wrap.page").append(kreisCard("Vocabulary"));

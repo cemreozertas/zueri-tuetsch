@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Preview image</title>
+<!--
+  Source of og-image.png (English) and og-image-de.png (German): the picture that shows up when the link is shared.
+  Render it at 1200 × 630. Add ?lang=de for the German version.
+-->
+<style>
+@font-face{font-family:S;src:url(../fonts/schibsted-grotesk-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:S;src:url(../fonts/schibsted-grotesk-latin-400-normal.woff2);font-weight:400}
+@font-face{font-family:M;src:url(../fonts/jetbrains-mono-latin-700-normal.woff2);font-weight:700}
+html,body{margin:0}
+body{width:1200px;height:630px;background:#0070B4 url(../map-on-blue.svg) 50% 60%/cover no-repeat;color:#fff;font-family:S;position:relative;overflow:hidden}
+.wrap{position:absolute;left:76px;top:66px;right:76px}
+.kick{font-family:M;font-weight:700;font-size:19px;letter-spacing:.14em;text-transform:uppercase;opacity:.92}
+h1{font-size:77px;line-height:1.03;letter-spacing:-.03em;margin:16px 0 0;font-weight:800}
+h1 span{color:#B9D6EE;display:block}
+.board{position:absolute;left:72px;bottom:64px;background:#00407C;border-radius:20px;padding:22px 24px;display:flex;gap:8px;box-shadow:0 30px 60px -30px rgba(0,20,50,.7)}
+.t{width:70px;height:98px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:M;font-weight:700;font-size:44px;
+ background:linear-gradient(#0B4E8E 50%,#003468 50%,#003468 calc(50% + 2px),#003A72 calc(50% + 2px))}
+.t.c{background:linear-gradient(#fff 50%,#DCEBF6 50%,#DCEBF6 calc(50% + 2px),#EEF5FB calc(50% + 2px));color:#0070B4}
+.side{position:absolute;right:76px;bottom:64px;text-align:right}
+.zd{font-family:M;font-weight:700;font-size:20px;letter-spacing:.12em}
+.name{font-size:40px;font-weight:800;letter-spacing:-.01em;margin-top:30px}
+.sub{font-size:21px;opacity:.9;margin-top:4px}
+</style></head><body>
+<div class="wrap"><div class="kick" id="kick">For German speakers in and around Zurich</div>
+<h1 id="h1">You already speak most of it.<span>You just can't hear it yet.</span></h1></div>
+<div class="board"><div class="t">Z</div><div class="t c">E</div><div class="t">I</div><div class="t">T</div><div class="t c">U</div><div class="t c">N</div><div class="t">G</div></div>
+<div class="side"><div class="zd">ZIITIG → ZEITUNG</div><div class="name">Züritüütsch</div><div class="sub" id="sub">A guide to Zurich German</div></div>
+<script>
+if (new URLSearchParams(location.search).get("lang") === "de") {
+  document.documentElement.lang = "de";
+  document.getElementById("kick").textContent = "Für alle, die in und um Zürich Deutsch sprechen";
+  document.getElementById("h1").innerHTML = "Das meiste kannst du schon.<span>Du hörst es nur noch nicht.</span>";
+  document.getElementById("sub").textContent = "Wegweiser ins Zürichdeutsche";
+}
+</script>
+</body></html>

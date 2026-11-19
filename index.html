@@ -2,19 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <script>
+    // The English site lives at /zueri-tuetsch/, the German one at /zueri-tuetsch/de/, so a shared link always opens and previews in its own language.
+    // Old links with ?lang=de or ?lang=en are sent to the matching address.
+    (function () {
+      var page = document.documentElement.getAttribute("data-page-lang") || "en", q = null;
+      try { q = new URLSearchParams(location.search).get("lang"); } catch (e) { /* old browser */ }
+      if ((q === "en" || q === "de") && q !== page) location.replace((q === "de" ? "de/" : "../") + (location.protocol === "file:" ? "index.html" : "") + location.hash);
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Züritüütsch · A guide to Zurich German</title>
-  <meta name="description" content="A guide to Zurich German for anyone who already speaks German: sound patterns, a two-way decoder, flashcards, a quiz, a listening plan and the story behind the dialect.">
+  <meta name="description" content="A guide to Zurich German for anyone who already speaks German: sound patterns, a two-way decoder, flashcards, a quiz, a learning plan and the story behind the dialect.">
   <meta name="theme-color" content="#0070B4">
   <link rel="canonical" href="https://cemreozertas.github.io/zueri-tuetsch/">
   <link rel="alternate" hreflang="en" href="https://cemreozertas.github.io/zueri-tuetsch/">
-  <link rel="alternate" hreflang="de" href="https://cemreozertas.github.io/zueri-tuetsch/?lang=de">
+  <link rel="alternate" hreflang="de" href="https://cemreozertas.github.io/zueri-tuetsch/de/">
   <link rel="alternate" hreflang="x-default" href="https://cemreozertas.github.io/zueri-tuetsch/">
   <!-- Link previews (LinkedIn, WhatsApp, Slack, X) -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Züritüütsch">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="de_CH">
   <meta property="og:title" content="Züritüütsch: a guide to Zurich German">
-  <meta property="og:description" content="Sound patterns, a two-way decoder, flashcards, a quiz and a listening plan for German speakers in and around Zurich.">
+  <meta property="og:description" content="Sound patterns, a two-way decoder, flashcards, a quiz and a learning plan for German speakers in and around Zurich.">
   <meta property="og:url" content="https://cemreozertas.github.io/zueri-tuetsch/">
   <meta property="og:image" content="https://cemreozertas.github.io/zueri-tuetsch/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -41,12 +52,12 @@
         <a href="#cards" data-view="cards">Vocabulary</a>
         <a href="#quiz" data-view="quiz">Quiz</a>
         <a href="#worksheets" data-view="worksheets">Worksheets</a>
-        <a href="#plan" data-view="plan">Plan</a>
+        <a href="#plan" data-view="plan">Learning plan</a>
         <a href="#story" data-view="story">Story</a>
       </nav>
       <div class="lang-switch" role="group" aria-label="Language / Sprache">
-        <a href="?lang=en" data-lang="en" lang="en" hreflang="en" title="English">EN</a>
-        <a href="?lang=de" data-lang="de" lang="de" hreflang="de" title="Deutsch">DE</a>
+        <a href="./" data-lang="en" lang="en" hreflang="en" title="English">EN</a>
+        <a href="de/" data-lang="de" lang="de" hreflang="de" title="Deutsch">DE</a>
       </div>
     </div>
   </header>
@@ -129,7 +140,7 @@
             <span class="num" id="vocab-count">74</span>
             <h2>Words and phrases to learn</h2>
             <p>Some everyday words follow no rule at all: luege, poschte, Rüebli. Those go on flashcards.</p>
-            <a class="link-arrow" href="#cards">Practise the vocabulary</a>
+            <a class="link-arrow" href="#cards">Practice the vocabulary</a>
           </div>
           <div class="intro-card">
             <span class="num" data-count="quiz">52</span>
@@ -139,11 +150,11 @@
           </div>
         </div>
 
-        <p class="start-more">Plus a <a href="#decode">decoder</a> for any word you hear, a <a href="cheat-sheet.pdf" download>one-page cheat sheet</a> of the sound shifts to print, a <a href="#plan">four-stage listening and reading plan</a> with real sources online and around Zurich, <a href="#worksheets">worksheets</a> to practise with, and <a href="#story">the story</a> of where Züritüütsch comes from.</p>
+        <p class="start-more">Plus a <a href="#decode">decoder</a> for any word you hear, a <a href="cheat-sheet.pdf" download>one-page cheat sheet</a> of the sound shifts to print, a <a href="#plan">four-stage learning plan</a> with real sources online and around Zurich, <a href="#worksheets">worksheets</a> to practice with, and <a href="#story">the story</a> of where Züritüütsch comes from.</p>
 
         <aside class="about-note" aria-labelledby="about-title">
           <h2 id="about-title">Why this exists</h2>
-          <p>This guide was made by a multilingual translator turned functional consultant, with Turkish roots, a career in German and English, and a lasting fascination with how two languages can grow from the same roots and still sound worlds apart. After a decade of studying and working in Germany, a new chapter took her to Zurich, where she started picking up words from day one. With a translator's habit of looking for patterns and a musician's ear for sound, she noticed how regularly Zurich German lines up with Standard German, and kept listening more closely. Everything that helped her along the way is collected here: the sound patterns, the everyday words, practice, a listening plan and the story behind the dialect. It's for anyone who wants to hear and speak Zurich German faster.</p>
+          <p>This guide was made by a multilingual translator turned functional consultant, with Turkish roots, a career in German and English, and a lasting fascination with how two languages can grow from the same roots and still sound worlds apart. After a decade of studying and working in Germany, a new chapter took her to Zurich, where she started picking up words from day one. With a translator's habit of looking for patterns and a musician's ear for sound, she noticed how regularly Zurich German lines up with Standard German, and kept listening more closely. Everything that helped her along the way is collected here: the sound patterns, the everyday words, practice, a learning plan and the story behind the dialect. It's for anyone who wants to hear and speak Zurich German faster.</p>
         </aside>
       </div>
     </section>
@@ -183,7 +194,7 @@
             <span class="next-stop-tag">Next stop?</span>
             <div class="next-stop-body">
               <h2 id="next-stop-title">Decode a whole message, not just one word</h2>
-              <p>Paste a chat, a text or a note from your neighbour, like <span lang="gsw" class="next-stop-sample">«Häsch morn Ziit? Gömmer go poschte?»</span>, and see every word explained, including the merged ones like <span lang="gsw">häsch</span> and <span lang="gsw">gömmer</span>.</p>
+              <p>Paste a chat, a text or a note from your neighbor, like <span lang="gsw" class="next-stop-sample">«Häsch morn Ziit? Gömmer go poschte?»</span>, and see every word explained, including the merged ones like <span lang="gsw">häsch</span> and <span lang="gsw">gömmer</span>.</p>
               <div class="next-stop-ask" id="next-stop-ask">
                 <p class="next-stop-q">Would you use it?</p>
                 <div class="next-stop-actions">
@@ -224,9 +235,9 @@
       <div class="band band-head band-wall">
         <div class="wrap">
           <div class="page-head">
-            <p class="kicker">Practise · <span data-count="vocab"></span> words and phrases</p>
+            <p class="kicker">Practice · <span data-count="vocab"></span> words and phrases</p>
             <h2 id="cards-title">Vocabulary</h2>
-            <p>The words the sound rules can't explain, sorted by topic and by how hard they are. Practise them as flashcards, or browse the whole list.</p>
+            <p>The words the sound rules can't explain, sorted by topic and by how hard they are. Practice them as flashcards, or browse the whole list.</p>
           </div>
         </div>
       </div>
@@ -301,7 +312,7 @@
         <div class="wrap">
           <div class="page-head">
             <p class="kicker">Listen and read · <span data-count="sources"></span> sources</p>
-            <h2 id="plan-title">Listening and reading plan</h2>
+            <h2 id="plan-title">Learning plan</h2>
             <p>A step-by-step plan from short and predictable to fast and unscripted, with real sources online and around Zurich. Each card says what you'll actually hear, because not everything on Swiss media is Zurich German.</p>
           </div>
         </div>
@@ -370,7 +381,7 @@
       </div>
       <div class="footer-meta">
         <p>Swiss German has no official spelling, so you'll meet variants in the wild.</p>
-        <p><a href="https://github.com/cemreozertas">@cemreozertas</a> · <a href="https://github.com/" id="repo-link">Source on GitHub</a> · MIT licence<br>Visits are counted anonymously with <a href="https://www.goatcounter.com/">GoatCounter</a>: no cookies, no personal data.<br>Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a><br>The level names are borrowed from ZVV tickets. This site isn't affiliated with ZVV.</p>
+        <p><a href="https://github.com/cemreozertas">@cemreozertas</a> · <a href="https://github.com/" id="repo-link">Source on GitHub</a> · MIT license<br>Visits are counted anonymously with <a href="https://www.goatcounter.com/">GoatCounter</a>: no cookies, no personal data.<br>Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a><br>The level names are borrowed from ZVV tickets. This site isn't affiliated with ZVV.</p>
       </div>
     </div>
   </footer>
