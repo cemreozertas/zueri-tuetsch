@@ -838,3 +838,54 @@ main { flex: 1 0 auto; display: flex; flex-direction: column; }
 .footer-links { margin-top: 8px !important; font-size: 0.9375rem; font-weight: 600; }
 
 @media print { .start-try, .path, .kreis-card, .head-actions { display: none; } }
+
+/* ---------- More blue in the boxes ---------- */
+/* Level buttons: the chosen level is solid blue, the others light blue */
+.level-btn { background: var(--blau-soft); border-color: transparent; }
+.level-btn[aria-pressed="true"] { background: var(--blau); border-color: var(--blau); color: #fff; box-shadow: none; }
+.level-btn[aria-pressed="true"] .level-sub { color: rgba(255, 255, 255, 0.85); }
+.level-btn[aria-pressed="true"] .pips i { background: rgba(255, 255, 255, 0.35); }
+.level-btn.lvl-1[aria-pressed="true"] .pips i:nth-child(1), .level-btn.lvl-2[aria-pressed="true"] .pips i:nth-child(-n+2),
+.level-btn.lvl-3[aria-pressed="true"] .pips i, .level-btn.lvl-all[aria-pressed="true"] .pips i { background: #fff; }
+/* Quiz: a dark blue card, like the departure board */
+.quiz-card { background: var(--dunkelblau); border-color: var(--dunkelblau); color: #fff; }
+.quiz-card .quiz-prompt { color: #fff; }
+.quiz-card .quiz-meta { color: rgba(255, 255, 255, 0.7); }
+.quiz-card .fb { color: var(--ink); }
+.quiz-card .ticket-card { background: var(--blau); box-shadow: none; }
+.quiz-card .ticket-verdict { color: #fff; }
+.quiz-card .share-status { color: rgba(255, 255, 255, 0.8); }
+.quiz-result .btn-ghost { color: #fff; border-color: rgba(255, 255, 255, 0.5); }
+.quiz-result .btn-ghost:hover { border-color: #fff; background: rgba(255, 255, 255, 0.1); }
+/* Rules: light blue rule cards, solid blue grammar shortcuts */
+.rule { background: var(--blau-soft); }
+.grammar { background: var(--blau); color: #fff; }
+.grammar p, .grammar li { color: rgba(255, 255, 255, 0.88); }
+.grammar .zd { color: #fff; }
+/* Light blue cards: Start, worksheets, plan sources, closed story chapters */
+.intro-card { background: var(--blau-soft); }
+.ws-card { background: var(--blau-soft); border-color: transparent; }
+.ws-card:hover { border-color: var(--blau); }
+.src { background: var(--blau-soft); border-color: transparent; }
+.src-read .src-kind, .src-meta span { background: #fff; }
+.src-tip { border-top-color: rgba(0, 64, 124, 0.15); }
+.story > li { background: var(--blau-soft); border-color: transparent; }
+.story > li.is-open { background: #fff; border-color: var(--magenta); }
+.quiz-card .btn-primary { background: #fff; color: var(--blau); }
+.quiz-card .btn-primary:hover { background: var(--blau-soft); color: var(--dunkelblau); }
+.quiz-card :focus-visible { outline-color: #fff; }
+/* Inside a worksheet, the "Why this exists" card and the Kreis card: light blue too */
+.ws-text, .ws-sec { background: var(--blau-soft); border-color: transparent; }
+.ws-opt { background: #fff; border-color: transparent; }
+.ws-opt.is-right { border-color: var(--blau); background: var(--blau-soft); }
+.ws-opt.is-wrong { border-color: var(--magenta); background: var(--magenta-soft); }
+.ws-row input, .ws-row select { border-color: transparent; }
+.ws-row.is-right input, .ws-row.is-right select { border-color: var(--blau); }
+.ws-row.is-wrong input, .ws-row.is-wrong select { border-color: var(--magenta); }
+.ws-chip { background: #fff; }
+.about-note { background: var(--blau-soft); border-color: transparent; border-left-color: var(--magenta); }
+.kreis-card { background: var(--blau-soft); border-color: transparent; }
+@media print {
+  .ws-text, .ws-sec { background: #fff !important; border: 1px solid #999 !important; }
+  .ws-opt, .ws-row input, .ws-row select { border: 1px solid #999 !important; }
+}
