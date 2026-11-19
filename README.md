@@ -92,7 +92,7 @@ Swiss German has no official spelling. The site follows common Zurich usage, wit
 
 ## Credits
 
-[Cemre](https://github.com/cemreozertas) is a Zurich-based tinkerer at heart. She builds automations, templates and apps for creative minds who love a well-run life, with [Claude](https://claude.ai) as her building partner.
+[Cemre](https://github.com/cemreozertas) is a Zurich-based tinkerer at heart. She builds automations, templates and apps for creative minds who love a well-run life.
 
 ***Mit Liebi gmacht z Züri.***
 

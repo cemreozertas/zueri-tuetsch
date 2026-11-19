@@ -123,7 +123,7 @@ const I18N_DE = {
     "#story-toggle-all": "Alle öffnen",
 
     // Footer
-    ".footer-bio": "<a href=\"https://github.com/cemreozertas\">Cemre</a> ist Tüftlerin aus Leidenschaft und lebt in Zürich. Sie baut Automatisierungen, Vorlagen und Apps für kreative Köpfe, die ein gut organisiertes Leben lieben, mit <a href=\"https://claude.ai/\">Claude</a> als Partner beim Bauen.",
+    ".footer-bio": "<a href=\"https://github.com/cemreozertas\">Cemre</a> ist Tüftlerin aus Leidenschaft und lebt in Zürich. Sie baut Automatisierungen, Vorlagen und Apps für kreative Köpfe, die ein gut organisiertes Leben lieben.",
     ".footer-meta p:first-child": "Für Schweizerdeutsch gibt es keine offizielle Rechtschreibung, im Alltag begegnen dir also auch andere Schreibweisen.",
     ".footer-meta p:last-child": "<a href=\"https://github.com/cemreozertas\">@cemreozertas</a> · <a href=\"https://github.com/\" id=\"repo-link\">Quellcode auf GitHub</a> · MIT-Lizenz<br>Besuche werden anonym mit <a href=\"https://www.goatcounter.com/\">GoatCounter</a> gezählt: ohne Cookies, ohne persönliche Daten.<br>Kartendaten © <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap-Mitwirkende</a><br>Die Stufennamen sind von ZVV-Tickets geborgt. Diese Seite steht in keiner Verbindung zum ZVV."
   },
