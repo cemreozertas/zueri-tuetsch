@@ -8,7 +8,7 @@ Turkish is my mother tongue, German my second home, and Zurich German the langua
 
 👉 **Try it live: https://cemreozertas.github.io/zueri-tuetsch/**
 
-The site speaks English and German: switch any time with **EN | DE** at the top right, or open the German version directly at [cemreozertas.github.io/zueri-tuetsch/de](https://cemreozertas.github.io/zueri-tuetsch/de/). Each language has its own address, so a shared link opens, and previews, in the right language.
+The site works on your laptop and your phone, and it speaks English and German: switch any time with **EN | DE** at the top right, or open the German version directly at [cemreozertas.github.io/zueri-tuetsch/de](https://cemreozertas.github.io/zueri-tuetsch/de/). Each language has its own address, so a shared link opens, and previews, in the right language.
 
 📄 **Print the one-page cheat sheet** of the 13 sound shifts: [cheat-sheet.pdf](cheat-sheet.pdf), free to print and share (in German: [cheat-sheet-de.pdf](cheat-sheet-de.pdf)).
 
